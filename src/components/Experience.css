@@ -1,0 +1,175 @@
+.experience {
+  padding: 6rem 2rem;
+  background: #ffffff;
+  position: relative;
+}
+
+.experience-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.experience-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: #2d2d50;
+  text-align: center;
+  margin-bottom: 1rem;
+  letter-spacing: -1px;
+}
+
+.experience-subtitle {
+  font-size: 1.1rem;
+  color: #4a5568;
+  text-align: center;
+  margin-bottom: 4rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.experience-timeline {
+  position: relative;
+  padding-left: 3rem;
+}
+
+.experience-item {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.timeline-marker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.marker-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+  z-index: 2;
+}
+
+.marker-line {
+  position: absolute;
+  top: 16px;
+  width: 2px;
+  height: calc(100% + 3rem);
+  background: linear-gradient(180deg, #a78bfa 0%, rgba(167, 139, 250, 0.3) 100%);
+  z-index: 1;
+}
+
+.experience-content {
+  flex: 1;
+  background: #fafafa;
+  padding: 2rem;
+  border-radius: 16px;
+  border-left: 3px solid #a78bfa;
+  transition: all 0.3s ease;
+}
+
+.experience-content:hover {
+  background: #ffffff;
+  box-shadow: 0 8px 25px rgba(167, 139, 250, 0.1);
+  transform: translateX(5px);
+}
+
+.experience-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.experience-role {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d2d50;
+}
+
+.experience-company {
+  font-size: 1.2rem;
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+.experience-period {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: #4a5568;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  padding: 0.25rem 0.75rem;
+  background: #e0e7ff;
+  border-radius: 6px;
+}
+
+.experience-description {
+  font-size: 1rem;
+  color: #4a5568;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.experience-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tech-badge {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%);
+  color: #2d2d50;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid rgba(167, 139, 250, 0.2);
+}
+
+@media (max-width: 968px) {
+  .experience {
+    padding: 4rem 1.5rem;
+  }
+
+  .experience-timeline {
+    padding-left: 2rem;
+  }
+
+  .experience-item {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .experience {
+    padding: 3rem 1rem;
+  }
+
+  .experience-timeline {
+    padding-left: 1.5rem;
+  }
+
+  .experience-content {
+    padding: 1.5rem;
+  }
+
+  .experience-role {
+    font-size: 1.3rem;
+  }
+
+  .experience-company {
+    font-size: 1rem;
+  }
+}
+

@@ -1,0 +1,134 @@
+.about {
+  padding: 6rem 2rem;
+  background: #ffffff;
+  position: relative;
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-content {
+  text-align: center;
+}
+
+.about-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  color: #2d2d50;
+  margin-bottom: 2rem;
+  letter-spacing: -1px;
+}
+
+.about-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+  font-family: 'Courier New', monospace;
+}
+
+.code-prompt {
+  font-size: 1.5rem;
+  color: #a78bfa;
+  font-weight: 600;
+}
+
+.code-cursor {
+  font-size: 1.5rem;
+  color: #a78bfa;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.about-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 3rem;
+  text-align: left;
+}
+
+.about-section {
+  background: #fafafa;
+  padding: 2.5rem;
+  border-radius: 20px;
+  border: 1px solid rgba(167, 139, 250, 0.1);
+  transition: all 0.3s ease;
+}
+
+.about-section:hover {
+  box-shadow: 0 10px 30px rgba(167, 139, 250, 0.1);
+  border-color: rgba(167, 139, 250, 0.3);
+  transform: translateY(-5px);
+}
+
+.section-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2d2d50;
+  margin-bottom: 1.5rem;
+}
+
+.section-description {
+  font-size: 1.1rem;
+  color: #4a5568;
+  line-height: 1.8;
+}
+
+.identity-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.identity-item {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+}
+
+.identity-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.identity-item h4 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2d2d50;
+  margin-bottom: 0.5rem;
+}
+
+.identity-item p {
+  font-size: 1rem;
+  color: #4a5568;
+  line-height: 1.6;
+}
+
+@media (max-width: 968px) {
+  .about {
+    padding: 4rem 1.5rem;
+  }
+
+  .about-sections {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about {
+    padding: 3rem 1rem;
+  }
+
+  .about-section {
+    padding: 2rem 1.5rem;
+  }
+}
+
