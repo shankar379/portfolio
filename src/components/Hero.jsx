@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaLinkedin, FaGithub, FaDribbble, FaYoutube, FaInstagram } from 'react-icons/fa';
+import ParticleModel from './ParticleModel';
 import './Hero.css';
 
 const Hero = () => {
   const [typedText, setTypedText] = useState('');
   const fullText = "Welcome To My Space: Where Code Comes To Life.";
-  const roles = ["DEVELOPER", "DESIGNER", "DREAMER"];
+  const roles = ["BUILDING", "EVOLVING", "SHIPPING"];
 
   useEffect(() => {
     let index = 0;
@@ -63,7 +64,6 @@ const Hero = () => {
           <h1 className="hero-name">
             <span>DURGA</span>
             <span className="name-accent"> SHANKAR</span>
-            <span className="accent-dot">•</span>
           </h1>
           
           <div className="hero-roles">
@@ -117,6 +117,9 @@ const Hero = () => {
           RESUME
         </motion.a>
       </div>
+
+      {/* 3D Particle Model */}
+      <ParticleModel />
 
       {/* Decorative Shapes */}
       <div className="hero-shapes">

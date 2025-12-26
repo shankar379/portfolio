@@ -73,9 +73,9 @@ const Navbar = () => {
   return (
     <nav className={`navbar ${isVisible ? 'visible' : 'hidden'}`}>
       <div className="nav-container">
-        <div className="nav-logo">
-          <span className="logo-name">Durga Shankar</span>
-        </div>
+            <div className="nav-logo">
+              <span className="logo-name">DURGA SHANKAR</span>
+            </div>
         
         <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
           {navItems.map((item) => (
