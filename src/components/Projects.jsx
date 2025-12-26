@@ -1,60 +1,47 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import './Projects.css';
 
 const Projects = () => {
+  const navigate = useNavigate();
+
   const projects = [
     {
       id: 1,
-      title: 'SETHU Project',
-      duration: 'Jan 2023 - Apr 2023',
-      role: 'Web Developer',
-      description: 'Engineered a high-performance web interface serving 5k+ monthly users, improving engagement by 40%',
-      technologies: ['React', 'Node.js', 'FireBase'],
-      impact: 'Reduced loading times by 60% through optimized code practices',
-      icon: '🌐'
+      title: 'SETHU Web App',
+      description: 'Public-facing site for SETHU initiative with storytelling-driven UX.',
+      technologies: ['React', 'Vite', 'Tailwind CSS']
     },
     {
       id: 2,
       title: 'Time Table Generator',
-      duration: 'Jan 2022 - Apr 2022',
-      role: 'Full-Stack Developer',
-      description: 'Automated scheduling system handling 500+ weekly schedules with 98% accuracy',
-      technologies: ['Python', 'Django', 'SQLite3'],
-      impact: 'Saved 200+ admin hours annually through process automation',
-      icon: '📅'
+      description: 'Constraint-driven timetable engine for academic departments.',
+      technologies: ['Python', 'Django', 'SQLite3']
     },
     {
       id: 3,
       title: 'Student Communication Platform',
-      duration: 'May 2023 - Aug 2023',
-      role: 'Backend Developer',
-      description: 'Scalable real-time chat system supporting 200+ concurrent users',
-      technologies: ['React', 'Node.js', 'FireBase'],
-      impact: 'Enhanced student collaboration efficiency by 70%',
-      icon: '💬'
+      description: 'Real-time messaging and announcement hub for universities.',
+      technologies: ['React', 'Firebase', 'Cloud Functions']
     },
     {
       id: 4,
-      title: 'Attendance Manager',
-      duration: 'Sep 2022 - Dec 2022',
-      role: 'Software Engineer',
-      description: 'AI-powered attendance system processing 10k+ records monthly',
-      technologies: ['Python', 'Django', 'SQLite3'],
-      impact: 'Reduced administrative errors by 90%',
-      icon: '✅'
+      title: 'Smart Attendance Manager',
+      description: 'Automated biometric attendance tracking with analytics dashboards.',
+      technologies: ['Python', 'Django', 'SQLite3']
     },
     {
       id: 5,
       title: 'Race the Sun: Challenge Edition',
-      duration: 'May 2025 - Present',
-      role: 'Full-Stack Developer & Game Designer',
-      description: 'Developed a 3D infinite runner game inspired by "Race the Sun" with procedural generation and solar energy mechanics',
-      technologies: ['React', 'Three.js', 'WebGL'],
-      impact: 'Achieved 90+ FPS performance on mid-range devices through WebGL optimizations',
-      icon: '🎮'
+      description: '3D infinite runner game with procedural generation and solar energy mechanics.',
+      technologies: ['React', 'Three.js', 'WebGL']
     }
   ];
+
+  const handleProjectClick = (projectId) => {
+    navigate(`/project/${projectId}`);
+  };
 
   return (
     <section id="projects" className="projects">
@@ -87,30 +74,15 @@ const Projects = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              onClick={() => handleProjectClick(project.id)}
             >
-              <div className="project-header">
-                <div className="project-icon">{project.icon}</div>
-                <div className="project-meta">
-                  <h3 className="project-title">{project.title}</h3>
-                  <div className="project-info">
-                    <span className="project-duration">{project.duration}</span>
-                    <span className="project-role">{project.role}</span>
-                  </div>
-                </div>
-              </div>
-              
+              <h3 className="project-title">{project.title}</h3>
               <p className="project-description">{project.description}</p>
-              
               <div className="project-technologies">
                 {project.technologies.map((tech, techIndex) => (
                   <span key={techIndex} className="tech-tag">{tech}</span>
                 ))}
-              </div>
-              
-              <div className="project-impact">
-                <span className="impact-icon">🚀</span>
-                <span className="impact-text">Impact: {project.impact}</span>
               </div>
             </motion.div>
           ))}
