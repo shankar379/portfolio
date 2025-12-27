@@ -21,25 +21,26 @@ const ParticleModel = () => {
   const currentRotationRef = useRef({ x: 0, y: 0 });
   const isDraggingRef = useRef(false);
 
-  // 17 different shapes including energy & time-travel
+  // Mouse hover interaction for particle repulsion
+  const hoverMouseRef = useRef(new THREE.Vector2(-1000, -1000));
+  const mouse3DRef = useRef(new THREE.Vector3());
+  const raycasterRef = useRef(new THREE.Raycaster());
+  const interactionRadiusRef = useRef(0.8); // Radius of mouse influence
+  const repulsionStrengthRef = useRef(0.15); // How strongly particles are pushed
+
+  // 11 different shapes
   const shapes = [
     'sphere',
     'cube',
     'torus',
-    'joystick',
     'dna',
-    'lattice',
     'atom',
     'infinity',
-    'prism',
-    'hourglass',
-    'unreal',
     'plasmaOrb',
-    'timeVortex',
     'energyPulse',
-    'wormhole',
     'clockwork',
-    'quantumField'
+    'quantumField',
+    'earthMoon'
   ];
 
   useEffect(() => {
@@ -105,6 +106,9 @@ const ParticleModel = () => {
     currentPositionsRef.current = positions;
     targetPositionsRef.current = new Float32Array(particleCount * 3);
 
+    // Store displacement for each particle (for hover effect)
+    const particleDisplacements = new Float32Array(particleCount * 3);
+
     // Generate shape positions
     const generateShapePositions = (shapeType) => {
       const positions = new Float32Array(particleCount * 3);
@@ -137,25 +141,6 @@ const ParticleModel = () => {
             z = (layer * unit) - radius;
             break;
             
-          case 'joystick':
-            // Base (circular)
-            if (i < particleCount * 0.3) {
-              const baseAngle = (i / (particleCount * 0.3)) * Math.PI * 2;
-              const baseRadius = radius * 0.6;
-              x = baseRadius * Math.cos(baseAngle);
-              y = -radius * 0.8;
-              z = baseRadius * Math.sin(baseAngle);
-            } else {
-              // Stick (vertical cylinder)
-              const stickAngle = ((i - particleCount * 0.3) / (particleCount * 0.7)) * Math.PI * 2;
-              const stickHeight = ((i - particleCount * 0.3) / (particleCount * 0.7)) * radius * 1.2 - radius * 0.4;
-              const stickRadius = radius * 0.15;
-              x = stickRadius * Math.cos(stickAngle);
-              y = stickHeight;
-              z = stickRadius * Math.sin(stickAngle);
-            }
-            break;
-            
           case 'torus':
             const torusAngle = t * Math.PI * 2;
             const torusRadius = radius * 0.7;
@@ -181,18 +166,6 @@ const ParticleModel = () => {
               x = dnaRadius * Math.cos(dnaAngle) * (1 - rungT * 2);
               z = dnaRadius * Math.sin(dnaAngle) * (1 - rungT * 2);
             }
-            break;
-            
-          case 'lattice':
-            // Grid/network structure
-            const gridSize = Math.floor(Math.cbrt(particleCount));
-            const gridX = (i % gridSize);
-            const gridY = Math.floor((i % (gridSize * gridSize)) / gridSize);
-            const gridZ = Math.floor(i / (gridSize * gridSize));
-            const gridUnit = radius * 1.5 / gridSize;
-            x = (gridX * gridUnit) - radius * 0.75;
-            y = (gridY * gridUnit) - radius * 0.75;
-            z = (gridZ * gridUnit) - radius * 0.75;
             break;
             
           case 'atom':
@@ -227,105 +200,19 @@ const ParticleModel = () => {
             break;
             
           case 'infinity':
-            // Infinity symbol (∞) - 3D lemniscate
+            // Infinity symbol (∞) - 3D lemniscate with thickness
             const infAngle = t * Math.PI * 2;
             const infRadius = radius * 0.6;
             const infScale = 1 + Math.cos(infAngle * 2) * 0.3;
-            x = infRadius * Math.cos(infAngle) * infScale;
-            y = infRadius * Math.sin(infAngle) * Math.cos(infAngle) * 0.5;
-            z = infRadius * Math.sin(infAngle * 2) * 0.3;
-            break;
-            
-          case 'prism':
-            // Triangular prism
-            const prismAngle = t * Math.PI * 2;
-            const prismHeight = t * radius * 2 - radius;
-            const prismRadius = radius * 0.7;
-            // Triangular base
-            const triAngle = Math.floor(t * 3) * (Math.PI * 2 / 3);
-            x = prismRadius * Math.cos(triAngle + prismAngle);
-            y = prismHeight;
-            z = prismRadius * Math.sin(triAngle + prismAngle);
-            break;
-            
-          case 'hourglass':
-            // Two cones connected at the tip
-            if (i < particleCount * 0.5) {
-              // Top cone (inverted)
-              const topAngle = (i / (particleCount * 0.5)) * Math.PI * 2;
-              const topHeight = (i / (particleCount * 0.5)) * radius - radius * 0.5;
-              const topRadius = radius * 0.6 * (1 - Math.abs(topHeight) / radius);
-              x = topRadius * Math.cos(topAngle);
-              y = topHeight + radius * 0.3;
-              z = topRadius * Math.sin(topAngle);
-            } else {
-              // Bottom cone
-              const bottomAngle = ((i - particleCount * 0.5) / (particleCount * 0.5)) * Math.PI * 2;
-              const bottomHeight = ((i - particleCount * 0.5) / (particleCount * 0.5)) * radius - radius * 0.5;
-              const bottomRadius = radius * 0.6 * (1 - Math.abs(bottomHeight) / radius);
-              x = bottomRadius * Math.cos(bottomAngle);
-              y = bottomHeight - radius * 0.3;
-              z = bottomRadius * Math.sin(bottomAngle);
-            }
-            break;
-            
-          case 'unreal':
-            // Unreal Engine icon: Circle with stylized 'U'
-            if (i < particleCount * 0.3) {
-              // Outer circle outline
-              const circleAngle = (i / (particleCount * 0.3)) * Math.PI * 2;
-              const circleRadius = radius * 0.9;
-              const circleThickness = radius * 0.08;
-              const circleDepth = (i % 4) * 0.05 - 0.075; // 3D depth for circle
-              x = circleRadius * Math.cos(circleAngle);
-              y = circleRadius * Math.sin(circleAngle);
-              z = circleDepth;
-            } else {
-              // Stylized 'U' letter inside
-              const uT = (i - particleCount * 0.3) / (particleCount * 0.7);
-              
-              // Left vertical stroke with barb
-              if (uT < 0.25) {
-                const leftT = uT / 0.25;
-                const leftX = -radius * 0.4;
-                const leftY = radius * 0.6 - leftT * radius * 1.2;
-                // Add barb at top
-                if (leftT < 0.15) {
-                  const barbAngle = leftT * Math.PI * 0.5;
-                  x = leftX - Math.cos(barbAngle) * radius * 0.15;
-                  y = radius * 0.6 - Math.sin(barbAngle) * radius * 0.15;
-                } else {
-                  x = leftX;
-                  y = leftY;
-                }
-                z = (i % 3) * 0.03 - 0.03;
-              }
-              // Base curve of U
-              else if (uT < 0.5) {
-                const baseT = (uT - 0.25) / 0.25;
-                const baseAngle = Math.PI + baseT * Math.PI;
-                x = radius * 0.4 * Math.cos(baseAngle);
-                y = -radius * 0.6 + radius * 0.4 * Math.sin(baseAngle);
-                z = (i % 3) * 0.03 - 0.03;
-              }
-              // Right vertical stroke with barb
-              else {
-                const rightT = (uT - 0.5) / 0.5;
-                const rightX = radius * 0.4;
-                const rightY = -radius * 0.6 + rightT * radius * 1.2;
-                // Add barb at top
-                if (rightT > 0.85) {
-                  const barbT = (rightT - 0.85) / 0.15;
-                  const barbAngle = barbT * Math.PI * 0.5;
-                  x = rightX + Math.cos(barbAngle) * radius * 0.15;
-                  y = radius * 0.6 - Math.sin(barbAngle) * radius * 0.15;
-                } else {
-                  x = rightX;
-                  y = rightY;
-                }
-                z = (i % 3) * 0.03 - 0.03;
-              }
-            }
+            // Add thickness by offsetting particles in a tube around the path
+            const infTubeAngle = (i % 12) * Math.PI * 2 / 12;
+            const infTubeRadius = radius * 0.06;
+            const infBaseX = infRadius * Math.cos(infAngle) * infScale;
+            const infBaseY = infRadius * Math.sin(infAngle) * Math.cos(infAngle) * 0.5;
+            const infBaseZ = infRadius * Math.sin(infAngle * 2) * 0.3;
+            x = infBaseX + infTubeRadius * Math.cos(infTubeAngle);
+            y = infBaseY + infTubeRadius * Math.sin(infTubeAngle);
+            z = infBaseZ + infTubeRadius * Math.sin(infTubeAngle) * 0.5;
             break;
             
           case 'plasmaOrb':
@@ -364,17 +251,6 @@ const ParticleModel = () => {
             }
             break;
             
-          case 'timeVortex':
-            // Swirling time portal - particles spiral into a central point
-            const vortexAngle = t * Math.PI * 12;
-            const vortexDepth = (t - 0.5) * radius * 2;
-            const vortexRadius = radius * 0.8 * (1 - Math.abs(vortexDepth) / (radius * 1.5));
-            const vortexSpiral = vortexRadius * (1 + Math.sin(t * Math.PI * 6) * 0.3);
-            x = vortexSpiral * Math.cos(vortexAngle);
-            y = vortexSpiral * Math.sin(vortexAngle);
-            z = vortexDepth;
-            break;
-            
           case 'energyPulse':
             // Expanding energy waves - concentric spheres
             const pulseLayer = Math.floor(t * 5);
@@ -386,18 +262,6 @@ const ParticleModel = () => {
             x = pulseRadius * pulseIntensity * Math.cos(pulseTheta) * Math.sin(pulsePhi);
             y = pulseRadius * pulseIntensity * Math.sin(pulseTheta) * Math.sin(pulsePhi);
             z = pulseRadius * pulseIntensity * Math.cos(pulsePhi);
-            break;
-            
-          case 'wormhole':
-            // Wormhole tunnel - curved tube through space
-            const wormholeT = t * Math.PI * 2;
-            const wormholeAngle = t * Math.PI * 20;
-            const wormholeRadius = radius * 0.4 + Math.sin(wormholeT * 3) * radius * 0.2;
-            const wormholeX = radius * 1.2 * Math.sin(wormholeT);
-            const wormholeY = radius * 0.5 * Math.sin(wormholeT * 2);
-            x = wormholeX + wormholeRadius * Math.cos(wormholeAngle);
-            y = wormholeY + wormholeRadius * Math.sin(wormholeAngle) * Math.cos(wormholeT);
-            z = radius * Math.cos(wormholeT) + wormholeRadius * Math.sin(wormholeAngle) * Math.sin(wormholeT);
             break;
             
           case 'clockwork':
@@ -446,7 +310,40 @@ const ParticleModel = () => {
             y = qY * radius * 0.5;
             z = (qWave1 + qWave2 + qWave3) * radius;
             break;
-            
+
+          case 'earthMoon':
+            // Earth and Moon - planet with orbiting satellite
+            const emSection = Math.floor(t * 6);
+            const emT = (t * 6) % 1;
+
+            if (emSection < 4) {
+              // Earth - larger sphere
+              const earthPhi = Math.acos(-1 + 2 * (emSection * 0.25 + emT * 0.25));
+              const earthTheta = Math.sqrt(particleCount * 0.65 * Math.PI) * earthPhi;
+              const earthR = radius * 0.65;
+              x = earthR * Math.cos(earthTheta) * Math.sin(earthPhi);
+              y = earthR * Math.sin(earthTheta) * Math.sin(earthPhi);
+              z = earthR * Math.cos(earthPhi);
+            } else if (emSection === 4) {
+              // Moon - smaller sphere on orbit
+              const moonPhi = Math.acos(-1 + 2 * emT);
+              const moonTheta = Math.sqrt(particleCount * 0.15 * Math.PI) * moonPhi;
+              const moonR = radius * 0.15;
+              const moonOrbitR = radius * 1.2;
+              // Position moon on the orbit path
+              x = moonOrbitR + moonR * Math.cos(moonTheta) * Math.sin(moonPhi);
+              y = moonR * Math.sin(moonTheta) * Math.sin(moonPhi);
+              z = moonR * Math.cos(moonPhi);
+            } else {
+              // Orbit path - circular ring around Earth
+              const orbitAngle = emT * Math.PI * 2;
+              const orbitR = radius * 1.2;
+              x = orbitR * Math.cos(orbitAngle);
+              y = 0;
+              z = orbitR * Math.sin(orbitAngle);
+            }
+            break;
+
           default:
             x = 0;
             y = 0;
@@ -470,11 +367,11 @@ const ParticleModel = () => {
     // Initialize first shape
     morphToShape(0);
 
-    // Change shape every 3 seconds
+    // Change shape every 4 seconds
     const shapeInterval = setInterval(() => {
       shapeIndexRef.current = (shapeIndexRef.current + 1) % shapes.length;
       morphToShape(shapeIndexRef.current);
-    }, 3000);
+    }, 4000);
 
     // Animation loop
     const animate = () => {
@@ -483,11 +380,62 @@ const ParticleModel = () => {
       // Smooth morphing
       const positionAttr = particleSystem.geometry.attributes.position;
       const positions = positionAttr.array;
-      
-      for (let i = 0; i < particleCount * 3; i++) {
-        positions[i] += (targetPositionsRef.current[i] - positions[i]) * 0.05;
+
+      // Calculate mouse position in 3D space for hover effect
+      raycasterRef.current.setFromCamera(hoverMouseRef.current, camera);
+      const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+      raycasterRef.current.ray.intersectPlane(planeZ, mouse3DRef.current);
+
+      // Apply rotation to get mouse position relative to rotated particles
+      const inverseRotation = new THREE.Euler(
+        -currentRotationRef.current.x,
+        -currentRotationRef.current.y,
+        0
+      );
+      const rotatedMouse = mouse3DRef.current.clone().applyEuler(inverseRotation);
+
+      for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+
+        // Get target position
+        const targetX = targetPositionsRef.current[i3];
+        const targetY = targetPositionsRef.current[i3 + 1];
+        const targetZ = targetPositionsRef.current[i3 + 2];
+
+        // Calculate distance from mouse to this particle's target position
+        const dx = targetX - rotatedMouse.x;
+        const dy = targetY - rotatedMouse.y;
+        const dz = targetZ - rotatedMouse.z;
+        const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+        // Apply repulsion if within interaction radius
+        const interactionRadius = interactionRadiusRef.current;
+        const repulsionStrength = repulsionStrengthRef.current;
+
+        if (distance < interactionRadius && distance > 0.01) {
+          // Calculate repulsion force (stronger when closer)
+          const force = (1 - distance / interactionRadius) * repulsionStrength;
+          const normalizedDx = dx / distance;
+          const normalizedDy = dy / distance;
+          const normalizedDz = dz / distance;
+
+          // Apply displacement
+          particleDisplacements[i3] += normalizedDx * force;
+          particleDisplacements[i3 + 1] += normalizedDy * force;
+          particleDisplacements[i3 + 2] += normalizedDz * force;
+        }
+
+        // Decay displacement over time (particles return to original position)
+        particleDisplacements[i3] *= 0.92;
+        particleDisplacements[i3 + 1] *= 0.92;
+        particleDisplacements[i3 + 2] *= 0.92;
+
+        // Smooth morphing + displacement
+        positions[i3] += (targetX + particleDisplacements[i3] - positions[i3]) * 0.08;
+        positions[i3 + 1] += (targetY + particleDisplacements[i3 + 1] - positions[i3 + 1]) * 0.08;
+        positions[i3 + 2] += (targetZ + particleDisplacements[i3 + 2] - positions[i3 + 2]) * 0.08;
       }
-      
+
       positionAttr.needsUpdate = true;
 
       // Auto rotation when not dragging
@@ -495,11 +443,11 @@ const ParticleModel = () => {
         targetRotationRef.current.y += 0.002;
         targetRotationRef.current.x += 0.001;
       }
-      
+
       // Smooth rotation from mouse interaction or auto rotation
       currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * 0.05;
       currentRotationRef.current.y += (targetRotationRef.current.y - currentRotationRef.current.y) * 0.05;
-      
+
       // Apply rotation
       particleSystem.rotation.y = currentRotationRef.current.y;
       particleSystem.rotation.x = currentRotationRef.current.x;
@@ -518,18 +466,37 @@ const ParticleModel = () => {
       mouseRef.current.y = e.clientY;
     };
 
+    // Hover effect - track mouse position for particle repulsion
+    const handleHoverMove = (e) => {
+      if (!containerRef.current) return;
+
+      const rect = containerRef.current.getBoundingClientRect();
+      // Convert mouse position to normalized device coordinates (-1 to +1)
+      hoverMouseRef.current.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      hoverMouseRef.current.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    };
+
+    const handleHoverLeave = () => {
+      // Move mouse far away when leaving canvas
+      hoverMouseRef.current.x = -1000;
+      hoverMouseRef.current.y = -1000;
+    };
+
     const handleMouseMove = (e) => {
+      // Update hover position
+      handleHoverMove(e);
+
       if (!isDraggingRef.current) return;
-      
+
       const deltaX = e.clientX - mouseRef.current.x;
       const deltaY = e.clientY - mouseRef.current.y;
-      
+
       targetRotationRef.current.y += deltaX * 0.01;
       targetRotationRef.current.x += deltaY * 0.01;
-      
+
       // Limit vertical rotation
       targetRotationRef.current.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, targetRotationRef.current.x));
-      
+
       mouseRef.current.x = e.clientX;
       mouseRef.current.y = e.clientY;
     };
@@ -582,6 +549,8 @@ const ParticleModel = () => {
     // Add event listeners to canvas
     if (renderer && renderer.domElement) {
       renderer.domElement.addEventListener('mousedown', handleMouseDown);
+      renderer.domElement.addEventListener('mousemove', handleHoverMove);
+      renderer.domElement.addEventListener('mouseleave', handleHoverLeave);
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
       renderer.domElement.addEventListener('touchstart', handleTouchStart, { passive: false });
@@ -607,6 +576,8 @@ const ParticleModel = () => {
       
       if (renderer && renderer.domElement) {
         renderer.domElement.removeEventListener('mousedown', handleMouseDown);
+        renderer.domElement.removeEventListener('mousemove', handleHoverMove);
+        renderer.domElement.removeEventListener('mouseleave', handleHoverLeave);
         renderer.domElement.removeEventListener('touchstart', handleTouchStart);
         renderer.domElement.removeEventListener('touchmove', handleTouchMove);
         renderer.domElement.removeEventListener('touchend', handleTouchEnd);

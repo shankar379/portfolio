@@ -8,11 +8,9 @@ import {
   SiThreedotjs,
   SiPython,
   SiBlender,
-  SiOpenai,
-  SiGoogle,
   SiUnrealengine
 } from 'react-icons/si';
-import { FaGithub, FaCube, FaRobot, FaEdit, FaFilm } from 'react-icons/fa';
+import { FaGithub } from 'react-icons/fa';
 import './Skills.css';
 
 // Custom Java Icon
@@ -31,43 +29,23 @@ const JavaIcon = ({ style }) => (
   </svg>
 );
 
-// Custom DeepSeek Icon
-const DeepSeekIcon = ({ style }) => (
-  <svg
-    stroke="currentColor"
-    fill="currentColor"
-    strokeWidth="0"
-    viewBox="0 0 24 24"
-    height="1em"
-    width="1em"
-    xmlns="http://www.w3.org/2000/svg"
-    style={style}
-  >
-    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
-  </svg>
-);
 
 const Skills = () => {
   const [hoveredSkill, setHoveredSkill] = useState(null);
 
+  const themeColor = '#a78bfa';
+
   const allSkills = [
-    { name: 'React', icon: SiReact, color: '#61DAFB', category: 'development' },
-    { name: 'Python', icon: SiPython, color: '#3776AB', category: 'development' },
-    { name: 'Django', icon: SiDjango, color: '#092e20', category: 'development' },
-    { name: 'Three.js', icon: SiThreedotjs, color: '#2d2d50', category: 'development' },
-    { name: 'Java', icon: JavaIcon, color: '#ED8B00', category: 'development' },
-    { name: 'Tailwind', icon: SiTailwindcss, color: '#06B6D4', category: 'development' },
-    { name: 'GitHub', icon: FaGithub, color: '#181717', category: 'development' },
-    { name: 'Figma', icon: SiFigma, color: '#F24E1E', category: 'design' },
-    { name: 'Blender', icon: SiBlender, color: '#F5792A', category: 'design' },
-    { name: 'Unreal Engine', icon: SiUnrealengine, color: '#2d2d50', category: 'design' },
-    { name: '3D Modeling', icon: FaCube, color: '#a78bfa', category: 'design' },
-    { name: 'Animation', icon: FaFilm, color: '#a78bfa', category: 'design' },
-    { name: 'ChatGPT', icon: SiOpenai, color: '#10A37F', category: 'ai' },
-    { name: 'Claude AI', icon: FaRobot, color: '#D97757', category: 'ai' },
-    { name: 'Gemini', icon: SiGoogle, color: '#4285F4', category: 'ai' },
-    { name: 'DeepSeek', icon: DeepSeekIcon, color: '#1E40AF', category: 'ai' },
-    { name: 'Cursor AI', icon: FaEdit, color: '#a78bfa', category: 'ai' }
+    { name: 'React', icon: SiReact },
+    { name: 'Python', icon: SiPython },
+    { name: 'Django', icon: SiDjango },
+    { name: 'Three.js', icon: SiThreedotjs },
+    { name: 'Java', icon: JavaIcon },
+    { name: 'Tailwind', icon: SiTailwindcss },
+    { name: 'GitHub', icon: FaGithub },
+    { name: 'Figma', icon: SiFigma },
+    { name: 'Blender', icon: SiBlender },
+    { name: 'Unreal Engine', icon: SiUnrealengine }
   ];
 
 
@@ -119,20 +97,19 @@ const Skills = () => {
                   <div
                     className="skill-icon-wrapper"
                     style={{
-                      '--skill-color': skill.color,
-                      boxShadow: isHovered ? `0 0 30px ${skill.color}40` : 'none'
+                      boxShadow: isHovered ? `0 0 30px ${themeColor}40` : 'none'
                     }}
                   >
                     <IconComponent
                       className="skill-icon"
-                      style={{ color: skill.color }}
+                      style={{ color: themeColor }}
                     />
                   </div>
                   <h3 className="skill-name">{skill.name}</h3>
                 </div>
                 <div
                   className="skill-card-glow"
-                  style={{ background: `radial-gradient(circle, ${skill.color}20 0%, transparent 70%)` }}
+                  style={{ background: `radial-gradient(circle, ${themeColor}20 0%, transparent 70%)` }}
                 />
               </motion.div>
             );

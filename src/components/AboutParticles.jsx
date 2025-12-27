@@ -20,18 +20,14 @@ const AboutParticles = () => {
   const currentRotationRef = useRef({ x: 0, y: 0 });
   const isDraggingRef = useRef(false);
 
-  // Different shapes for About section - time travel & energy themed
+  // Different shapes for About section - energy themed
   const shapes = [
-    'timeVortex',
-    'hourglass',
     'energyPulse',
     'wormhole',
     'clockwork',
     'plasmaOrb',
     'quantumField',
-    'crystal',
-    'spiral',
-    'rings'
+    'earthMoon'
   ];
 
   useEffect(() => {
@@ -110,66 +106,6 @@ const AboutParticles = () => {
         const t = i / particleCount;
         
         switch (shapeType) {
-          case 'timeVortex':
-            // Swirling time portal - particles spiral into a central point
-            const vortexAngle = t * Math.PI * 12;
-            const vortexDepth = (t - 0.5) * radius * 2;
-            const vortexRadius = radius * 0.8 * (1 - Math.abs(vortexDepth) / (radius * 1.5));
-            const vortexSpiral = vortexRadius * (1 + Math.sin(t * Math.PI * 6) * 0.3);
-            x = vortexSpiral * Math.cos(vortexAngle);
-            y = vortexSpiral * Math.sin(vortexAngle);
-            z = vortexDepth;
-            break;
-            
-          case 'hourglass':
-            // Realistic hourglass with glass outline and sand
-            const hgSection = Math.floor(t * 5);
-            const hgT = (t * 5) % 1;
-            const hgAngle = hgT * Math.PI * 2;
-            
-            if (hgSection === 0) {
-              // Top bulb outline (curved)
-              const topCurve = Math.sin(hgT * Math.PI);
-              const topRadius = radius * 0.5 * topCurve;
-              const topY = radius * 0.3 + hgT * radius * 0.7;
-              x = topRadius * Math.cos(hgAngle * 8);
-              y = topY;
-              z = topRadius * Math.sin(hgAngle * 8);
-            } else if (hgSection === 1) {
-              // Bottom bulb outline (curved)
-              const botCurve = Math.sin(hgT * Math.PI);
-              const botRadius = radius * 0.5 * botCurve;
-              const botY = -radius * 0.3 - hgT * radius * 0.7;
-              x = botRadius * Math.cos(hgAngle * 8);
-              y = botY;
-              z = botRadius * Math.sin(hgAngle * 8);
-            } else if (hgSection === 2) {
-              // Narrow neck/waist
-              const neckY = (hgT - 0.5) * radius * 0.6;
-              const neckRadius = radius * 0.08;
-              x = neckRadius * Math.cos(hgAngle * 12);
-              y = neckY;
-              z = neckRadius * Math.sin(hgAngle * 12);
-            } else if (hgSection === 3) {
-              // Sand in top (diminishing pile)
-              const sandTopRadius = radius * 0.35 * (1 - hgT * 0.7);
-              const sandTopY = radius * 0.35 + hgT * radius * 0.4;
-              const sandTopAngle = hgT * Math.PI * 2 * 6;
-              x = sandTopRadius * Math.cos(sandTopAngle) * (0.5 + Math.random() * 0.5);
-              y = sandTopY;
-              z = sandTopRadius * Math.sin(sandTopAngle) * (0.5 + Math.random() * 0.5);
-            } else {
-              // Sand in bottom (growing pile - cone shape)
-              const sandBotT = hgT;
-              const sandBotRadius = radius * 0.4 * sandBotT;
-              const sandBotY = -radius * 0.35 - sandBotT * radius * 0.5;
-              const sandBotAngle = hgT * Math.PI * 2 * 6;
-              x = sandBotRadius * Math.cos(sandBotAngle);
-              y = sandBotY;
-              z = sandBotRadius * Math.sin(sandBotAngle);
-            }
-            break;
-            
           case 'energyPulse':
             // Expanding energy waves - concentric spheres
             const pulseLayer = Math.floor(t * 5);
@@ -281,49 +217,40 @@ const AboutParticles = () => {
             y = qY * radius * 0.5;
             z = (qWave1 + qWave2 + qWave3) * radius;
             break;
-            
-          case 'crystal':
-            // Diamond/crystal shape
-            const crystalAngle = t * Math.PI * 2 * 8;
-            const crystalHeight = (t - 0.5) * radius * 2;
-            const crystalRadius = radius * 0.8 * (1 - Math.abs(crystalHeight) / radius);
-            x = crystalRadius * Math.cos(crystalAngle);
-            y = crystalHeight;
-            z = crystalRadius * Math.sin(crystalAngle);
-            break;
-            
-          case 'spiral':
-            // 3D spiral galaxy
-            const spiralAngle = t * Math.PI * 8;
-            const spiralRadius = t * radius;
-            const spiralHeight = Math.sin(t * Math.PI * 4) * radius * 0.3;
-            x = spiralRadius * Math.cos(spiralAngle);
-            y = spiralHeight;
-            z = spiralRadius * Math.sin(spiralAngle);
-            break;
-            
-          case 'rings':
-            // Multiple interlocking rings
-            const ringIndex = Math.floor(t * 3);
-            const ringT = (t * 3) % 1;
-            const ringAngle = ringT * Math.PI * 2;
-            const ringRadius = radius * 0.7;
-            
-            if (ringIndex === 0) {
-              x = ringRadius * Math.cos(ringAngle);
-              y = ringRadius * Math.sin(ringAngle);
-              z = 0;
-            } else if (ringIndex === 1) {
-              x = ringRadius * Math.cos(ringAngle);
-              y = 0;
-              z = ringRadius * Math.sin(ringAngle);
+
+          case 'earthMoon':
+            // Earth and Moon - planet with orbiting satellite
+            const emSection = Math.floor(t * 6);
+            const emT = (t * 6) % 1;
+
+            if (emSection < 4) {
+              // Earth - larger sphere
+              const earthPhi = Math.acos(-1 + 2 * (emSection * 0.25 + emT * 0.25));
+              const earthTheta = Math.sqrt(particleCount * 0.65 * Math.PI) * earthPhi;
+              const earthR = radius * 0.65;
+              x = earthR * Math.cos(earthTheta) * Math.sin(earthPhi);
+              y = earthR * Math.sin(earthTheta) * Math.sin(earthPhi);
+              z = earthR * Math.cos(earthPhi);
+            } else if (emSection === 4) {
+              // Moon - smaller sphere on orbit
+              const moonPhi = Math.acos(-1 + 2 * emT);
+              const moonTheta = Math.sqrt(particleCount * 0.15 * Math.PI) * moonPhi;
+              const moonR = radius * 0.15;
+              const moonOrbitR = radius * 1.2;
+              // Position moon on the orbit path
+              x = moonOrbitR + moonR * Math.cos(moonTheta) * Math.sin(moonPhi);
+              y = moonR * Math.sin(moonTheta) * Math.sin(moonPhi);
+              z = moonR * Math.cos(moonPhi);
             } else {
-              x = 0;
-              y = ringRadius * Math.cos(ringAngle);
-              z = ringRadius * Math.sin(ringAngle);
+              // Orbit path - circular ring around Earth
+              const orbitAngle = emT * Math.PI * 2;
+              const orbitR = radius * 1.2;
+              x = orbitR * Math.cos(orbitAngle);
+              y = 0;
+              z = orbitR * Math.sin(orbitAngle);
             }
             break;
-            
+
           default:
             x = 0;
             y = 0;
