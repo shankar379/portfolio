@@ -35,7 +35,7 @@ const Footer = () => {
           >
             <div className="footer-logo">
               <div className="logo-square">
-                <span className="logo-letter">D</span>
+                <img src="/ds_logo.png" alt="DS Logo" className="logo-letter" />
               </div>
               <h2 className="footer-name">Durga Shankar</h2>
             </div>

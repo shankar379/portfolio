@@ -10,11 +10,13 @@ import Experience from './components/Experience';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import ProjectDetail from './components/ProjectDetail';
+import SocialSidebar from './components/SocialSidebar';
 
 function HomePage() {
   return (
     <>
       <Navbar />
+      <SocialSidebar />
       <Hero />
       <About />
       <Skills />

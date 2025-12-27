@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaLinkedin, FaGithub, FaDribbble, FaYoutube, FaInstagram } from 'react-icons/fa';
 import ParticleModel from './ParticleModel';
 import './Hero.css';
 
@@ -23,35 +22,8 @@ const Hero = () => {
     return () => clearInterval(typingInterval);
   }, []);
 
-  const socialLinks = [
-    { icon: FaLinkedin, url: 'https://linkedin.com/in/durga-shankar', name: 'LinkedIn' },
-    { icon: FaGithub, url: 'https://github.com/durga369shankar', name: 'GitHub' },
-    { icon: FaDribbble, url: 'https://dribbble.com', name: 'Dribbble' },
-    { icon: FaYoutube, url: 'https://youtube.com', name: 'YouTube' },
-    { icon: FaInstagram, url: 'https://instagram.com/durga369shankar', name: 'Instagram' }
-  ];
-
   return (
     <section id="home" className="hero">
-      {/* Left Social Icons */}
-      <div className="hero-social">
-        {socialLinks.map((social, index) => (
-          <motion.a
-            key={index}
-            href={social.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="social-icon"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1 }}
-            whileHover={{ scale: 1.2, color: '#a78bfa' }}
-          >
-            <social.icon />
-          </motion.a>
-        ))}
-      </div>
-
       {/* Main Hero Content */}
       <div className="hero-content">
         <motion.div

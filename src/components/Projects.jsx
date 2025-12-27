@@ -6,7 +6,7 @@ import './Projects.css';
 
 const Projects = () => {
   const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(2);
 
   const projects = [
     {

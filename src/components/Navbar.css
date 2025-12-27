@@ -79,6 +79,15 @@
   white-space: nowrap;
 }
 
+.logo-image {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  background: #fafafa;
+  border-radius: 8px;
+  padding: 4px;
+}
+
 .nav-links {
   display: flex;
   gap: 2rem;
