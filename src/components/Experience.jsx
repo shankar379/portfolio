@@ -1,100 +1,115 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import './Experience.css';
 
 const Experience = () => {
-  const experiences = [
-    {
-      id: 1,
-      title: 'Full-Stack Developer',
-      company: 'Time Table Generator',
-      period: 'Jan 2022 - Apr 2022',
-      description: 'Developed an automated scheduling tool that increased efficiency by 30%, streamlining timetable generation.',
-      technologies: ['Python', 'Django', 'SQLite3']
-    },
-    {
-      id: 2,
-      title: 'Software Engineer',
-      company: 'Attendance Manager',
-      period: 'Sep 2022 - Dec 2022',
-      description: 'Built an automated attendance tracking system for 1000+ students, reducing administrative tasks and providing real-time data updates and reports.',
-      technologies: ['Python', 'Django', 'SQLite3']
-    },
-    {
-      id: 3,
-      title: 'Web Developer',
-      company: 'SETHU Project',
-      period: 'Jan 2023 - Apr 2023',
-      description: 'Designed and developed a user-friendly interface using modern frameworks to enhance engagement for educational resources.',
-      technologies: ['React', 'Node.js', 'FireBase']
-    },
-    {
-      id: 4,
-      title: 'Backend Developer',
-      company: 'Student Communication Platform',
-      period: 'May 2023 - Aug 2023',
-      description: 'Implemented real-time chat functionality and secure user authentication for 200+ students, improving collaboration and communication.',
-      technologies: ['React', 'Node.js', 'FireBase']
-    }
-  ];
+  const [particles, setParticles] = useState([]);
+
+  useEffect(() => {
+    // Generate random particles
+    const generateParticles = () => {
+      const newParticles = [];
+      for (let i = 0; i < 8; i++) {
+        newParticles.push({
+          id: i,
+          x: Math.random() * 20 + 5,
+          y: Math.random() * 30 + 10,
+          size: Math.random() * 6 + 3,
+          delay: Math.random() * 2
+        });
+      }
+      setParticles(newParticles);
+    };
+    generateParticles();
+  }, []);
 
   return (
-    <section id="experience" className="experience">
-      <div className="experience-container">
-        <motion.h2
-          className="experience-title"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          Milestones of Time
-        </motion.h2>
-        <motion.p
-          className="experience-subtitle"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          Full-Stack Developer with 1 year of hands-on experience in Python & React.js. From revamping educational platforms to building AI-powered features, I craft performant, scalable web solutions that truly engage users.
-        </motion.p>
+    <section id="experience" className="experience-dropping">
+      {/* Background gradient */}
+      <div className="dropping-bg"></div>
+      
+      {/* Floating particles */}
+      <div className="particles-container">
+        {particles.map((particle) => (
+          <motion.div
+            key={particle.id}
+            className="particle"
+            style={{
+              left: `${particle.x}%`,
+              top: `${particle.y}%`,
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+            }}
+            animate={{
+              y: [0, -20, 0],
+              opacity: [0.4, 1, 0.4],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: particle.delay,
+              ease: "easeInOut"
+            }}
+          />
+        ))}
+      </div>
 
-        <div className="experience-timeline">
-          {experiences.map((exp, index) => (
-            <motion.div
-              key={exp.id}
-              className="experience-item"
-              initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-            >
-              <div className="timeline-marker">
-                <div className="marker-dot"></div>
-                {index !== experiences.length - 1 && <div className="marker-line"></div>}
-              </div>
-              
-              <div className="experience-content">
-                <div className="experience-header">
-                  <h3 className="experience-role">{exp.title}</h3>
-                  <span className="experience-company">- {exp.company}</span>
-                </div>
-                <span className="experience-period">{exp.period}</span>
-                <p className="experience-description">{exp.description}</p>
-                <div className="experience-tech">
-                  {exp.technologies.map((tech, techIndex) => (
-                    <span key={techIndex} className="tech-badge">{tech}</span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+      {/* Decorative pink circle */}
+      <motion.div 
+        className="pink-circle"
+        animate={{
+          scale: [1, 1.1, 1],
+          opacity: [0.6, 0.8, 0.6],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+
+      {/* Main frame */}
+      <div className="dropping-frame">
+        {/* Corner brackets */}
+        <div className="corner corner-tl"></div>
+        <div className="corner corner-tr"></div>
+        <div className="corner corner-bl"></div>
+        <div className="corner corner-br"></div>
+
+        {/* Directional arrows */}
+        <div className="arrow arrow-top">↓</div>
+        <div className="arrow arrow-bottom">↑</div>
+        <div className="arrow arrow-left">→</div>
+        <div className="arrow arrow-right">←</div>
+
+        {/* Main text */}
+        <motion.div
+          className="dropping-content"
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2 className="dropping-title">
+            <span className="title-line">DROPPING</span>
+            <span className="title-line">SOON</span>
+          </h2>
+
+          {/* Progress bar */}
+          <div className="progress-container">
+            <div className="progress-line"></div>
+            <div className="progress-dots">
+              <span className="dot"></span>
+              <span className="dot"></span>
+              <span className="dot active"></span>
+              <span className="dot"></span>
+              <span className="dot"></span>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
 };
 
 export default Experience;
-

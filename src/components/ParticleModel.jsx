@@ -21,7 +21,7 @@ const ParticleModel = () => {
   const currentRotationRef = useRef({ x: 0, y: 0 });
   const isDraggingRef = useRef(false);
 
-  // 11 different shapes
+  // 17 different shapes including energy & time-travel
   const shapes = [
     'sphere',
     'cube',
@@ -33,7 +33,13 @@ const ParticleModel = () => {
     'infinity',
     'prism',
     'hourglass',
-    'unreal'
+    'unreal',
+    'plasmaOrb',
+    'timeVortex',
+    'energyPulse',
+    'wormhole',
+    'clockwork',
+    'quantumField'
   ];
 
   useEffect(() => {
@@ -50,7 +56,7 @@ const ParticleModel = () => {
       0.1,
       1000
     );
-    camera.position.z = 5;
+    camera.position.z = 4;
     cameraRef.current = camera;
 
     // Renderer
@@ -320,6 +326,125 @@ const ParticleModel = () => {
                 z = (i % 3) * 0.03 - 0.03;
               }
             }
+            break;
+            
+          case 'plasmaOrb':
+            // Glowing energy ball with dense core and electric lightning tendrils
+            const plasmaSection = Math.floor(t * 3);
+            const plasmaT = (t * 3) % 1;
+            
+            if (plasmaSection === 0) {
+              // Dense glowing core
+              const corePhi = Math.acos(-1 + 2 * plasmaT);
+              const coreTheta = Math.sqrt(particleCount / 3 * Math.PI) * corePhi;
+              const coreR = radius * 0.5;
+              x = coreR * Math.cos(coreTheta) * Math.sin(corePhi);
+              y = coreR * Math.sin(coreTheta) * Math.sin(corePhi);
+              z = coreR * Math.cos(corePhi);
+            } else if (plasmaSection === 1) {
+              // Electric tendrils shooting outward
+              const tendrilIndex = Math.floor(plasmaT * 8);
+              const tendrilProgress = (plasmaT * 8) % 1;
+              const tendrilBaseAngle = (tendrilIndex / 8) * Math.PI * 2;
+              const tendrilElevation = ((tendrilIndex % 3) - 1) * 0.5;
+              const zigzag = Math.sin(tendrilProgress * Math.PI * 6) * 0.15 * tendrilProgress;
+              const tendrilLen = radius * 0.5 + tendrilProgress * radius * 0.8;
+              x = tendrilLen * Math.cos(tendrilBaseAngle + zigzag);
+              y = tendrilLen * tendrilElevation + zigzag * radius * 0.5;
+              z = tendrilLen * Math.sin(tendrilBaseAngle + zigzag);
+            } else {
+              // Outer glow/aura
+              const auraPhi = Math.acos(-1 + 2 * plasmaT);
+              const auraTheta = Math.sqrt(particleCount / 3 * Math.PI) * auraPhi * 2;
+              const auraR = radius * 0.6 + Math.random() * radius * 0.4;
+              const flicker = 0.8 + Math.sin(i * 0.3) * 0.2;
+              x = auraR * flicker * Math.cos(auraTheta) * Math.sin(auraPhi);
+              y = auraR * flicker * Math.sin(auraTheta) * Math.sin(auraPhi);
+              z = auraR * flicker * Math.cos(auraPhi);
+            }
+            break;
+            
+          case 'timeVortex':
+            // Swirling time portal - particles spiral into a central point
+            const vortexAngle = t * Math.PI * 12;
+            const vortexDepth = (t - 0.5) * radius * 2;
+            const vortexRadius = radius * 0.8 * (1 - Math.abs(vortexDepth) / (radius * 1.5));
+            const vortexSpiral = vortexRadius * (1 + Math.sin(t * Math.PI * 6) * 0.3);
+            x = vortexSpiral * Math.cos(vortexAngle);
+            y = vortexSpiral * Math.sin(vortexAngle);
+            z = vortexDepth;
+            break;
+            
+          case 'energyPulse':
+            // Expanding energy waves - concentric spheres
+            const pulseLayer = Math.floor(t * 5);
+            const pulseT = (t * 5) % 1;
+            const pulseRadius = (pulseLayer + 0.5) * radius * 0.35;
+            const pulsePhi = Math.acos(-1 + 2 * pulseT);
+            const pulseTheta = Math.sqrt(particleCount / 5 * Math.PI) * pulsePhi;
+            const pulseIntensity = 1 + Math.sin(pulseLayer * Math.PI * 0.5) * 0.2;
+            x = pulseRadius * pulseIntensity * Math.cos(pulseTheta) * Math.sin(pulsePhi);
+            y = pulseRadius * pulseIntensity * Math.sin(pulseTheta) * Math.sin(pulsePhi);
+            z = pulseRadius * pulseIntensity * Math.cos(pulsePhi);
+            break;
+            
+          case 'wormhole':
+            // Wormhole tunnel - curved tube through space
+            const wormholeT = t * Math.PI * 2;
+            const wormholeAngle = t * Math.PI * 20;
+            const wormholeRadius = radius * 0.4 + Math.sin(wormholeT * 3) * radius * 0.2;
+            const wormholeX = radius * 1.2 * Math.sin(wormholeT);
+            const wormholeY = radius * 0.5 * Math.sin(wormholeT * 2);
+            x = wormholeX + wormholeRadius * Math.cos(wormholeAngle);
+            y = wormholeY + wormholeRadius * Math.sin(wormholeAngle) * Math.cos(wormholeT);
+            z = radius * Math.cos(wormholeT) + wormholeRadius * Math.sin(wormholeAngle) * Math.sin(wormholeT);
+            break;
+            
+          case 'clockwork':
+            // Clock gears and hands - time mechanism
+            const clockSection = Math.floor(t * 4);
+            const clockT = (t * 4) % 1;
+            if (clockSection === 0) {
+              // Outer ring (clock face)
+              const faceAngle = clockT * Math.PI * 2;
+              x = radius * 0.9 * Math.cos(faceAngle);
+              y = radius * 0.9 * Math.sin(faceAngle);
+              z = 0;
+            } else if (clockSection === 1) {
+              // Hour hand
+              const hourLen = clockT * radius * 0.5;
+              const hourAngle = Math.PI * 0.25;
+              x = hourLen * Math.cos(hourAngle);
+              y = hourLen * Math.sin(hourAngle);
+              z = 0.05;
+            } else if (clockSection === 2) {
+              // Minute hand
+              const minLen = clockT * radius * 0.7;
+              const minAngle = Math.PI * 0.75;
+              x = minLen * Math.cos(minAngle);
+              y = minLen * Math.sin(minAngle);
+              z = 0.1;
+            } else {
+              // Inner gear
+              const gearAngle = clockT * Math.PI * 2;
+              const gearRadius = radius * 0.3 * (1 + Math.sin(gearAngle * 8) * 0.2);
+              x = gearRadius * Math.cos(gearAngle);
+              y = gearRadius * Math.sin(gearAngle);
+              z = -0.1;
+            }
+            break;
+            
+          case 'quantumField':
+            // Quantum probability field - particles in wave-like patterns
+            const qSize = Math.floor(Math.sqrt(particleCount));
+            const qX = (i % qSize) / qSize * 4 - 2;
+            const qY = Math.floor(i / qSize) / qSize * 4 - 2;
+            const qWave1 = Math.sin(qX * Math.PI * 2) * 0.3;
+            const qWave2 = Math.sin(qY * Math.PI * 2) * 0.3;
+            const qWave3 = Math.sin((qX + qY) * Math.PI) * 0.2;
+            x = qX * radius * 0.5;
+            y = qY * radius * 0.5;
+            z = (qWave1 + qWave2 + qWave3) * radius;
             break;
             
           default:

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
   SiDjango, 
@@ -49,149 +49,78 @@ const DeepSeekIcon = ({ style }) => (
 );
 
 const Skills = () => {
-  const [outerRotation, setOuterRotation] = useState(0);
-  const [innerRotation, setInnerRotation] = useState(0);
   const [hoveredSkill, setHoveredSkill] = useState(null);
 
-  const hardSkills = [
-    { name: 'Django', icon: SiDjango, color: '#092e20' },
-    { name: 'Figma', icon: SiFigma, color: '#F24E1E' },
+  const allSkills = [
     { name: 'React', icon: SiReact, color: '#61DAFB' },
-    { name: 'Tailwind', icon: SiTailwindcss, color: '#06B6D4' },
+    { name: 'Python', icon: SiPython, color: '#3776AB' },
+    { name: 'Django', icon: SiDjango, color: '#092e20' },
     { name: 'Three.js', icon: SiThreedotjs, color: '#000000' },
     { name: 'Java', icon: JavaIcon, color: '#ED8B00' },
-    { name: 'Python', icon: SiPython, color: '#3776AB' },
+    { name: 'Tailwind', icon: SiTailwindcss, color: '#06B6D4' },
+    { name: 'Figma', icon: SiFigma, color: '#F24E1E' },
     { name: 'Blender 3D', icon: SiBlender, color: '#F5792A' },
     { name: 'GitHub', icon: FaGithub, color: '#181717' },
-    { name: '3D Modeling', icon: FaCube, color: '#a78bfa' },
-    { name: 'Animation', icon: FaCode, color: '#a78bfa' }
-  ];
-
-  const aiTools = [
     { name: 'ChatGPT', icon: SiOpenai, color: '#10A37F' },
     { name: 'Claude', icon: FaRobot, color: '#D97757' },
     { name: 'Gemini', icon: SiGoogle, color: '#4285F4' },
+    { name: 'DeepSeek', icon: DeepSeekIcon, color: '#1E40AF' },
     { name: 'Cursor AI', icon: FaEdit, color: '#a78bfa' },
-    { name: 'DeepSeek', icon: DeepSeekIcon, color: '#1E40AF' }
+    { name: '3D Modeling', icon: FaCube, color: '#a78bfa' },
+    { name: 'Animation', icon: FaCode, color: '#a78bfa' }
   ];
-
-  // Calculate step angles (one step = one position)
-  const outerStepAngle = 360 / hardSkills.length;
-  const innerStepAngle = 360 / aiTools.length;
-
-  // Move one step every 3 seconds
-  useEffect(() => {
-    if (hoveredSkill) return; // Pause when hovering over a skill
-
-    const interval = setInterval(() => {
-      setOuterRotation(prev => prev + outerStepAngle);
-      setInnerRotation(prev => prev - innerStepAngle); // Inner rotates opposite direction
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [hoveredSkill, outerStepAngle, innerStepAngle]);
 
 
 
   return (
     <section id="skills" className="skills">
+      <div className="skills-background-text">SKILLS</div>
       <div className="skills-container">
-        <motion.h2
-          className="skills-title"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+        <motion.div
+          className="skills-room"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8 }}
         >
-          Skills & Tools
-        </motion.h2>
-        <motion.p
-          className="skills-subtitle"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          The technologies and tools I use to build digital experiences
-        </motion.p>
-
-        <div className="orbital-container">
-          {/* Outer Orbit - Hard Skills */}
-          <div 
-            className="orbit orbit-outer"
-            style={{
-              transform: `rotate(${outerRotation}deg)`,
-              transition: 'transform 0.5s ease-out'
-            }}
-          >
-            {hardSkills.map((skill, index) => {
-              const IconComponent = skill.icon;
-              const angle = (index / hardSkills.length) * 360;
-              const radius = 200; // Outer orbit radius
-              const x = Math.cos((angle * Math.PI) / 180) * radius;
-              const y = Math.sin((angle * Math.PI) / 180) * radius;
-              
-              return (
-                <div
-                  key={index}
-                  className="orbital-skill"
-                  style={{
-                    transform: `translate(${x}px, ${y}px) rotate(${-outerRotation}deg)`
-                  }}
-                  onMouseEnter={() => setHoveredSkill(`outer-${index}`)}
-                  onMouseLeave={() => setHoveredSkill(null)}
-                >
-                  <div className="skill-orbital-item">
-                    <div className="skill-icon-wrapper">
-                      <IconComponent style={{ color: skill.color }} />
-                    </div>
-                    {hoveredSkill === `outer-${index}` && (
-                      <div className="skill-name-tooltip">{skill.name}</div>
-                    )}
-                  </div>
+          {allSkills.map((skill, index) => {
+            const IconComponent = skill.icon;
+            const isHovered = hoveredSkill === index;
+            
+            return (
+              <motion.div
+                key={index}
+                className={`skill-platform ${isHovered ? 'hovered' : ''}`}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                onMouseEnter={() => setHoveredSkill(index)}
+                onMouseLeave={() => setHoveredSkill(null)}
+                whileHover={{ scale: 1.1, y: -10 }}
+              >
+                <div className="platform-glow"></div>
+                <div className="platform-base"></div>
+                <div className="skill-icon-container">
+                  <IconComponent 
+                    className="skill-icon"
+                    style={{ color: isHovered ? '#a78bfa' : skill.color }} 
+                  />
                 </div>
-              );
-            })}
-          </div>
-
-          {/* Inner Orbit - AI Tools */}
-          <div 
-            className="orbit orbit-inner"
-            style={{
-              transform: `rotate(${innerRotation}deg)`,
-              transition: 'transform 0.5s ease-out'
-            }}
-          >
-            {aiTools.map((tool, index) => {
-              const IconComponent = tool.icon;
-              const angle = (index / aiTools.length) * 360;
-              const radius = 120; // Inner orbit radius
-              const x = Math.cos((angle * Math.PI) / 180) * radius;
-              const y = Math.sin((angle * Math.PI) / 180) * radius;
-              
-              return (
-                <div
-                  key={index}
-                  className="orbital-skill"
-                  style={{
-                    transform: `translate(${x}px, ${y}px) rotate(${-innerRotation}deg)`
-                  }}
-                  onMouseEnter={() => setHoveredSkill(`inner-${index}`)}
-                  onMouseLeave={() => setHoveredSkill(null)}
-                >
-                  <div className="skill-orbital-item">
-                    <div className="skill-icon-wrapper">
-                      <IconComponent style={{ color: tool.color }} />
-                    </div>
-                    {hoveredSkill === `inner-${index}` && (
-                      <div className="skill-name-tooltip">{tool.name}</div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+                {isHovered && (
+                  <motion.div
+                    className="skill-name-label"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {skill.name}
+                  </motion.div>
+                )}
+              </motion.div>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );

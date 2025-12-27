@@ -1,0 +1,33 @@
+.about-particle-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+  cursor: grab;
+}
+
+.about-particle-container:active {
+  cursor: grabbing;
+}
+
+.about-particle-container canvas {
+  display: block;
+}
+
+@media (max-width: 968px) {
+  .about-particle-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-particle-container {
+    height: 350px;
+  }
+}
+

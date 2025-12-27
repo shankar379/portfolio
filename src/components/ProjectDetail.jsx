@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import './ProjectDetail.css';
@@ -15,6 +15,8 @@ const ProjectDetail = () => {
       id: 1,
       title: 'SETHU Web App',
       subtitle: 'Public-facing site for SETHU initiative with storytelling-driven UX.',
+      liveUrl: 'https://team-sethu.web.app/',
+      githubUrl: '',
       challenge: 'Creating an engaging public-facing website that effectively communicates the SETHU initiative\'s mission while maintaining high performance for 5k+ monthly users.',
       solution: 'Developed a high-performance web interface using React and Node.js with Firebase integration. Implemented code splitting, lazy loading, and optimized state management to ensure smooth performance even under high traffic conditions.',
       impactPoints: [
@@ -29,6 +31,8 @@ const ProjectDetail = () => {
       id: 2,
       title: 'Time Table Generator',
       subtitle: 'Constraint-driven timetable engine for academic departments.',
+      liveUrl: 'https://timetable-genaretor-vs.vercel.app/',
+      githubUrl: 'https://github.com/shankar379/TG_NEW',
       challenge: 'Creating timetables manually was a time-consuming process (3 weeks) prone to errors, conflicts, and resource allocation issues across multiple departments.',
       solution: 'Built an automated scheduling system using Python and Django that intelligently resolves scheduling conflicts, allocates resources efficiently, and considers multiple constraints including room availability, faculty preferences, and course requirements.',
       impactPoints: [
@@ -44,6 +48,8 @@ const ProjectDetail = () => {
       id: 3,
       title: 'Student Communication Platform',
       subtitle: 'Real-time messaging and announcement hub for universities.',
+      liveUrl: 'https://student-communication-vs.web.app/',
+      githubUrl: '',
       challenge: 'Students and faculty needed a reliable, scalable communication system that could handle high concurrency while providing real-time messaging, file sharing, and group collaboration features.',
       solution: 'Architected a scalable real-time chat system using React, Node.js, and Firebase. Implemented WebSocket connections for instant message delivery, optimized backend for high concurrency, and included features like message encryption, user presence indicators, and message history.',
       impactPoints: [
@@ -59,6 +65,8 @@ const ProjectDetail = () => {
       id: 4,
       title: 'Smart Attendance Manager',
       subtitle: 'Automated biometric attendance tracking with analytics dashboards.',
+      liveUrl: '',
+      githubUrl: '',
       challenge: 'Manual attendance tracking was error-prone, time-consuming, and difficult to manage across large institutions processing 10k+ records monthly.',
       solution: 'Developed an AI-powered attendance system using Python and Django with automated face recognition, QR code scanning, and biometric integration. Implemented machine learning algorithms for improved recognition accuracy and intelligent reporting features.',
       impactPoints: [
@@ -74,6 +82,8 @@ const ProjectDetail = () => {
       id: 5,
       title: 'Race the Sun: Challenge Edition',
       subtitle: '3D infinite runner game with procedural generation and solar energy mechanics.',
+      liveUrl: '',
+      githubUrl: '',
       challenge: 'Creating an engaging 3D browser-based game with procedural generation while maintaining high frame rates (90+ FPS) on mid-range devices.',
       solution: 'Developed a 3D infinite runner game using React, Three.js, and WebGL. Implemented procedural generation algorithms, optimized WebGL rendering pipelines, efficient geometry management, and intelligent level-of-detail (LOD) systems for optimal performance.',
       impactPoints: [
@@ -150,6 +160,29 @@ const ProjectDetail = () => {
             <span className="case-study-label">Case Study</span>
             <h1 className="project-detail-title">{project.title}</h1>
             <p className="project-subtitle">{project.subtitle}</p>
+            
+            <div className="project-links">
+              {project.liveUrl && (
+                <a 
+                  href={project.liveUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="project-link live-link"
+                >
+                  <FaExternalLinkAlt /> Live Demo
+                </a>
+              )}
+              {project.githubUrl && (
+                <a 
+                  href={project.githubUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="project-link github-link"
+                >
+                  <FaGithub /> View Code
+                </a>
+              )}
+            </div>
           </div>
 
           <div className="project-detail-body">

@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
   padding: 120px 2rem 4rem;
   background: #fafafa;
@@ -40,12 +40,13 @@
 }
 
 .hero-content {
-  max-width: 1200px;
-  width: 100%;
+  max-width: 500px;
+  width: 40%;
   text-align: left;
   z-index: 2;
   padding-left: 4rem;
   position: relative;
+  pointer-events: auto;
 }
 
 .hero-text-container {
@@ -263,6 +264,7 @@
 
   .hero-content {
     padding-left: 2rem;
+    width: 50%;
   }
 
   .hero-resume {
@@ -291,6 +293,8 @@
 
   .hero-content {
     padding-left: 1rem;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero-name {
