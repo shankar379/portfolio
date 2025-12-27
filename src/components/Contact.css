@@ -3,6 +3,7 @@
   background: #fafafa;
   position: relative;
   overflow: hidden;
+  z-index: 20;
 }
 
 .contact-container {

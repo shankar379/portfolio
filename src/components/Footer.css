@@ -4,6 +4,7 @@
   color: #ffffff;
   position: relative;
   overflow: hidden;
+  z-index: 20;
 }
 
 .footer-container {

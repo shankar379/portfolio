@@ -4,6 +4,7 @@
   position: relative;
   min-height: 100vh;
   overflow: hidden;
+  z-index: 20;
 }
 
 .projects-background-text {
