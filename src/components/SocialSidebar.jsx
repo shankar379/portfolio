@@ -28,30 +28,6 @@ const SocialSidebar = () => {
           <social.icon />
         </motion.a>
       ))}
-
-      {/* Contact Information */}
-      <motion.div
-        className="contact-info"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: 0.6 }}
-      >
-        <div className="contact-item">
-          📧 Email: durga369shankar@gmail.com
-        </div>
-        <div className="contact-item">
-          📞 Phone: 6303449205
-        </div>
-        <div className="contact-item">
-          🔗 Portfolio: Durga Shankar
-        </div>
-        <div className="contact-item">
-          🔗 GitHub: shankar379
-        </div>
-        <div className="contact-item">
-          🔗 LinkedIn: durga-shankar-295286249
-        </div>
-      </motion.div>
     </div>
   );
 };
