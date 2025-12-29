@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaArrowLeft, FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
 import Navbar from './Navbar';
-import Footer from './Footer';
 import './ProjectDetail.css';
 
 const ProjectDetail = () => {
@@ -122,7 +121,6 @@ const ProjectDetail = () => {
             </button>
           </div>
         </div>
-        <Footer />
       </>
     );
   }
@@ -233,7 +231,6 @@ const ProjectDetail = () => {
         </motion.div>
         </div>
       </div>
-      <Footer />
     </>
   );
 };
