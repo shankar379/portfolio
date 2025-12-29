@@ -40,7 +40,7 @@ const SocialSidebar = () => {
           📧 Email: durga369shankar@gmail.com
         </div>
         <div className="contact-item">
-          📞 Phone: +91 93443 32099
+          📞 Phone: 6303449205
         </div>
         <div className="contact-item">
           🔗 Portfolio: Durga Shankar
