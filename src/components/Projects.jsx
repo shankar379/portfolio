@@ -18,7 +18,7 @@ const Projects = () => {
       accentColor: '#10B981',
       image: '/sethu_web.png',
       liveUrl: 'https://team-sethu.web.app/',
-      githubUrl: ''
+      githubUrl: 'https://github.com/shankar379/SETHU-public'
     },
     {
       id: 2,
