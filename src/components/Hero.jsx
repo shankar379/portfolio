@@ -76,17 +76,20 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Right Resume Text */}
+      {/* Right Resume Download */}
       <div className="hero-resume">
         <motion.a
-          href="#resume"
+          href="/Durga_Shankar_Resume.html"
+          target="_blank"
+          rel="noopener noreferrer"
           className="resume-text"
           initial={{ opacity: 0, rotate: 90 }}
           animate={{ opacity: 1, rotate: 90 }}
           transition={{ delay: 1 }}
-          whileHover={{ color: '#a78bfa' }}
+          whileHover={{ color: '#a78bfa', scale: 1.05 }}
+          title="View Resume (Print to PDF using browser print function)"
         >
-          RESUME
+          VIEW RESUME
         </motion.a>
       </div>
 

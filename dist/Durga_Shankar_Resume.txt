@@ -1,0 +1,112 @@
+DURGA SHANKAR GUTTULA
+
+Android Developer | Full-Stack Engineer | 3D & Interactive Systems Developer
+
+📍 India
+📧 durga369shankar@gmail.com
+📞 +91 6303449205
+🔗 Portfolio: Durga Shankar
+🔗 GitHub: https://github.com/shankar379
+🔗 LinkedIn: https://www.linkedin.com/in/durga-shankar-295286249/
+
+---
+
+PROFESSIONAL SUMMARY
+
+Android Developer with strong full-stack engineering experience and a solid foundation in building real-world, production-oriented applications. Proven ability to design and deliver scalable systems using React Native, Android, Node.js, MongoDB, AWS, and Firebase. Experienced in AI-integrated platforms and interactive 3D workflows using Blender, Three.js, and Unreal Engine. Passionate about immersive technologies, clean architecture, and practical problem-solving.
+
+---
+
+PROFESSIONAL EXPERIENCE
+
+Android Developer
+Tickets99 | India
+2024 – Present
+
+• Developing and maintaining Android applications used in live event and ticketing workflows.
+• Implementing REST API integrations, secure data handling, and optimized UI flows.
+• Collaborating with backend teams to ensure stable real-time updates and reliable app behavior.
+• Debugging production issues and improving overall performance and maintainability.
+
+---
+
+PERSONAL PROJECT
+
+MediVoice – Medicine Reminder & Assistance Platform
+Tech Stack: React Native, Next.js, Node.js, MongoDB, AWS S3, WebSockets, Firebase, Twilio, Google Gemini AI
+
+• Designed a full-scale medicine management ecosystem with Patient, Seller, and Doctor mobile applications.
+• Implemented medicine reminders using local alarms, voice alerts (TTS), and push notifications.
+• Built missed-dose escalation logic with SMS and automated calls to guardians using Twilio.
+• Integrated an AI chat assistant with persistent conversation history for user guidance.
+• Implemented real-time synchronization using WebSockets.
+• Set up CI/CD pipelines using GitHub Actions, Docker, and AWS EC2 deployments.
+• Focused heavily on elderly-friendly UX and real-world usability constraints.
+
+---
+
+B.TECH FINAL YEAR PROJECT
+
+Deep Crack – Image-Based Crack Detection System
+Tech Stack: Python, Flask, MobileNet, CNNs, SQLite, Data Augmentation
+
+• Developed a deep learning-based system to detect surface cracks from uploaded images.
+• Used transfer learning with MobileNet to improve detection accuracy and reduce training time.
+• Applied data augmentation techniques to enhance model generalization.
+• Evaluated model performance using confusion matrices and accuracy metrics.
+• Built a Flask-based web application for real-time image upload and prediction visualization.
+
+---
+
+3D, INTERACTIVE & VISUAL DEVELOPMENT
+
+• Created realistic and cinematic 3D scenes using Blender.
+• Built interactive web-based visual experiences using Three.js with React.
+• Experience with character animation pipelines (Mixamo, MetaHuman-ready assets).
+• Strong interest in Unreal Engine workflows for games and immersive experiences.
+
+---
+
+TECHNICAL SKILLS
+
+Programming & Development
+• Java, Python, JavaScript, C, C++
+• Android (Native), React, React Native, Next.js
+• Django, Flask, Node.js, Express
+
+Databases & Cloud
+• MongoDB, Firebase Realtime Database, SQLite
+• AWS (EC2, S3), LocalStack
+• CI/CD with GitHub Actions & Docker
+
+3D & Creative Technology
+• Blender (Modeling, Animation, Cinematics)
+• Three.js, Unreal Engine
+• UI/UX: Figma
+
+AI & Integrations
+• Deep Learning (CNNs, Transfer Learning)
+• AI Chat Integration (Google Gemini)
+• Real-time systems (WebSockets, Push Notifications)
+
+---
+
+EDUCATION
+
+Bachelor of Technology (B.Tech)
+Completed
+
+---
+
+CERTIFICATIONS
+
+• Django with Machine Learning – Datapoint, Hyderabad
+• Artificial Intelligence & Machine Learning – Youngminds, Vijayawada
+• Cloud-based DevOps – Datavalley, Hyderabad
+
+---
+
+ADDITIONAL
+
+• YouTube Creator – "Code and Create" (Programming & 3D content)
+• Strong interest in VFX, Game Development, and Immersive Technologies
