@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaPaperPlane, FaPaperclip } from 'react-icons/fa';
+import EnvelopeParticleModel from './EnvelopeParticleModel';
 import './Contact.css';
 
 const Contact = () => {
@@ -108,7 +109,7 @@ const Contact = () => {
                   onChange={handleChange}
                   placeholder="Your message here..."
                   className="form-textarea"
-                  rows="6"
+                  rows="3"
                   required
                 ></textarea>
                 <FaPaperPlane className="input-icon message-icon" />
@@ -127,24 +128,15 @@ const Contact = () => {
           </form>
         </motion.div>
 
-        {/* Right Side - Image Section */}
+        {/* Right Side - 3D Envelope */}
         <motion.div
-          className="contact-image-section"
+          className="contact-envelope-section"
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="image-wrapper">
-            <div className="wavy-divider"></div>
-            <div className="contact-image">
-              <img 
-                src="/contact_bg2.png" 
-                alt="Durga Shankar - Developer" 
-                className="contact-photo"
-              />
-            </div>
-          </div>
+          <EnvelopeParticleModel />
         </motion.div>
       </div>
     </section>

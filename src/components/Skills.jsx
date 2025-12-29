@@ -8,7 +8,10 @@ import {
   SiThreedotjs,
   SiPython,
   SiBlender,
-  SiUnrealengine
+  SiUnrealengine,
+  SiAndroidstudio,
+  SiAmazonec2,
+  SiExpo
 } from 'react-icons/si';
 import { FaGithub } from 'react-icons/fa';
 import './Skills.css';
@@ -20,8 +23,8 @@ const JavaIcon = ({ style }) => (
     fill="currentColor"
     strokeWidth="0"
     viewBox="0 0 384 512"
-    height="1em"
-    width="1em"
+    height="1.8em"
+    width="1.8em"
     xmlns="http://www.w3.org/2000/svg"
     style={style}
   >
@@ -37,15 +40,18 @@ const Skills = () => {
 
   const allSkills = [
     { name: 'React', icon: SiReact },
-    { name: 'Python', icon: SiPython },
-    { name: 'Django', icon: SiDjango },
-    { name: 'Three.js', icon: SiThreedotjs },
-    { name: 'Java', icon: JavaIcon },
     { name: 'Tailwind', icon: SiTailwindcss },
+    { name: 'Django', icon: SiDjango },
+    { name: 'Python', icon: SiPython },
+    { name: 'Java', icon: JavaIcon },
+    { name: 'Android Studio', icon: SiAndroidstudio },
     { name: 'GitHub', icon: FaGithub },
+    { name: 'Three.js', icon: SiThreedotjs },
     { name: 'Figma', icon: SiFigma },
     { name: 'Blender', icon: SiBlender },
-    { name: 'Unreal Engine', icon: SiUnrealengine }
+    { name: 'Unreal Engine', icon: SiUnrealengine },
+    { name: 'AWS EC2 + CI/CD', icon: SiAmazonec2 },
+    { name: 'React Native + Expo', icon: SiExpo }
   ];
 
 
@@ -67,7 +73,6 @@ const Skills = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <span className="skills-label">EXPERTISE</span>
           <h2 className="skills-title">Skills & Technologies</h2>
           <p className="skills-subtitle">Tools and technologies I use to bring ideas to life</p>
         </motion.div>

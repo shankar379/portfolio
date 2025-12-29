@@ -1,0 +1,29 @@
+.jarvis-orb-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.jarvis-orb-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 968px) {
+  .jarvis-orb-container {
+    position: relative;
+    width: 100%;
+    height: 350px;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .jarvis-orb-container {
+    height: 280px;
+  }
+}

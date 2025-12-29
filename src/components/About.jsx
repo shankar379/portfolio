@@ -27,8 +27,8 @@ const About = () => {
           >
             I turn ideas into reliable digital products.
           </motion.h2>
-          
-          <motion.p 
+
+          <motion.p
             className="about-subtitle"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

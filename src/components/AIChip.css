@@ -1,0 +1,29 @@
+.ai-chip-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.ai-chip-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@media (max-width: 968px) {
+  .ai-chip-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .ai-chip-container {
+    height: 250px;
+  }
+}

@@ -15,7 +15,7 @@ const Navbar = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
           const currentScrollY = window.scrollY;
-          const sections = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
+          const sections = ['home', 'about', 'skills', 'projects', 'world', 'contact'];
           const scrollPosition = currentScrollY + 100;
 
           // Update active section
@@ -66,7 +66,7 @@ const Navbar = () => {
     { id: 'about', label: 'ABOUT' },
     { id: 'skills', label: 'SKILLS' },
     { id: 'projects', label: 'PROJECTS' },
-    { id: 'experience', label: 'WORK' },
+    { id: 'world', label: 'WORLD' },
     { id: 'contact', label: 'CONTACT' }
   ];
 

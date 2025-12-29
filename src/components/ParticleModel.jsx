@@ -12,8 +12,9 @@ const ParticleModel = () => {
   const shapeIndexRef = useRef(0);
   const targetPositionsRef = useRef(null);
   const currentPositionsRef = useRef(null);
-  const particleCount = 2000; // Low quality - fewer particles
-  const color = new THREE.Color(0xa78bfa); // #a78bfa
+  const particleCount = 2000; // Particle count
+  const color = new THREE.Color(0xa78bfa); // #a78bfa (purple)
+  const hoverColor = new THREE.Color(0x3b82f6); // Blue color for hover
   
   // Mouse interaction
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -21,12 +22,11 @@ const ParticleModel = () => {
   const currentRotationRef = useRef({ x: 0, y: 0 });
   const isDraggingRef = useRef(false);
 
-  // Mouse hover interaction for particle repulsion
+  // Mouse hover interaction for color change
   const hoverMouseRef = useRef(new THREE.Vector2(-1000, -1000));
   const mouse3DRef = useRef(new THREE.Vector3());
   const raycasterRef = useRef(new THREE.Raycaster());
-  const interactionRadiusRef = useRef(0.8); // Radius of mouse influence
-  const repulsionStrengthRef = useRef(0.15); // How strongly particles are pushed
+  const colorChangeRadiusRef = useRef(1.0); // Radius of color change influence
 
   // 11 different shapes
   const shapes = [
@@ -71,6 +71,9 @@ const ParticleModel = () => {
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
+    // Create raycaster for mouse position tracking
+    raycasterRef.current = new THREE.Raycaster();
+
     // Create particle system
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
@@ -105,9 +108,6 @@ const ParticleModel = () => {
     particleSystemRef.current = particleSystem;
     currentPositionsRef.current = positions;
     targetPositionsRef.current = new Float32Array(particleCount * 3);
-
-    // Store displacement for each particle (for hover effect)
-    const particleDisplacements = new Float32Array(particleCount * 3);
 
     // Generate shape positions
     const generateShapePositions = (shapeType) => {
@@ -152,19 +152,74 @@ const ParticleModel = () => {
             break;
             
           case 'dna':
-            // Double helix - two intertwined spirals
-            const dnaAngle = t * Math.PI * 6;
-            const dnaHeight = t * radius * 3 - radius * 1.5;
-            const dnaRadius = radius * 0.5;
-            const helixOffset = (i % 2) * Math.PI;
-            x = dnaRadius * Math.cos(dnaAngle + helixOffset);
-            y = dnaHeight;
-            z = dnaRadius * Math.sin(dnaAngle + helixOffset);
-            // Add connecting lines (rungs)
-            if (i % 20 < 2) {
-              const rungT = (i % 20) / 2;
-              x = dnaRadius * Math.cos(dnaAngle) * (1 - rungT * 2);
-              z = dnaRadius * Math.sin(dnaAngle) * (1 - rungT * 2);
+            // DNA Double Helix - compact with dense particles
+            const dnaHeight = radius * 2.2;  // Smaller height
+            const dnaRadius = radius * 0.45; // Smaller radius
+            const dnaStrandThickness = radius * 0.05;
+            const dnaTurns = 2;  // Fewer turns for compactness
+            const dnaNumRungs = 16; // More rungs for density
+
+            // Particle distribution: 40% strand1, 40% strand2, 20% rungs
+            const dnaStrandCount = Math.floor(particleCount * 0.40);
+            const dnaRungCount = particleCount - dnaStrandCount * 2;
+            const dnaParticlesPerRung = Math.floor(dnaRungCount / dnaNumRungs);
+
+            if (i < dnaStrandCount) {
+              // Strand 1 - dense tube with more particles
+              const s1t = i / dnaStrandCount;
+              const s1Angle = s1t * Math.PI * 2 * dnaTurns;
+              const s1Y = s1t * dnaHeight - dnaHeight / 2;
+
+              // Create thicker tube with 8 particles around the helix path
+              const s1TubeAngle = (i % 8) * Math.PI * 2 / 8;
+              const s1RadialOffset = dnaStrandThickness * (0.5 + (i % 3) * 0.25);
+
+              x = dnaRadius * Math.cos(s1Angle) + s1RadialOffset * Math.cos(s1TubeAngle) * Math.sin(s1Angle);
+              y = s1Y + s1RadialOffset * Math.sin(s1TubeAngle) * 0.8;
+              z = dnaRadius * Math.sin(s1Angle) + s1RadialOffset * Math.cos(s1TubeAngle) * Math.cos(s1Angle);
+
+            } else if (i < dnaStrandCount * 2) {
+              // Strand 2 - opposite side with dense tube
+              const s2i = i - dnaStrandCount;
+              const s2t = s2i / dnaStrandCount;
+              const s2Angle = s2t * Math.PI * 2 * dnaTurns + Math.PI;
+              const s2Y = s2t * dnaHeight - dnaHeight / 2;
+
+              const s2TubeAngle = (s2i % 8) * Math.PI * 2 / 8;
+              const s2RadialOffset = dnaStrandThickness * (0.5 + (s2i % 3) * 0.25);
+
+              x = dnaRadius * Math.cos(s2Angle) + s2RadialOffset * Math.cos(s2TubeAngle) * Math.sin(s2Angle);
+              y = s2Y + s2RadialOffset * Math.sin(s2TubeAngle) * 0.8;
+              z = dnaRadius * Math.sin(s2Angle) + s2RadialOffset * Math.cos(s2TubeAngle) * Math.cos(s2Angle);
+
+            } else {
+              // Base pair rungs - denser horizontal connections
+              const rungIdx = i - dnaStrandCount * 2;
+              const whichRung = Math.floor(rungIdx / dnaParticlesPerRung);
+              const rungLocalIdx = rungIdx % dnaParticlesPerRung;
+
+              // Position along helix height
+              const rungHeightT = (whichRung + 0.5) / dnaNumRungs;
+              const rungAngle = rungHeightT * Math.PI * 2 * dnaTurns;
+              const rungYPos = rungHeightT * dnaHeight - dnaHeight / 2;
+
+              // Two ends of the rung (on each strand)
+              const rungX1 = dnaRadius * Math.cos(rungAngle);
+              const rungZ1 = dnaRadius * Math.sin(rungAngle);
+              const rungX2 = dnaRadius * Math.cos(rungAngle + Math.PI);
+              const rungZ2 = dnaRadius * Math.sin(rungAngle + Math.PI);
+
+              // Progress along the rung with slight variation
+              const rungProgress = rungLocalIdx / Math.max(dnaParticlesPerRung - 1, 1);
+
+              // Add thickness to rungs - multiple layers
+              const rungLayer = (rungLocalIdx % 4);
+              const rungThicknessY = (rungLayer - 1.5) * 0.015;
+              const rungThicknessZ = ((rungLocalIdx % 2) - 0.5) * 0.02;
+
+              x = rungX1 + (rungX2 - rungX1) * rungProgress;
+              y = rungYPos + rungThicknessY;
+              z = rungZ1 + (rungZ2 - rungZ1) * rungProgress + rungThicknessZ;
             }
             break;
             
@@ -380,6 +435,8 @@ const ParticleModel = () => {
       // Smooth morphing
       const positionAttr = particleSystem.geometry.attributes.position;
       const positions = positionAttr.array;
+      const colorAttr = particleSystem.geometry.attributes.color;
+      const colors = colorAttr.array;
 
       // Calculate mouse position in 3D space for hover effect
       raycasterRef.current.setFromCamera(hoverMouseRef.current, camera);
@@ -394,6 +451,8 @@ const ParticleModel = () => {
       );
       const rotatedMouse = mouse3DRef.current.clone().applyEuler(inverseRotation);
 
+      const colorChangeRadius = colorChangeRadiusRef.current;
+
       for (let i = 0; i < particleCount; i++) {
         const i3 = i * 3;
 
@@ -402,41 +461,36 @@ const ParticleModel = () => {
         const targetY = targetPositionsRef.current[i3 + 1];
         const targetZ = targetPositionsRef.current[i3 + 2];
 
-        // Calculate distance from mouse to this particle's target position
-        const dx = targetX - rotatedMouse.x;
-        const dy = targetY - rotatedMouse.y;
-        const dz = targetZ - rotatedMouse.z;
+        // Smooth morphing
+        positions[i3] += (targetX - positions[i3]) * 0.08;
+        positions[i3 + 1] += (targetY - positions[i3 + 1]) * 0.08;
+        positions[i3 + 2] += (targetZ - positions[i3 + 2]) * 0.08;
+
+        // Calculate distance from mouse to this particle's current position
+        const dx = positions[i3] - rotatedMouse.x;
+        const dy = positions[i3 + 1] - rotatedMouse.y;
+        const dz = positions[i3 + 2] - rotatedMouse.z;
         const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-        // Apply repulsion if within interaction radius
-        const interactionRadius = interactionRadiusRef.current;
-        const repulsionStrength = repulsionStrengthRef.current;
-
-        if (distance < interactionRadius && distance > 0.01) {
-          // Calculate repulsion force (stronger when closer)
-          const force = (1 - distance / interactionRadius) * repulsionStrength;
-          const normalizedDx = dx / distance;
-          const normalizedDy = dy / distance;
-          const normalizedDz = dz / distance;
-
-          // Apply displacement
-          particleDisplacements[i3] += normalizedDx * force;
-          particleDisplacements[i3 + 1] += normalizedDy * force;
-          particleDisplacements[i3 + 2] += normalizedDz * force;
+        // Calculate color mix based on distance (closer = more blue)
+        let colorMix = 0;
+        if (distance < colorChangeRadius) {
+          // Smooth falloff: 1.0 at distance 0, 0.0 at colorChangeRadius
+          colorMix = 1 - (distance / colorChangeRadius);
+          colorMix = Math.max(0, Math.min(1, colorMix)); // Clamp between 0 and 1
         }
 
-        // Decay displacement over time (particles return to original position)
-        particleDisplacements[i3] *= 0.92;
-        particleDisplacements[i3 + 1] *= 0.92;
-        particleDisplacements[i3 + 2] *= 0.92;
+        // Interpolate between original color and blue based on distance
+        const particleColor = new THREE.Color().lerpColors(color, hoverColor, colorMix);
 
-        // Smooth morphing + displacement
-        positions[i3] += (targetX + particleDisplacements[i3] - positions[i3]) * 0.08;
-        positions[i3 + 1] += (targetY + particleDisplacements[i3 + 1] - positions[i3 + 1]) * 0.08;
-        positions[i3 + 2] += (targetZ + particleDisplacements[i3 + 2] - positions[i3 + 2]) * 0.08;
+        // Update color for this particle
+        colors[i3] = particleColor.r;
+        colors[i3 + 1] = particleColor.g;
+        colors[i3 + 2] = particleColor.b;
       }
 
       positionAttr.needsUpdate = true;
+      colorAttr.needsUpdate = true;
 
       // Auto rotation when not dragging
       if (!isDraggingRef.current) {
@@ -466,7 +520,7 @@ const ParticleModel = () => {
       mouseRef.current.y = e.clientY;
     };
 
-    // Hover effect - track mouse position for particle repulsion
+    // Hover effect - track mouse position for color change
     const handleHoverMove = (e) => {
       if (!containerRef.current) return;
 
@@ -547,16 +601,16 @@ const ParticleModel = () => {
     };
 
     // Add event listeners to canvas
-    if (renderer && renderer.domElement) {
-      renderer.domElement.addEventListener('mousedown', handleMouseDown);
-      renderer.domElement.addEventListener('mousemove', handleHoverMove);
-      renderer.domElement.addEventListener('mouseleave', handleHoverLeave);
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-      renderer.domElement.addEventListener('touchstart', handleTouchStart, { passive: false });
-      renderer.domElement.addEventListener('touchmove', handleTouchMove, { passive: false });
-      renderer.domElement.addEventListener('touchend', handleTouchEnd);
-    }
+      if (renderer && renderer.domElement) {
+        renderer.domElement.addEventListener('mousedown', handleMouseDown);
+        renderer.domElement.addEventListener('mousemove', handleHoverMove);
+        renderer.domElement.addEventListener('mouseleave', handleHoverLeave);
+        window.addEventListener('mousemove', handleMouseMove);
+        window.addEventListener('mouseup', handleMouseUp);
+        renderer.domElement.addEventListener('touchstart', handleTouchStart, { passive: false });
+        renderer.domElement.addEventListener('touchmove', handleTouchMove, { passive: false });
+        renderer.domElement.addEventListener('touchend', handleTouchEnd);
+      }
 
     // Handle resize
     const handleResize = () => {
