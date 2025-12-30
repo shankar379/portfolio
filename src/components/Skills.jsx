@@ -11,7 +11,8 @@ import {
   SiUnrealengine,
   SiAndroidstudio,
   SiAmazonec2,
-  SiExpo
+  SiExpo,
+  SiFirebase
 } from 'react-icons/si';
 import { FaGithub } from 'react-icons/fa';
 import './Skills.css';
@@ -45,13 +46,14 @@ const Skills = () => {
     { name: 'Python', icon: SiPython },
     { name: 'Java', icon: JavaIcon },
     { name: 'Android Studio', icon: SiAndroidstudio },
+    { name: 'React Native + Expo', icon: SiExpo },
     { name: 'GitHub', icon: FaGithub },
     { name: 'Three.js', icon: SiThreedotjs },
     { name: 'Figma', icon: SiFigma },
     { name: 'Blender', icon: SiBlender },
     { name: 'Unreal Engine', icon: SiUnrealengine },
     { name: 'AWS EC2 + CI/CD', icon: SiAmazonec2 },
-    { name: 'React Native + Expo', icon: SiExpo }
+    { name: 'Firebase', icon: SiFirebase }
   ];
 
 
