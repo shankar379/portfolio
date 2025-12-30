@@ -193,40 +193,6 @@
   transform: translateX(5px);
 }
 
-.hero-resume {
-  position: absolute;
-  right: 2rem;
-  top: 50%;
-  transform: translateY(-50%) rotate(90deg);
-  z-index: 10;
-}
-
-.resume-text {
-  color: #2d2d50;
-  font-size: 0.9rem;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.9);
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transform: rotate(90deg);
-  white-space: nowrap;
-}
-
-.resume-text:hover {
-  color: #a78bfa;
-  background: rgba(167, 139, 250, 0.1);
-  border-color: #a78bfa;
-  box-shadow: 0 6px 20px rgba(167, 139, 250, 0.3);
-  transform: rotate(90deg) scale(1.05);
-}
-
 .hero-shapes {
   position: absolute;
   width: 100%;
@@ -283,11 +249,6 @@
   .hero-content {
     padding-left: 2rem;
     width: 50%;
-  }
-
-  .hero-resume {
-    right: 1rem;
-    display: none;
   }
 
   .hero-roles {
