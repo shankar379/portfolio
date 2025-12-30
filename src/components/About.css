@@ -1,12 +1,13 @@
 .about {
   min-height: 100vh;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   background: linear-gradient(135deg, #1a1a35 0%, #2d2d50 100%);
   position: relative;
   overflow: hidden;
-  padding: 4rem 2rem;
+  padding: 0 2rem;
   z-index: 20;
 }
 
