@@ -4,6 +4,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow: hidden;
+}
+
 .App {
   min-height: 100vh;
   position: relative;
@@ -11,9 +15,9 @@
   background: #fafafa;
 }
 
-/* Smooth Scrolling */
-html {
-  scroll-behavior: smooth;
+/* Locomotive Scroll Container */
+[data-scroll-container] {
+  min-height: 100vh;
 }
 
 /* Section Spacing */
@@ -22,20 +26,14 @@ section {
   z-index: 2;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar - Hidden for smooth scroll */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 0px;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #a78bfa;
-  border-radius: 4px;
-  }
-
-::-webkit-scrollbar-thumb:hover {
-  background: #8b5cf6;
+/* Fixed elements need special handling with locomotive */
+.navbar,
+.social-sidebar {
+  position: fixed !important;
 }

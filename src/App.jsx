@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import LocomotiveScroll from 'locomotive-scroll';
+import 'locomotive-scroll/dist/locomotive-scroll.css';
 import './App.css';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -14,18 +16,51 @@ import Footer from './components/Footer';
 import ExploreWorld from './components/ExploreWorld';
 
 function HomePage() {
+  const scrollRef = useRef(null);
+
+  useEffect(() => {
+    const scroll = new LocomotiveScroll({
+      el: scrollRef.current,
+      smooth: true,
+      smoothMobile: true,
+      multiplier: 0.8,
+      lerp: 0.05,
+    });
+
+    // Update scroll on window resize
+    window.addEventListener('resize', () => scroll.update());
+
+    return () => {
+      scroll.destroy();
+    };
+  }, []);
+
   return (
-    <>
+    <div ref={scrollRef} data-scroll-container>
       <Navbar />
       <SocialSidebar />
-      <Hero />
-      <About />
-      <Skills />
-      <Projects />
-      <World />
-      <Contact />
-      <Footer />
-    </>
+      <div data-scroll-section>
+        <Hero />
+      </div>
+      <div data-scroll-section>
+        <About />
+      </div>
+      <div data-scroll-section>
+        <Skills />
+      </div>
+      <div data-scroll-section>
+        <Projects />
+      </div>
+      <div data-scroll-section>
+        <World />
+      </div>
+      <div data-scroll-section>
+        <Contact />
+      </div>
+      <div data-scroll-section>
+        <Footer />
+      </div>
+    </div>
   );
 }
 
