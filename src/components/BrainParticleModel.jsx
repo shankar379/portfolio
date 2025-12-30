@@ -129,7 +129,7 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
 
     // Create neural connection lines (initially hidden)
     const lineGeometry = new THREE.BufferGeometry();
-    const maxLines = 2000;
+    const maxLines = 5000; // More lines for dense neural network
     const linePositions = new Float32Array(maxLines * 6); // 2 points per line, 3 coords each
     const lineColors = new Float32Array(maxLines * 6);
 
@@ -141,7 +141,8 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
       vertexColors: true,
       transparent: true,
       opacity: 0,
-      blending: THREE.AdditiveBlending
+      blending: THREE.AdditiveBlending,
+      linewidth: 2 // Note: linewidth > 1 only works on some systems
     });
     lineMaterialRef.current = lineMaterial;
 
@@ -253,7 +254,7 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
           material.size = 0.025 + easeGrowth * 0.04; // Grow particles
         }
 
-        // Phase 2: Camera zoom into brain (0.3 - 1.2)
+        // Phase 2: Camera zoom into brain + particles expand (0.3 - 1.2)
         if (progress >= phase1End && progress < phase2End) {
           const zoomProgress = (progress - phase1End) / (phase2End - phase1End);
           const easeZoom = zoomProgress < 0.5
@@ -261,42 +262,52 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
             : 1 - Math.pow(-2 * zoomProgress + 2, 2) / 2;
 
           // Camera moves forward into the brain
-          camera.position.z = initialCameraZ - easeZoom * 2.8;
+          camera.position.z = initialCameraZ - easeZoom * 2.5;
 
           // Slight camera shake for immersion
-          camera.position.x = Math.sin(progress * 20) * 0.02 * (1 - zoomProgress);
-          camera.position.y = Math.cos(progress * 15) * 0.02 * (1 - zoomProgress);
+          camera.position.x = Math.sin(progress * 20) * 0.03 * (1 - zoomProgress);
+          camera.position.y = Math.cos(progress * 15) * 0.03 * (1 - zoomProgress);
 
-          // Particles expand slightly outward as camera approaches
+          // Particles expand outward significantly as camera approaches
+          const expandAmount = easeZoom * 1.5; // Strong expansion
           for (let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
-            const expandFactor = 1 + easeZoom * 0.3;
-            positionsArray[i3] *= 1 + (expandFactor - 1) * 0.01;
-            positionsArray[i3 + 1] *= 1 + (expandFactor - 1) * 0.01;
-            positionsArray[i3 + 2] *= 1 + (expandFactor - 1) * 0.01;
+            // Expand from center
+            const x = positionsArray[i3];
+            const y = positionsArray[i3 + 1];
+            const z = positionsArray[i3 + 2];
+            const dist = Math.sqrt(x * x + y * y + z * z);
+            if (dist > 0.01) {
+              const expandFactor = 1 + expandAmount * 0.08;
+              positionsArray[i3] *= expandFactor;
+              positionsArray[i3 + 1] *= expandFactor;
+              positionsArray[i3 + 2] *= expandFactor;
+            }
           }
         }
 
-        // Phase 3: Neural connections appear (0.8 - 2.0)
-        if (progress >= 0.8 && progress < phase3End) {
-          const connectionProgress = (progress - 0.8) / (phase3End - 0.8);
+        // Phase 3: Neural connections appear (0.6 - 2.0) - start earlier
+        if (progress >= 0.6 && progress < phase3End) {
+          const connectionProgress = (progress - 0.6) / (phase3End - 0.6);
 
           // Build neural connections between nearby particles
           const linePositions = neuralLines.geometry.attributes.position.array;
           const lineColors = neuralLines.geometry.attributes.color.array;
           let lineIndex = 0;
-          const maxDistance = 0.5 + connectionProgress * 0.3;
+
+          // Increase max distance as particles expand
+          const maxDistance = 1.0 + connectionProgress * 1.5;
           const maxLinesToDraw = Math.floor(connectionProgress * maxLines);
 
-          // Find nearby particles and create connections
-          for (let i = 0; i < particleCount && lineIndex < maxLinesToDraw * 2; i += 10) {
+          // Find nearby particles and create connections - use smaller step for more connections
+          for (let i = 0; i < particleCount && lineIndex < maxLinesToDraw * 2; i += 5) {
             const i3 = i * 3;
             const x1 = positionsArray[i3];
             const y1 = positionsArray[i3 + 1];
             const z1 = positionsArray[i3 + 2];
 
-            // Only connect to particles ahead (in z) for neural flow effect
-            for (let j = i + 10; j < particleCount && lineIndex < maxLinesToDraw * 2; j += 15) {
+            // Connect to nearby particles
+            for (let j = i + 5; j < Math.min(i + 100, particleCount) && lineIndex < maxLinesToDraw * 2; j += 8) {
               const j3 = j * 3;
               const x2 = positionsArray[j3];
               const y2 = positionsArray[j3 + 1];
@@ -307,7 +318,7 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
               const dz = z2 - z1;
               const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-              if (dist < maxDistance && dist > 0.1) {
+              if (dist < maxDistance && dist > 0.2) {
                 const li = lineIndex * 3;
                 linePositions[li] = x1;
                 linePositions[li + 1] = y1;
@@ -316,14 +327,15 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
                 linePositions[li + 4] = y2;
                 linePositions[li + 5] = z2;
 
-                // Gradient color for lines (purple to blue)
+                // Bright purple-blue color for neural connections
                 const colorIntensity = 1 - dist / maxDistance;
-                lineColors[li] = 0.65 + colorIntensity * 0.2;
-                lineColors[li + 1] = 0.55 + colorIntensity * 0.2;
-                lineColors[li + 2] = 0.98;
-                lineColors[li + 3] = 0.45 + colorIntensity * 0.3;
-                lineColors[li + 4] = 0.65 + colorIntensity * 0.2;
-                lineColors[li + 5] = 0.98;
+                const pulse = Math.sin(progress * 10 + i * 0.1) * 0.2 + 0.8;
+                lineColors[li] = (0.65 + colorIntensity * 0.35) * pulse;
+                lineColors[li + 1] = (0.45 + colorIntensity * 0.35) * pulse;
+                lineColors[li + 2] = 0.98 * pulse;
+                lineColors[li + 3] = (0.35 + colorIntensity * 0.4) * pulse;
+                lineColors[li + 4] = (0.55 + colorIntensity * 0.3) * pulse;
+                lineColors[li + 5] = 0.98 * pulse;
 
                 lineIndex += 2;
               }
@@ -334,8 +346,8 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
           neuralLines.geometry.attributes.color.needsUpdate = true;
           neuralLines.geometry.setDrawRange(0, lineIndex);
 
-          // Fade in lines
-          lineMaterial.opacity = Math.min(connectionProgress * 1.5, 0.7);
+          // Make lines more visible
+          lineMaterial.opacity = Math.min(connectionProgress * 2, 0.9);
         }
 
         // Phase 4: Everything fades to white (2.0 - 2.8)
