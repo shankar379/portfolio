@@ -53,8 +53,15 @@ const HeroAboutParticles = () => {
       0.1,
       1000
     );
-    camera.position.z = 4;
+    camera.position.z = 5;
     cameraRef.current = camera;
+
+    // Calculate screen-relative offset based on camera
+    const vFov = (75 * Math.PI) / 180;
+    const visibleHeight = 2 * Math.tan(vFov / 2) * 5;
+    const visibleWidth = visibleHeight * (window.innerWidth / window.innerHeight);
+    const heroXOffset = visibleWidth * 0.25; // Right quarter of screen
+    const aboutXOffset = -visibleWidth * 0.25; // Left quarter of screen
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({
@@ -261,9 +268,9 @@ const HeroAboutParticles = () => {
       return positions;
     };
 
-    // Initialize positions - Hero on right side
-    heroPositionsRef.current = generateShapePositions('sphere', 2.5);
-    aboutPositionsRef.current = generateShapePositions('energyPulse', -2.5);
+    // Initialize positions - Hero on right side, About on left side
+    heroPositionsRef.current = generateShapePositions('sphere', heroXOffset);
+    aboutPositionsRef.current = generateShapePositions('energyPulse', aboutXOffset);
 
     // Copy initial positions
     for (let i = 0; i < particleCount * 3; i++) {
@@ -274,7 +281,7 @@ const HeroAboutParticles = () => {
     const shapeInterval = setInterval(() => {
       if (scrollProgressRef.current < 0.3) {
         shapeIndexRef.current = (shapeIndexRef.current + 1) % heroShapes.length;
-        heroPositionsRef.current = generateShapePositions(heroShapes[shapeIndexRef.current], 2.5);
+        heroPositionsRef.current = generateShapePositions(heroShapes[shapeIndexRef.current], heroXOffset);
       }
     }, 4000);
 
@@ -289,18 +296,19 @@ const HeroAboutParticles = () => {
       const aboutRect = aboutSection.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Calculate scroll progress (0 = Hero fully visible, 1 = About fully visible)
+      // Calculate scroll progress (0 = Hero center, 1 = About center)
       let progress = 0;
 
-      if (heroRect.bottom > 0 && heroRect.bottom < windowHeight) {
-        // Transitioning out of Hero
+      // Calculate based on which section is more visible
+      const heroVisibility = Math.max(0, Math.min(heroRect.bottom, windowHeight) - Math.max(heroRect.top, 0)) / windowHeight;
+      const aboutVisibility = Math.max(0, Math.min(aboutRect.bottom, windowHeight) - Math.max(aboutRect.top, 0)) / windowHeight;
+
+      if (aboutVisibility > 0) {
+        // About section is visible - calculate progress based on how much
+        progress = aboutVisibility;
+      } else if (heroRect.bottom < windowHeight) {
+        // Hero is scrolling out but About not yet visible
         progress = 1 - (heroRect.bottom / windowHeight);
-      } else if (aboutRect.top < windowHeight && aboutRect.top > 0) {
-        // Transitioning into About
-        progress = 1 - (aboutRect.top / windowHeight);
-      } else if (aboutRect.top <= 0) {
-        // About is fully visible or past
-        progress = 1;
       } else {
         // Hero is fully visible
         progress = 0;
