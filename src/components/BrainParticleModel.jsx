@@ -29,8 +29,7 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
   // Explosion state
   const isExplodingRef = useRef(false);
   const explodeProgressRef = useRef(0);
-  const neuralLinesRef = useRef(null);
-  const lineMaterialRef = useRef(null);
+  const originalPositionsRef = useRef(null);
 
   // Morph state
   const shouldMorphRef = useRef(false);
@@ -46,6 +45,12 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
     if (isExploding && !isExplodingRef.current) {
       isExplodingRef.current = true;
       explodeProgressRef.current = 0;
+
+      // Store original positions when explosion starts
+      if (particleSystemRef.current) {
+        const positions = particleSystemRef.current.geometry.attributes.position.array;
+        originalPositionsRef.current = new Float32Array(positions);
+      }
     }
   }, [isExploding]);
 
@@ -81,7 +86,6 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
-    const sizes = new Float32Array(particleCount);
 
     // Random floating positions (spread across space)
     const randomPositions = new Float32Array(particleCount * 3);
@@ -103,7 +107,6 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
       floatOffsets[i3 + 2] = Math.random() * Math.PI * 2;
 
       floatSpeeds[i] = 0.5 + Math.random() * 1;
-      sizes[i] = 0.025;
 
       colors[i3] = color.r;
       colors[i3 + 1] = color.g;
@@ -112,7 +115,6 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
     const material = new THREE.PointsMaterial({
       size: 0.025,
@@ -126,29 +128,6 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
     const particleSystem = new THREE.Points(geometry, material);
     scene.add(particleSystem);
     particleSystemRef.current = particleSystem;
-
-    // Create neural connection lines (initially hidden)
-    const lineGeometry = new THREE.BufferGeometry();
-    const maxLines = 5000; // More lines for dense neural network
-    const linePositions = new Float32Array(maxLines * 6); // 2 points per line, 3 coords each
-    const lineColors = new Float32Array(maxLines * 6);
-
-    lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-    lineGeometry.setAttribute('color', new THREE.BufferAttribute(lineColors, 3));
-    lineGeometry.setDrawRange(0, 0); // Initially draw nothing
-
-    const lineMaterial = new THREE.LineBasicMaterial({
-      vertexColors: true,
-      transparent: true,
-      opacity: 0,
-      blending: THREE.AdditiveBlending,
-      linewidth: 2 // Note: linewidth > 1 only works on some systems
-    });
-    lineMaterialRef.current = lineMaterial;
-
-    const neuralLines = new THREE.LineSegments(lineGeometry, lineMaterial);
-    scene.add(neuralLines);
-    neuralLinesRef.current = neuralLines;
 
     // Target positions for brain shape
     const brainPositions = new Float32Array(particleCount * 3);
@@ -235,154 +214,70 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
       const colorAttr = particleSystem.geometry.attributes.color;
       const colorsArray = colorAttr.array;
 
-      // Enhanced explosion animation - "Enter the Brain World"
-      if (isExplodingRef.current) {
-        explodeProgressRef.current += 0.012; // Slower for dramatic effect
+      // Simple ball expansion animation - camera goes inside
+      if (isExplodingRef.current && originalPositionsRef.current) {
+        explodeProgressRef.current += 0.015;
         const progress = explodeProgressRef.current;
 
-        // Phase timings
-        const phase1End = 0.3;   // Particle doubling/growth
-        const phase2End = 1.2;   // Camera zoom into brain
-        const phase3End = 2.0;   // Neural connections
-        const phase4End = 2.8;   // White fade
-        const totalEnd = 3.2;    // Complete
+        // Easing function for smooth animation
+        const easeInOut = progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
 
-        // Phase 1: Particle growth (0 - 0.3)
-        if (progress < phase1End) {
-          const growthProgress = progress / phase1End;
-          const easeGrowth = 1 - Math.pow(1 - growthProgress, 2);
-          material.size = 0.025 + easeGrowth * 0.04; // Grow particles
-        }
+        // Phase 1: Expand particles like a ball (0 - 1.5)
+        if (progress < 1.5) {
+          const expandProgress = Math.min(progress / 1.5, 1);
+          const expandEase = 1 - Math.pow(1 - expandProgress, 3);
 
-        // Phase 2: Camera zoom into brain + particles expand (0.3 - 1.2)
-        if (progress >= phase1End && progress < phase2End) {
-          const zoomProgress = (progress - phase1End) / (phase2End - phase1End);
-          const easeZoom = zoomProgress < 0.5
-            ? 2 * zoomProgress * zoomProgress
-            : 1 - Math.pow(-2 * zoomProgress + 2, 2) / 2;
+          // Expand factor - particles move outward from center
+          const expandFactor = 1 + expandEase * 4; // Expand to 5x size
 
-          // Camera moves forward into the brain
-          camera.position.z = initialCameraZ - easeZoom * 2.5;
-
-          // Slight camera shake for immersion
-          camera.position.x = Math.sin(progress * 20) * 0.03 * (1 - zoomProgress);
-          camera.position.y = Math.cos(progress * 15) * 0.03 * (1 - zoomProgress);
-
-          // Particles expand outward significantly as camera approaches
-          const expandAmount = easeZoom * 1.5; // Strong expansion
           for (let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
-            // Expand from center
-            const x = positionsArray[i3];
-            const y = positionsArray[i3 + 1];
-            const z = positionsArray[i3 + 2];
-            const dist = Math.sqrt(x * x + y * y + z * z);
-            if (dist > 0.01) {
-              const expandFactor = 1 + expandAmount * 0.08;
-              positionsArray[i3] *= expandFactor;
-              positionsArray[i3 + 1] *= expandFactor;
-              positionsArray[i3 + 2] *= expandFactor;
-            }
-          }
-        }
+            // Get original position and expand from center
+            const origX = originalPositionsRef.current[i3];
+            const origY = originalPositionsRef.current[i3 + 1];
+            const origZ = originalPositionsRef.current[i3 + 2];
 
-        // Phase 3: Neural connections appear (0.6 - 2.0) - start earlier
-        if (progress >= 0.6 && progress < phase3End) {
-          const connectionProgress = (progress - 0.6) / (phase3End - 0.6);
-
-          // Build neural connections between nearby particles
-          const linePositions = neuralLines.geometry.attributes.position.array;
-          const lineColors = neuralLines.geometry.attributes.color.array;
-          let lineIndex = 0;
-
-          // Increase max distance as particles expand
-          const maxDistance = 1.0 + connectionProgress * 1.5;
-          const maxLinesToDraw = Math.floor(connectionProgress * maxLines);
-
-          // Find nearby particles and create connections - use smaller step for more connections
-          for (let i = 0; i < particleCount && lineIndex < maxLinesToDraw * 2; i += 5) {
-            const i3 = i * 3;
-            const x1 = positionsArray[i3];
-            const y1 = positionsArray[i3 + 1];
-            const z1 = positionsArray[i3 + 2];
-
-            // Connect to nearby particles
-            for (let j = i + 5; j < Math.min(i + 100, particleCount) && lineIndex < maxLinesToDraw * 2; j += 8) {
-              const j3 = j * 3;
-              const x2 = positionsArray[j3];
-              const y2 = positionsArray[j3 + 1];
-              const z2 = positionsArray[j3 + 2];
-
-              const dx = x2 - x1;
-              const dy = y2 - y1;
-              const dz = z2 - z1;
-              const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-              if (dist < maxDistance && dist > 0.2) {
-                const li = lineIndex * 3;
-                linePositions[li] = x1;
-                linePositions[li + 1] = y1;
-                linePositions[li + 2] = z1;
-                linePositions[li + 3] = x2;
-                linePositions[li + 4] = y2;
-                linePositions[li + 5] = z2;
-
-                // Bright purple-blue color for neural connections
-                const colorIntensity = 1 - dist / maxDistance;
-                const pulse = Math.sin(progress * 10 + i * 0.1) * 0.2 + 0.8;
-                lineColors[li] = (0.65 + colorIntensity * 0.35) * pulse;
-                lineColors[li + 1] = (0.45 + colorIntensity * 0.35) * pulse;
-                lineColors[li + 2] = 0.98 * pulse;
-                lineColors[li + 3] = (0.35 + colorIntensity * 0.4) * pulse;
-                lineColors[li + 4] = (0.55 + colorIntensity * 0.3) * pulse;
-                lineColors[li + 5] = 0.98 * pulse;
-
-                lineIndex += 2;
-              }
-            }
+            positionsArray[i3] = origX * expandFactor;
+            positionsArray[i3 + 1] = origY * expandFactor;
+            positionsArray[i3 + 2] = origZ * expandFactor;
           }
 
-          neuralLines.geometry.attributes.position.needsUpdate = true;
-          neuralLines.geometry.attributes.color.needsUpdate = true;
-          neuralLines.geometry.setDrawRange(0, lineIndex);
+          // Camera moves INTO the ball (toward center then through)
+          const cameraProgress = Math.min(progress / 1.2, 1);
+          const cameraEase = cameraProgress < 0.5
+            ? 2 * cameraProgress * cameraProgress
+            : 1 - Math.pow(-2 * cameraProgress + 2, 2) / 2;
 
-          // Make lines more visible
-          lineMaterial.opacity = Math.min(connectionProgress * 2, 0.9);
+          camera.position.z = initialCameraZ - cameraEase * 5; // Move camera forward into the ball
         }
 
-        // Phase 4: Everything fades to white (2.0 - 2.8)
-        if (progress >= phase3End) {
-          const fadeProgress = Math.min((progress - phase3End) / (phase4End - phase3End), 1);
-          const easeFade = fadeProgress * fadeProgress;
+        // Phase 2: Fade to white (1.0 - 2.0)
+        if (progress >= 1.0) {
+          const fadeProgress = Math.min((progress - 1.0) / 1.0, 1);
+          const fadeEase = fadeProgress * fadeProgress;
 
           // Particles fade to white
           for (let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
-            colorsArray[i3] = color.r + (1 - color.r) * easeFade;
-            colorsArray[i3 + 1] = color.g + (1 - color.g) * easeFade;
-            colorsArray[i3 + 2] = color.b + (1 - color.b) * easeFade;
+            colorsArray[i3] = color.r + (1 - color.r) * fadeEase;
+            colorsArray[i3 + 1] = color.g + (1 - color.g) * fadeEase;
+            colorsArray[i3 + 2] = color.b + (1 - color.b) * fadeEase;
           }
           colorAttr.needsUpdate = true;
 
-          // Lines fade to white then disappear
-          const lineColorArr = neuralLines.geometry.attributes.color.array;
-          for (let i = 0; i < lineColorArr.length; i++) {
-            lineColorArr[i] = lineColorArr[i] + (1 - lineColorArr[i]) * easeFade;
-          }
-          neuralLines.geometry.attributes.color.needsUpdate = true;
-          lineMaterial.opacity = 0.7 * (1 - easeFade * 0.5);
-
-          // Particles glow brighter
-          material.size = 0.065 + easeFade * 0.05;
-          material.opacity = 0.9 + easeFade * 0.1;
-        }
-
-        // Final phase: Complete transition
-        if (progress >= totalEnd && onExplodeComplete) {
-          onExplodeComplete();
+          // Increase particle size slightly during fade
+          material.size = 0.025 + fadeEase * 0.03;
+          material.opacity = 0.9 + fadeEase * 0.1;
         }
 
         positionAttr.needsUpdate = true;
+
+        // Complete transition
+        if (progress >= 2.2 && onExplodeComplete) {
+          onExplodeComplete();
+        }
 
       } else {
         // Normal animation - morph or float
@@ -580,8 +475,6 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
 
       if (geometry) geometry.dispose();
       if (material) material.dispose();
-      if (lineGeometry) lineGeometry.dispose();
-      if (lineMaterial) lineMaterial.dispose();
       if (renderer) renderer.dispose();
     };
   }, []);
