@@ -7,7 +7,7 @@
   position: relative;
   overflow: hidden;
   padding: 4rem 2rem;
-  z-index: 20;
+  z-index: 10;
 }
 
 .about-content-wrapper {
@@ -17,6 +17,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
 }
 
 .about-text {

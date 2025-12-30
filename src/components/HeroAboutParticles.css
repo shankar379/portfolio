@@ -1,0 +1,28 @@
+.hero-about-particles-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.hero-about-particles-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.hero-about-particles-container canvas:active {
+  cursor: grabbing;
+}
+
+/* Hide on mobile for performance */
+@media (max-width: 768px) {
+  .hero-about-particles-container {
+    display: none;
+  }
+}

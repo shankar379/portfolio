@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import ParticleModel from './ParticleModel';
 import './Hero.css';
 
 const Hero = () => {
@@ -92,9 +91,6 @@ const Hero = () => {
           VIEW RESUME
         </motion.a>
       </div>
-
-      {/* 3D Particle Model */}
-      <ParticleModel />
 
       {/* Decorative Shapes */}
       <div className="hero-shapes">

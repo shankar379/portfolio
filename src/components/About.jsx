@@ -1,15 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import AboutParticles from './AboutParticles';
 import './About.css';
 
 const About = () => {
   return (
     <section id="about" className="about">
-      {/* 3D Particle Model on Left */}
-      <AboutParticles />
-      
-      {/* Content on Right */}
+      {/* Content on Right - particles flow in from Hero section */}
       <div className="about-content-wrapper">
         <motion.div
           className="about-text"

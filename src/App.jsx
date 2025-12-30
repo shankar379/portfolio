@@ -12,12 +12,14 @@ import ProjectDetail from './components/ProjectDetail';
 import SocialSidebar from './components/SocialSidebar';
 import Footer from './components/Footer';
 import ExploreWorld from './components/ExploreWorld';
+import HeroAboutParticles from './components/HeroAboutParticles';
 
 function HomePage() {
   return (
     <>
       <Navbar />
       <SocialSidebar />
+      <HeroAboutParticles />
       <Hero />
       <About />
       <Skills />
