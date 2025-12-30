@@ -1,10 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaPaperPlane, FaPaperclip } from 'react-icons/fa';
-import EnvelopeParticleModel from './EnvelopeParticleModel';
+import GreetingModel from './GreetingModel';
 import './Contact.css';
 
 const Contact = () => {
+  const sectionRef = useRef(null);
+  const [shouldPlayGreeting, setShouldPlayGreeting] = useState(false);
+
+  // Intersection Observer for 40% visibility
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+            setShouldPlayGreeting(true);
+          } else {
+            setShouldPlayGreeting(false);
+          }
+        });
+      },
+      {
+        threshold: [0, 0.4, 1],
+        rootMargin: '0px'
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -27,7 +59,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="contact">
+    <section id="contact" className="contact" ref={sectionRef}>
       <div className="contact-container">
         {/* Left Side - Contact Form */}
         <motion.div
@@ -128,7 +160,7 @@ const Contact = () => {
           </form>
         </motion.div>
 
-        {/* Right Side - 3D Envelope */}
+        {/* Right Side - 3D Greeting Animation */}
         <motion.div
           className="contact-envelope-section"
           initial={{ opacity: 0, x: 50 }}
@@ -136,7 +168,7 @@ const Contact = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <EnvelopeParticleModel />
+          <GreetingModel shouldPlay={shouldPlayGreeting} />
         </motion.div>
       </div>
     </section>
