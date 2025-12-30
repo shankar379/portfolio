@@ -1,35 +1,37 @@
 .contact {
-  padding: 2.5rem 2rem;
+  min-height: 100vh;
+  padding: 120px 2rem 4rem;
   background: #fafafa;
   position: relative;
   overflow: hidden;
   z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .contact-container {
-  max-width: 1400px;
+  max-width: 600px;
+  width: 100%;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  min-height: 380px;
   position: relative;
   background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
 }
 
-/* Left Side - Contact Form */
+/* Contact Form */
 .contact-form-section {
   background: #ffffff;
-  padding: 2rem 2rem;
+  padding: 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 550px;
-  margin: 0 auto;
   box-sizing: border-box;
+  border-radius: 20px;
 }
 
 .contact-header {
@@ -212,34 +214,23 @@
   box-shadow: 0 6px 20px rgba(167, 139, 250, 0.4);
 }
 
-/* Right Side - 3D Envelope Section */
-.contact-envelope-section {
-  position: relative;
-  overflow: hidden;
-  min-height: 380px;
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 @media (max-width: 968px) {
+  .contact {
+    padding: 100px 1.5rem 3rem;
+  }
+
   .contact-container {
-    grid-template-columns: 1fr;
+    max-width: 100%;
   }
 
   .contact-form-section {
-    padding: 3rem 2rem;
-  }
-
-  .contact-envelope-section {
-    min-height: 350px;
+    padding: 2.5rem 2rem;
   }
 }
 
 @media (max-width: 768px) {
   .contact {
-    padding: 4rem 1rem;
+    padding: 100px 1rem 2rem;
   }
 
   .contact-form-section {

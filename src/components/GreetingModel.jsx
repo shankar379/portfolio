@@ -10,7 +10,7 @@ const GreetingModel = ({ shouldPlay = false }) => {
   const rendererRef = useRef(null);
   const particleSystemRef = useRef(null);
   const animationFrameRef = useRef(null);
-  const particleCount = 4000;
+  const particleCount = 5000;
   const color = new THREE.Color(0xa78bfa); // Purple
   const hoverColor = new THREE.Color(0x3b82f6); // Blue
 
@@ -98,7 +98,7 @@ const GreetingModel = ({ shouldPlay = false }) => {
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-      size: 0.03,
+      size: 0.025,
       vertexColors: true,
       transparent: true,
       opacity: 0.9,
@@ -114,96 +114,161 @@ const GreetingModel = ({ shouldPlay = false }) => {
     const greetingPositions = new Float32Array(particleCount * 3);
     let modelLoaded = false;
 
-    // Load FBX model
+    // Load FBX model and extract pose at frame 20
     const loader = new FBXLoader();
     loader.load(
       '/models/Standing Greeting.fbx',
       (fbx) => {
+        fbx.scale.setScalar(0.01);
+
+        // Setup animation and go to frame 20
+        if (fbx.animations && fbx.animations.length > 0) {
+          const mixer = new THREE.AnimationMixer(fbx);
+          const clip = fbx.animations[0];
+          const action = mixer.clipAction(clip);
+          action.play();
+
+          // Calculate time for frame 50 (assuming 30fps animation)
+          const fps = 30;
+          const frameTime = 50 / fps;
+
+          // Update mixer to frame 20
+          mixer.setTime(frameTime);
+          mixer.update(0);
+        }
+
+        // Update all bones/skeleton
+        fbx.updateMatrixWorld(true);
+
+        // Collect all vertex positions from the posed mesh
         const sampledPositions = [];
 
         fbx.traverse((child) => {
-          if (child.isMesh || child.isSkinnedMesh) {
-            const meshGeometry = child.geometry;
-            const positionAttribute = meshGeometry.attributes.position;
+          if (child.isSkinnedMesh) {
+            // For skinned mesh, we need to compute posed positions
+            const mesh = child;
+            const positionAttribute = mesh.geometry.attributes.position;
+            const skinIndexAttr = mesh.geometry.attributes.skinIndex;
+            const skinWeightAttr = mesh.geometry.attributes.skinWeight;
 
-            if (positionAttribute) {
-              child.updateWorldMatrix(true, false);
-              const worldMatrix = child.matrixWorld;
+            if (skinIndexAttr && skinWeightAttr && mesh.skeleton) {
+              mesh.skeleton.update();
+              const boneMatrices = mesh.skeleton.boneMatrices;
+              const bindMatrix = mesh.bindMatrix;
 
               for (let i = 0; i < positionAttribute.count; i++) {
-                const vertex = new THREE.Vector3(
-                  positionAttribute.getX(i),
-                  positionAttribute.getY(i),
-                  positionAttribute.getZ(i)
-                );
-                vertex.applyMatrix4(worldMatrix);
-                sampledPositions.push(vertex);
+                const vertex = new THREE.Vector3().fromBufferAttribute(positionAttribute, i);
+
+                // Apply bind matrix
+                vertex.applyMatrix4(bindMatrix);
+
+                // Get skin weights and indices
+                const skinIndex = new THREE.Vector4().fromBufferAttribute(skinIndexAttr, i);
+                const skinWeight = new THREE.Vector4().fromBufferAttribute(skinWeightAttr, i);
+
+                // Apply skinning
+                const skinnedVertex = new THREE.Vector3(0, 0, 0);
+
+                for (let j = 0; j < 4; j++) {
+                  const weight = skinWeight.getComponent(j);
+                  if (weight > 0) {
+                    const boneIndex = skinIndex.getComponent(j);
+                    const boneMatrixIndex = boneIndex * 16;
+                    const boneMatrix = new THREE.Matrix4().fromArray(boneMatrices, boneMatrixIndex);
+
+                    const transformed = vertex.clone().applyMatrix4(boneMatrix);
+                    skinnedVertex.add(transformed.multiplyScalar(weight));
+                  }
+                }
+
+                // Apply world matrix
+                skinnedVertex.applyMatrix4(mesh.matrixWorld);
+                sampledPositions.push(skinnedVertex);
               }
+            }
+          } else if (child.isMesh) {
+            // Regular mesh - just get positions
+            const positionAttribute = child.geometry.attributes.position;
+            child.updateWorldMatrix(true, false);
+
+            for (let i = 0; i < positionAttribute.count; i++) {
+              const vertex = new THREE.Vector3().fromBufferAttribute(positionAttribute, i);
+              vertex.applyMatrix4(child.matrixWorld);
+              sampledPositions.push(vertex);
             }
           }
         });
 
         if (sampledPositions.length > 0) {
+          // Calculate bounding box and normalize
           const boundingBox = new THREE.Box3();
           sampledPositions.forEach(pos => boundingBox.expandByPoint(pos));
+
           const center = new THREE.Vector3();
           boundingBox.getCenter(center);
+
           const size = new THREE.Vector3();
           boundingBox.getSize(size);
           const maxDim = Math.max(size.x, size.y, size.z);
-          const scale = 2.2 / maxDim;
+          const scale = 2.5 / maxDim;
 
+          // Assign particles to sampled positions
           for (let i = 0; i < particleCount; i++) {
             const i3 = i * 3;
             const sampleIndex = Math.floor((i / particleCount) * sampledPositions.length);
             const pos = sampledPositions[sampleIndex] || sampledPositions[0];
 
-            greetingPositions[i3] = (pos.x - center.x) * scale;
-            greetingPositions[i3 + 1] = (pos.y - center.y) * scale;
-            greetingPositions[i3 + 2] = (pos.z - center.z) * scale;
+            // Add small random offset for particle distribution
+            const offset = 0.02;
+            greetingPositions[i3] = (pos.x - center.x) * scale + (Math.random() - 0.5) * offset;
+            greetingPositions[i3 + 1] = (pos.y - center.y) * scale + (Math.random() - 0.5) * offset;
+            greetingPositions[i3 + 2] = (pos.z - center.z) * scale + (Math.random() - 0.5) * offset;
           }
+
           modelLoaded = true;
+          console.log('Model loaded with', sampledPositions.length, 'vertices');
         }
       },
-      undefined,
+      (progress) => {
+        console.log('Loading:', (progress.loaded / progress.total * 100).toFixed(1) + '%');
+      },
       (error) => {
         console.error('Error loading FBX model:', error);
-        // Fallback to humanoid shape if model fails to load
+        // Fallback to humanoid shape
         for (let i = 0; i < particleCount; i++) {
           const i3 = i * 3;
           const t = i / particleCount;
 
-          // Create a basic humanoid silhouette
           if (t < 0.1) {
-            // Head (sphere)
+            // Head
             const angle = Math.random() * Math.PI * 2;
-            const radius = Math.random() * 0.3;
+            const radius = Math.random() * 0.25;
             greetingPositions[i3] = Math.cos(angle) * radius;
-            greetingPositions[i3 + 1] = 1.5 + Math.sin(angle) * radius * 0.8;
-            greetingPositions[i3 + 2] = (Math.random() - 0.5) * 0.3;
-          } else if (t < 0.5) {
-            // Body
-            greetingPositions[i3] = (Math.random() - 0.5) * 0.6;
-            greetingPositions[i3 + 1] = 0.5 + Math.random() * 0.8;
-            greetingPositions[i3 + 2] = (Math.random() - 0.5) * 0.3;
-          } else if (t < 0.7) {
-            // Right arm (waving)
-            const armT = (t - 0.5) / 0.2;
-            greetingPositions[i3] = 0.4 + armT * 0.8;
-            greetingPositions[i3 + 1] = 1.2 + Math.sin(armT * Math.PI) * 0.3;
-            greetingPositions[i3 + 2] = (Math.random() - 0.5) * 0.15;
-          } else if (t < 0.85) {
+            greetingPositions[i3 + 1] = 1.4 + Math.sin(angle) * radius * 0.8;
+            greetingPositions[i3 + 2] = (Math.random() - 0.5) * 0.25;
+          } else if (t < 0.45) {
+            // Torso
+            greetingPositions[i3] = (Math.random() - 0.5) * 0.5;
+            greetingPositions[i3 + 1] = 0.5 + Math.random() * 0.7;
+            greetingPositions[i3 + 2] = (Math.random() - 0.5) * 0.25;
+          } else if (t < 0.6) {
+            // Right arm (waving up)
+            const armT = (t - 0.45) / 0.15;
+            greetingPositions[i3] = 0.35 + armT * 0.5;
+            greetingPositions[i3 + 1] = 1.0 + armT * 0.6;
+            greetingPositions[i3 + 2] = (Math.random() - 0.5) * 0.12;
+          } else if (t < 0.75) {
             // Left arm
-            const armT = (t - 0.7) / 0.15;
+            const armT = (t - 0.6) / 0.15;
             greetingPositions[i3] = -0.3 - armT * 0.4;
-            greetingPositions[i3 + 1] = 0.9 - armT * 0.4;
-            greetingPositions[i3 + 2] = (Math.random() - 0.5) * 0.15;
+            greetingPositions[i3 + 1] = 0.85 - armT * 0.35;
+            greetingPositions[i3 + 2] = (Math.random() - 0.5) * 0.12;
           } else {
             // Legs
-            const legSide = Math.random() > 0.5 ? 0.2 : -0.2;
-            greetingPositions[i3] = legSide + (Math.random() - 0.5) * 0.15;
-            greetingPositions[i3 + 1] = Math.random() * 0.5 - 0.5;
-            greetingPositions[i3 + 2] = (Math.random() - 0.5) * 0.2;
+            const legSide = Math.random() > 0.5 ? 0.15 : -0.15;
+            greetingPositions[i3] = legSide + (Math.random() - 0.5) * 0.12;
+            greetingPositions[i3 + 1] = Math.random() * 0.5 - 0.3;
+            greetingPositions[i3 + 2] = (Math.random() - 0.5) * 0.15;
           }
         }
         modelLoaded = true;
@@ -255,7 +320,7 @@ const GreetingModel = ({ shouldPlay = false }) => {
         const targetY = greetingPositions[i3 + 1] * morphAmount + floatY * floatAmount;
         const targetZ = greetingPositions[i3 + 2] * morphAmount + floatZ * floatAmount;
 
-        const lerpSpeed = morphAmount > 0 ? 0.03 : 0.02;
+        const lerpSpeed = morphAmount > 0 ? 0.04 : 0.02;
         positionsArray[i3] += (targetX - positionsArray[i3]) * lerpSpeed;
         positionsArray[i3 + 1] += (targetY - positionsArray[i3 + 1]) * lerpSpeed;
         positionsArray[i3 + 2] += (targetZ - positionsArray[i3 + 2]) * lerpSpeed;
@@ -287,10 +352,7 @@ const GreetingModel = ({ shouldPlay = false }) => {
       positionAttr.needsUpdate = true;
       colorAttr.needsUpdate = true;
 
-      if (!isDraggingRef.current) {
-        const rotationSpeed = 0.001 + morphAmount * 0.002;
-        targetRotationRef.current.y += rotationSpeed;
-      }
+      // No auto-rotate - only rotate on drag
 
       currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * 0.05;
       currentRotationRef.current.y += (targetRotationRef.current.y - currentRotationRef.current.y) * 0.05;

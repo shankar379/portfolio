@@ -1,42 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaUser, FaEnvelope, FaPaperPlane, FaPaperclip } from 'react-icons/fa';
-import GreetingModel from './GreetingModel';
 import './Contact.css';
 
 const Contact = () => {
-  const sectionRef = useRef(null);
-  const [shouldPlayGreeting, setShouldPlayGreeting] = useState(false);
-
-  // Intersection Observer for 40% visibility
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
-            setShouldPlayGreeting(true);
-          } else {
-            setShouldPlayGreeting(false);
-          }
-        });
-      },
-      {
-        threshold: [0, 0.4, 1],
-        rootMargin: '0px'
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
-
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -59,13 +26,13 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="contact" ref={sectionRef}>
+    <section id="contact" className="contact">
       <div className="contact-container">
-        {/* Left Side - Contact Form */}
+        {/* Contact Form */}
         <motion.div
           className="contact-form-section"
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
@@ -159,21 +126,9 @@ const Contact = () => {
             </div>
           </form>
         </motion.div>
-
-        {/* Right Side - 3D Greeting Animation */}
-        <motion.div
-          className="contact-envelope-section"
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <GreetingModel shouldPlay={shouldPlayGreeting} />
-        </motion.div>
       </div>
     </section>
   );
 };
 
 export default Contact;
-
