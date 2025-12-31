@@ -5,7 +5,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import BrainParticleModel from './BrainParticleModel';
 import './World.css';
 
-const World = () => {
+const World = ({ onExploreClick }) => {
   const navigate = useNavigate();
   const [isExploding, setIsExploding] = useState(false);
   const [shouldMorph, setShouldMorph] = useState(false);
@@ -42,6 +42,10 @@ const World = () => {
 
   const handleExplore = () => {
     setIsExploding(true);
+    // Trigger social sidebar animation
+    if (onExploreClick) {
+      onExploreClick();
+    }
   };
 
   const handleExplodeComplete = () => {

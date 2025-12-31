@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaArrowLeft } from 'react-icons/fa';
+import SolarSystemParticles from './SolarSystemParticles';
 import './ExploreWorld.css';
 
 const ExploreWorld = () => {
@@ -9,6 +10,8 @@ const ExploreWorld = () => {
 
   return (
     <div className="explore-world">
+      <SolarSystemParticles />
+
       <motion.button
         className="back-button"
         onClick={() => navigate('/')}
@@ -23,16 +26,13 @@ const ExploreWorld = () => {
       </motion.button>
 
       <motion.div
-        className="explore-content"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
+        className="explore-header"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.3 }}
       >
-        <h1 className="explore-title">3D World</h1>
-        <p className="explore-subtitle">Coming Soon</p>
-        <div className="explore-placeholder">
-          <div className="placeholder-orb"></div>
-        </div>
+        <h1 className="explore-title">Solar System</h1>
+        <p className="explore-subtitle">Drag to rotate • Scroll to zoom</p>
       </motion.div>
     </div>
   );

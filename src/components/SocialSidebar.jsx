@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { FaLinkedin, FaGithub, FaDribbble, FaYoutube, FaInstagram } from 'react-icons/fa';
 import './SocialSidebar.css';
 
-const SocialSidebar = () => {
+const SocialSidebar = ({ isExploreClicked = false }) => {
   const socialLinks = [
     { icon: FaLinkedin, url: 'https://www.linkedin.com/in/durga-shankar-295286249/', name: 'LinkedIn' },
     { icon: FaGithub, url: 'https://github.com/shankar379/', name: 'GitHub' },
@@ -12,7 +12,17 @@ const SocialSidebar = () => {
   ];
 
   return (
-    <div className="social-sidebar">
+    <motion.div 
+      className="social-sidebar"
+      animate={{
+        x: isExploreClicked ? -100 : 0,
+        opacity: isExploreClicked ? 0 : 1
+      }}
+      transition={{
+        duration: 0.8,
+        ease: [0.25, 0.0, 0.35, 1.0]
+      }}
+    >
       {socialLinks.map((social, index) => (
         <motion.a
           key={index}
@@ -28,7 +38,7 @@ const SocialSidebar = () => {
           <social.icon />
         </motion.a>
       ))}
-    </div>
+    </motion.div>
   );
 };
 
