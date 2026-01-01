@@ -1,0 +1,9 @@
+.grid-section {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background: #f5f5f5;
+  overflow: hidden;
+  z-index: 20;
+}
+
