@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import './WorldModel.css';
+import './AboutModel.css';
 
-const WorldModel = () => {
+const AboutModel = () => {
   const containerRef = useRef(null);
   const sceneRef = useRef(null);
   const cameraRef = useRef(null);
@@ -46,40 +46,89 @@ const WorldModel = () => {
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // Full comprehensive lighting setup
+    // Ambient light - base illumination
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
     scene.add(ambientLight);
 
-    const directionalLight1 = new THREE.DirectionalLight(0xff6d00, 0.8);
-    directionalLight1.position.set(5, 5, 5);
+    // Hemisphere light - natural sky/ground lighting
+    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0xffaa00, 0.8);
+    hemisphereLight.position.set(0, 5, 0);
+    scene.add(hemisphereLight);
+
+    // Main directional light - primary key light (orange)
+    const directionalLight1 = new THREE.DirectionalLight(0xff6d00, 1.2);
+    directionalLight1.position.set(5, 8, 5);
     directionalLight1.castShadow = true;
+    directionalLight1.shadow.mapSize.width = 2048;
+    directionalLight1.shadow.mapSize.height = 2048;
+    directionalLight1.shadow.camera.near = 0.5;
+    directionalLight1.shadow.camera.far = 50;
     scene.add(directionalLight1);
 
-    const directionalLight2 = new THREE.DirectionalLight(0xffaa00, 0.5);
-    directionalLight2.position.set(-5, -5, -5);
+    // Secondary directional light - fill light (warm orange)
+    const directionalLight2 = new THREE.DirectionalLight(0xffaa00, 0.8);
+    directionalLight2.position.set(-5, 3, -5);
+    directionalLight2.castShadow = true;
     scene.add(directionalLight2);
 
-    const pointLight = new THREE.PointLight(0xff6d00, 0.5);
-    pointLight.position.set(0, 0, 5);
-    scene.add(pointLight);
+    // Third directional light - rim/back light (yellow-orange)
+    const directionalLight3 = new THREE.DirectionalLight(0xffb600, 0.6);
+    directionalLight3.position.set(-3, 2, -8);
+    scene.add(directionalLight3);
+
+    // Fourth directional light - side light (orange)
+    const directionalLight4 = new THREE.DirectionalLight(0xff7900, 0.7);
+    directionalLight4.position.set(8, 4, 0);
+    scene.add(directionalLight4);
+
+    // Point light 1 - front center
+    const pointLight1 = new THREE.PointLight(0xff6d00, 1.0, 100);
+    pointLight1.position.set(0, 2, 5);
+    scene.add(pointLight1);
+
+    // Point light 2 - top right
+    const pointLight2 = new THREE.PointLight(0xffaa00, 0.8, 100);
+    pointLight2.position.set(4, 6, 3);
+    scene.add(pointLight2);
+
+    // Point light 3 - bottom left
+    const pointLight3 = new THREE.PointLight(0xff8500, 0.6, 100);
+    pointLight3.position.set(-4, -2, 4);
+    scene.add(pointLight3);
+
+    // Spot light - focused accent light
+    const spotLight = new THREE.SpotLight(0xff6d00, 1.5, 100, Math.PI / 6, 0.5, 2);
+    spotLight.position.set(0, 10, 0);
+    spotLight.target.position.set(0, 0, 0);
+    spotLight.castShadow = true;
+    scene.add(spotLight);
+    scene.add(spotLight.target);
 
     // Load GLB model
     const loader = new GLTFLoader();
     loader.load(
-      '/models/Demo2.glb',
+      '/models/about_statue.glb',
       (gltf) => {
         const model = gltf.scene;
+        modelRef.current = model;
         
         // Center and scale the model
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 3 / maxDim; // Scale to fit in view
+        const scale = 5 / maxDim; // Increased scale for larger model
         
         model.scale.multiplyScalar(scale);
         model.position.sub(center.multiplyScalar(scale));
         model.position.y = 0;
+        
+        // Set initial rotation to 90 degrees (facing left)
+        const initialRotation = Math.PI / 2; // 90 degrees
+        model.rotation.y = initialRotation;
+        targetRotationRef.current.y = initialRotation;
+        currentRotationRef.current.y = initialRotation;
         
         // Enable shadows and enhance materials
         model.traverse((child) => {
@@ -87,69 +136,36 @@ const WorldModel = () => {
             child.castShadow = true;
             child.receiveShadow = true;
             
-            // Enhance material appearance
+            // Enhance material appearance with increased emission
             if (child.material) {
-              // Handle both single material and array of materials
               const materials = Array.isArray(child.material) ? child.material : [child.material];
               materials.forEach((mat) => {
                 if (mat) {
-                  mat.emissive = mat.emissive || new THREE.Color(0x000000);
-                  mat.emissiveIntensity = 0.1;
-                  // Make material more vibrant
+                  // Increase emission significantly
+                  mat.emissive = mat.emissive || new THREE.Color(0xff6d00);
+                  mat.emissiveIntensity = 0.5; // Increased from 0.1 to 0.5
                   if (mat.color) {
                     mat.color.multiplyScalar(1.2);
+                  }
+                  // Make material more emissive
+                  if (mat.emissive) {
+                    mat.emissive.multiplyScalar(1.5);
                   }
                 }
               });
             }
           }
         });
-
-        scene.add(model);
-        modelRef.current = model;
-
-        // Auto rotation
-        targetRotationRef.current.y = 0.5;
         
-        console.log('3D Model loaded successfully');
+        scene.add(model);
       },
-      (progress) => {
-        // Loading progress
-        if (progress.total > 0) {
-          const percent = (progress.loaded / progress.total) * 100;
-          console.log('Loading progress:', percent.toFixed(2) + '%');
-        }
-      },
+      undefined,
       (error) => {
-        console.error('Error loading 3D model:', error);
-        // You could add a fallback or error message here
+        console.error('Error loading GLB model:', error);
       }
     );
 
-    // Animation loop
-    const animate = () => {
-      animationFrameRef.current = requestAnimationFrame(animate);
-
-      // Smooth rotation
-      currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * 0.05;
-      currentRotationRef.current.y += (targetRotationRef.current.y - currentRotationRef.current.y) * 0.05;
-
-      if (modelRef.current) {
-        modelRef.current.rotation.y = currentRotationRef.current.y;
-        modelRef.current.rotation.x = currentRotationRef.current.x;
-      }
-
-      // Auto rotation when not dragging
-      if (!isDraggingRef.current) {
-        targetRotationRef.current.y += 0.005;
-      }
-
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    // Mouse interaction handlers
+    // Mouse interaction
     const handleMouseDown = (e) => {
       e.preventDefault();
       isDraggingRef.current = true;
@@ -159,16 +175,14 @@ const WorldModel = () => {
 
     const handleMouseMove = (e) => {
       if (!isDraggingRef.current) return;
-
+      
       const deltaX = e.clientX - mouseRef.current.x;
       const deltaY = e.clientY - mouseRef.current.y;
-
+      
       targetRotationRef.current.y += deltaX * 0.01;
       targetRotationRef.current.x += deltaY * 0.01;
-
-      // Limit vertical rotation
       targetRotationRef.current.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, targetRotationRef.current.x));
-
+      
       mouseRef.current.x = e.clientX;
       mouseRef.current.y = e.clientY;
     };
@@ -177,7 +191,6 @@ const WorldModel = () => {
       isDraggingRef.current = false;
     };
 
-    // Touch handlers
     const handleTouchStart = (e) => {
       if (e.touches.length === 1) {
         isDraggingRef.current = true;
@@ -195,7 +208,6 @@ const WorldModel = () => {
       
       targetRotationRef.current.y += deltaX * 0.01;
       targetRotationRef.current.x += deltaY * 0.01;
-      
       targetRotationRef.current.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, targetRotationRef.current.x));
       
       mouseRef.current.x = e.touches[0].clientX;
@@ -206,7 +218,6 @@ const WorldModel = () => {
       isDraggingRef.current = false;
     };
 
-    // Add event listeners
     if (renderer && renderer.domElement) {
       renderer.domElement.addEventListener('mousedown', handleMouseDown);
       window.addEventListener('mousemove', handleMouseMove);
@@ -215,6 +226,25 @@ const WorldModel = () => {
       renderer.domElement.addEventListener('touchmove', handleTouchMove, { passive: false });
       renderer.domElement.addEventListener('touchend', handleTouchEnd);
     }
+
+    // Animation loop
+    const animate = () => {
+      animationFrameRef.current = requestAnimationFrame(animate);
+
+      if (modelRef.current) {
+        // No auto rotation - only update rotation when dragging
+        // Smooth rotation interpolation
+        currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * 0.05;
+        currentRotationRef.current.y += (targetRotationRef.current.y - currentRotationRef.current.y) * 0.05;
+
+        modelRef.current.rotation.y = currentRotationRef.current.y;
+        modelRef.current.rotation.x = currentRotationRef.current.x;
+      }
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
 
     // Handle resize
     const handleResize = () => {
@@ -252,8 +282,8 @@ const WorldModel = () => {
     };
   }, []);
 
-  return <div ref={containerRef} className="world-model-container" />;
+  return <div ref={containerRef} className="about-model-container" />;
 };
 
-export default WorldModel;
+export default AboutModel;
 

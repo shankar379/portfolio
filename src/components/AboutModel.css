@@ -1,4 +1,4 @@
-.about-particle-container {
+.about-model-container {
   position: absolute;
   right: 0;
   top: 0;
@@ -8,16 +8,16 @@
   cursor: grab;
 }
 
-.about-particle-container:active {
+.about-model-container:active {
   cursor: grabbing;
 }
 
-.about-particle-container canvas {
+.about-model-container canvas {
   display: block;
 }
 
 @media (max-width: 968px) {
-  .about-particle-container {
+  .about-model-container {
     position: relative;
     width: 100%;
     height: 400px;
@@ -26,7 +26,7 @@
 }
 
 @media (max-width: 768px) {
-  .about-particle-container {
+  .about-model-container {
     height: 350px;
   }
 }

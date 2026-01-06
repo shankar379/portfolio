@@ -10,7 +10,7 @@ import {
 import { createRoot } from 'react-dom/client';
 import './GridScene.css';
 
-const themeColor = '#a78bfa';
+const themeColor = '#ff6d00';
 
 
 const GridScene = () => {

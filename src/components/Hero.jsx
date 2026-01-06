@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import ParticleModel from './ParticleModel';
+import OrangeRibbonBackground from './OrangeRibbonBackground';
 import './Hero.css';
 
 const Hero = () => {
@@ -24,6 +24,9 @@ const Hero = () => {
 
   return (
     <section id="home" className="hero">
+      {/* Background Shader */}
+      <OrangeRibbonBackground />
+      
       {/* Main Hero Content */}
       <div className="hero-content">
         <motion.div
@@ -33,10 +36,7 @@ const Hero = () => {
           transition={{ duration: 0.8 }}
         >
           <p className="hero-greeting">Hi I&apos;m</p>
-          <h1 className="hero-name">
-            <span>DURGA</span>
-            <span className="name-accent"> SHANKAR</span>
-          </h1>
+          <h1 className="hero-name">DURGA SHANKAR</h1>
           
           <div className="hero-roles">
             {roles.map((role, index) => (
@@ -74,31 +74,6 @@ const Hero = () => {
             <span className="cta-arrow">→</span>
           </motion.button>
         </motion.div>
-      </div>
-
-      {/* 3D Particle Model */}
-      <ParticleModel />
-
-      {/* Decorative Shapes */}
-      <div className="hero-shapes">
-        <motion.div
-          className="shape shape-circle-1"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 0.3, scale: 1 }}
-          transition={{ delay: 0.5, duration: 1 }}
-        />
-        <motion.div
-          className="shape shape-circle-2"
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 0.2, scale: 1 }}
-          transition={{ delay: 0.7, duration: 1 }}
-        />
-        <motion.div
-          className="shape shape-diamond"
-          initial={{ opacity: 0, rotate: 45 }}
-          animate={{ opacity: 0.25, rotate: 45 }}
-          transition={{ delay: 0.9, duration: 1 }}
-        />
       </div>
     </section>
   );

@@ -9,8 +9,8 @@ const EnvelopeParticleModel = () => {
   const flapOpenRef = useRef(0);
 
   const particleCount = 5000;
-  const primaryColor = new THREE.Color(0xa78bfa); // Purple
-  const secondaryColor = new THREE.Color(0x8b5cf6); // Darker purple
+  const primaryColor = new THREE.Color(0xff6d00); // Orange
+  const secondaryColor = new THREE.Color(0xff4800); // Darker orange
   const letterColor = new THREE.Color(0x3b82f6); // Blue for letter
 
   useEffect(() => {

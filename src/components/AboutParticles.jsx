@@ -13,7 +13,7 @@ const AboutParticles = () => {
   const targetPositionsRef = useRef(null);
   const currentPositionsRef = useRef(null);
   const particleCount = 1500;
-  const color = new THREE.Color(0xa78bfa);
+  const color = new THREE.Color(0xff6d00);
   
   const mouseRef = useRef({ x: 0, y: 0 });
   const targetRotationRef = useRef({ x: 0, y: 0 });
@@ -65,12 +65,12 @@ const AboutParticles = () => {
       positions[i3 + 1] = 0;
       positions[i3 + 2] = 0;
       
-      // Gradient colors - purple to blue
+      // Gradient colors - orange to yellow
       const colorT = i / particleCount;
       const particleColor = new THREE.Color();
       particleColor.lerpColors(
-        new THREE.Color(0xa78bfa), // purple
-        new THREE.Color(0x60a5fa), // blue
+        new THREE.Color(0xff6d00), // orange
+        new THREE.Color(0xffaa00), // yellow-orange
         colorT
       );
       colors[i3] = particleColor.r;

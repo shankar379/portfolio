@@ -13,7 +13,7 @@ const ParticleModel = () => {
   const targetPositionsRef = useRef(null);
   const currentPositionsRef = useRef(null);
   const particleCount = 2000; // Particle count
-  const color = new THREE.Color(0xa78bfa); // #a78bfa (purple)
+  const color = new THREE.Color(0xff6d00); // #ff6d00 (orange)
   const hoverColor = new THREE.Color(0x3b82f6); // Blue color for hover
   
   // Mouse interaction

@@ -11,7 +11,7 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
   const particleSystemRef = useRef(null);
   const animationFrameRef = useRef(null);
   const particleCount = 6000;
-  const color = new THREE.Color(0xa78bfa); // Purple
+  const color = new THREE.Color(0xff6d00); // Orange
   const hoverColor = new THREE.Color(0x3b82f6); // Blue
 
   // Mouse interaction

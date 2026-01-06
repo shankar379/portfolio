@@ -1,15 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { FaUser, FaEnvelope, FaPaperPlane, FaPaperclip } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPaperPlane, FaPaperclip, FaHandshake, FaLinkedin, FaGithub, FaDribbble, FaYoutube, FaInstagram } from 'react-icons/fa';
+import OrangeRibbonBackground from './OrangeRibbonBackground';
 import './Contact.css';
 
 const Contact = () => {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [shouldHideIcons, setShouldHideIcons] = useState(false);
+  const contactSectionRef = useRef(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
     message: ''
   });
+
+  const socialLinks = [
+    { icon: FaLinkedin, url: 'https://www.linkedin.com/in/durga-shankar-295286249/', name: 'LinkedIn' },
+    { icon: FaGithub, url: 'https://github.com/shankar379/', name: 'GitHub' },
+    { icon: FaDribbble, url: 'https://dribbble.com/Durgashankar3616', name: 'Dribbble' },
+    { icon: FaYoutube, url: 'https://www.youtube.com/@CodeAndCreate369', name: 'YouTube' },
+    { icon: FaInstagram, url: 'https://www.instagram.com/nine_tale_fox369/', name: 'Instagram' }
+  ];
+
+  useEffect(() => {
+    const checkScrollPosition = () => {
+      if (!contactSectionRef.current) return;
+
+      const rect = contactSectionRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      const sectionTop = rect.top;
+      const sectionHeight = rect.height;
+      
+      // Calculate visible percentage
+      const visibleHeight = windowHeight - sectionTop;
+      const visiblePercentage = (visibleHeight / sectionHeight) * 100;
+      
+      // Hide icons when 30% visible
+      if (visiblePercentage >= 30) {
+        setShouldHideIcons(true);
+      } else {
+        setShouldHideIcons(false);
+      }
+    };
+
+    const handleScroll = () => {
+      checkScrollPosition();
+    };
+
+    // Check on mount
+    checkScrollPosition();
+
+    // Listen to Locomotive Scroll events
+    const checkScroll = setInterval(() => {
+      if (window.locomotiveScroll) {
+        clearInterval(checkScroll);
+        window.locomotiveScroll.on('scroll', handleScroll);
+      }
+    }, 100);
+
+    // Also listen to regular scroll as fallback
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', checkScrollPosition);
+
+    return () => {
+      clearInterval(checkScroll);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', checkScrollPosition);
+      if (window.locomotiveScroll) {
+        window.locomotiveScroll.off('scroll', handleScroll);
+      }
+    };
+  }, []);
 
   const handleChange = (e) => {
     setFormData({
@@ -26,16 +88,62 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="contact">
+    <section id="contact" className="contact" ref={contactSectionRef}>
       <div className="contact-container">
-        {/* Contact Form */}
-        <motion.div
-          className="contact-form-section"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        {/* Flip Container */}
+        <div className={`contact-flip-container ${isFormOpen ? 'flipped' : ''}`}>
+          {/* Front Side - Contact Card */}
+          <div className="contact-card-front">
+            <motion.div
+              className="contact-card"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="contact-card-background">
+                <OrangeRibbonBackground />
+              </div>
+              <div className="contact-card-content">
+              <div className="business-card-info">
+                <h2 className="business-card-name">Durga Shankar Guttula</h2>
+                <p className="business-card-role">Android Developer</p>
+              </div>
+                <motion.button
+                  className="contact-card-icon-button"
+                  onClick={() => setIsFormOpen(true)}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <FaHandshake className="contact-card-icon" />
+                </motion.button>
+              </div>
+              
+              {/* Social Icons Container at Bottom */}
+              <div className="contact-card-social-icons">
+                {socialLinks.map((social, index) => (
+                  <motion.a
+                    key={index}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="contact-card-social-icon"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: index * 0.1, duration: 0.3 }}
+                    whileHover={{ scale: 1.2, y: -5 }}
+                    style={{ color: '#ffffff' }}
+                  >
+                    <social.icon />
+                  </motion.a>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Back Side - Contact Form */}
+          <div className="contact-card-back">
+            <div className="contact-form-section">
           <div className="contact-header">
             <h2 className="contact-title">
               Let&apos;s work together.
@@ -125,7 +233,16 @@ const Contact = () => {
               </button>
             </div>
           </form>
-        </motion.div>
+              <button 
+                className="close-form-button"
+                onClick={() => setIsFormOpen(false)}
+                aria-label="Close form"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

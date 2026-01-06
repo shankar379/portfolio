@@ -10,7 +10,6 @@
 }
 
 .social-sidebar-icon {
-  color: #ff6d00;
   font-size: 1.5rem;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -18,7 +17,6 @@
 }
 
 .social-sidebar-icon:hover {
-  color: #ff4800;
   transform: translateX(5px);
 }
 

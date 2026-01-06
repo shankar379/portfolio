@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, Suspense, lazy } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LocomotiveScroll from 'locomotive-scroll';
 import 'locomotive-scroll/dist/locomotive-scroll.css';
@@ -8,7 +8,6 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Skills from './components/Skills';
-import IceCubeScene from './components/IceCubeScene';
 import Projects from './components/Projects';
 import World from './components/World';
 import Contact from './components/Contact';
@@ -32,7 +31,7 @@ function HomePage({ isLoading }) {
     if (isLoading) return;
 
     // Section IDs to track
-    const sectionIds = ['home', 'about', 'skills', 'icecube', 'projects', 'world', 'contact'];
+    const sectionIds = ['home', 'about', 'skills', 'projects', 'world', 'contact'];
     const scroll = new LocomotiveScroll({
       el: scrollRef.current,
       smooth: true,
@@ -173,9 +172,6 @@ function HomePage({ isLoading }) {
       </div>
       <div data-scroll-section>
         <Skills />
-      </div>
-      <div data-scroll-section>
-        <IceCubeScene />
       </div>
       <div data-scroll-section>
         <Projects />
