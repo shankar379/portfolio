@@ -10,6 +10,18 @@ html, body {
   font-family: 'Outfit', sans-serif;
 }
 
+/* Enable scrolling on mobile devices */
+@media (max-width: 768px) {
+  html, body {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  [data-scroll-container] {
+    overflow: visible;
+  }
+}
+
 .App {
   min-height: 100vh;
   position: relative;

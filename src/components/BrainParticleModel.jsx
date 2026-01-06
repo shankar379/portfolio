@@ -10,9 +10,17 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
   const rendererRef = useRef(null);
   const particleSystemRef = useRef(null);
   const animationFrameRef = useRef(null);
-  const particleCount = 6000;
+  
+  // Detect mobile and adjust particle count
+  const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+  const particleCount = isMobile ? 2000 : 6000; // Reduce particles on mobile
   const color = new THREE.Color(0xff6d00); // Orange
   const hoverColor = new THREE.Color(0x3b82f6); // Blue
+  
+  // Performance optimization refs
+  const lastFrameTimeRef = useRef(0);
+  const frameSkipRef = useRef(0);
+  const isVisibleRef = useRef(true);
 
   // Mouse interaction
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -71,12 +79,13 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
     cameraRef.current = camera;
 
     const renderer = new THREE.WebGLRenderer({
-      antialias: true,
+      antialias: !isMobile, // Disable antialiasing on mobile
       alpha: true,
       powerPreference: 'high-performance'
     });
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Lower pixel ratio on mobile for better performance
+    renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1) : Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -203,10 +212,53 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
 
     let time = 0;
     const initialCameraZ = 2.5;
+    
+    // Frame rate limiting for mobile (target 30fps instead of 60fps)
+    const targetFPS = isMobile ? 30 : 60;
+    const frameInterval = 1000 / targetFPS;
+    lastFrameTimeRef.current = performance.now();
+
+    // Intersection Observer to pause when not visible
+    // Initialize as visible to ensure first render
+    isVisibleRef.current = true;
+    let observer = null;
+    
+    // Delay observer setup to ensure container is mounted and visible
+    setTimeout(() => {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            isVisibleRef.current = entry.isIntersecting;
+          });
+        },
+        { threshold: 0.01, rootMargin: '100px' } // Lower threshold and add margin
+      );
+      
+      if (containerRef.current) {
+        observer.observe(containerRef.current);
+      }
+    }, 200);
 
     // Animation loop
-    const animate = () => {
+    const animate = (currentTime) => {
       animationFrameRef.current = requestAnimationFrame(animate);
+      
+      // Frame rate limiting for mobile
+      if (isMobile) {
+        const elapsed = currentTime - lastFrameTimeRef.current;
+        if (elapsed < frameInterval) {
+          return;
+        }
+        lastFrameTimeRef.current = currentTime - (elapsed % frameInterval);
+      } else {
+        lastFrameTimeRef.current = currentTime;
+      }
+      
+      // Skip rendering if not visible (but always render on first few frames to initialize)
+      if (!isVisibleRef.current && !isExplodingRef.current && time > 0.1) {
+        return;
+      }
+      
       time += 0.016;
 
       const positionAttr = particleSystem.geometry.attributes.position;
@@ -302,6 +354,9 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
         const rotatedMouse = mouse3DRef.current.clone().applyEuler(inverseRotation);
         const colorChangeRadius = colorChangeRadiusRef.current;
 
+        // Optimize: Skip color calculations on mobile when not morphed
+        const shouldCalculateColors = !isMobile || morphAmount > 0.5;
+        
         for (let i = 0; i < particleCount; i++) {
           const i3 = i * 3;
 
@@ -318,7 +373,8 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
           positionsArray[i3 + 1] += (targetY - positionsArray[i3 + 1]) * lerpSpeed;
           positionsArray[i3 + 2] += (targetZ - positionsArray[i3 + 2]) * lerpSpeed;
 
-          if (morphAmount > 0.5) {
+          // Only calculate colors when needed (morphed or desktop)
+          if (shouldCalculateColors && morphAmount > 0.5) {
             const dx = positionsArray[i3] - rotatedMouse.x;
             const dy = positionsArray[i3 + 1] - rotatedMouse.y;
             const dz = positionsArray[i3 + 2] - rotatedMouse.z;
@@ -334,6 +390,11 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
             colorsArray[i3] = particleColor.r;
             colorsArray[i3 + 1] = particleColor.g;
             colorsArray[i3 + 2] = particleColor.b;
+          } else if (!shouldCalculateColors) {
+            // On mobile when not morphed, use simple color
+            colorsArray[i3] = color.r;
+            colorsArray[i3 + 1] = color.g;
+            colorsArray[i3 + 2] = color.b;
           } else {
             const colorVariation = Math.sin(time * 0.5 + i * 0.01) * 0.1;
             colorsArray[i3] = color.r + colorVariation;
@@ -360,7 +421,7 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
       renderer.render(scene, camera);
     };
 
-    animate();
+    animate(performance.now());
 
     // Event handlers
     const handleMouseDown = (e) => {
@@ -452,6 +513,11 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
     window.addEventListener('resize', handleResize);
 
     return () => {
+      // Cleanup observer
+      if (observer && containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+      
       window.removeEventListener('resize', handleResize);
 
       if (renderer && renderer.domElement) {

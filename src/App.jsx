@@ -32,10 +32,42 @@ function HomePage({ isLoading }) {
 
     // Section IDs to track
     const sectionIds = ['home', 'about', 'skills', 'projects', 'world', 'contact'];
+    
+    // Detect mobile device - use window width for more reliable detection
+    const checkMobile = () => window.innerWidth <= 768;
+    const isMobile = checkMobile();
+    
+    // On mobile, use native scrolling instead of Locomotive Scroll
+    if (isMobile) {
+      // Remove overflow hidden for native scrolling
+      document.documentElement.style.overflow = 'auto';
+      document.body.style.overflow = 'auto';
+      
+      // Set a flag so other components know we're on mobile
+      window.isMobileDevice = true;
+      
+      // Handle resize to re-check mobile status
+      const handleResize = () => {
+        if (!checkMobile() && !window.locomotiveScroll) {
+          // Switched to desktop, reload page to initialize Locomotive Scroll
+          window.location.reload();
+        }
+      };
+      window.addEventListener('resize', handleResize);
+      
+      return () => {
+        window.removeEventListener('resize', handleResize);
+        delete window.isMobileDevice;
+      };
+    }
+    
+    // Desktop: Initialize Locomotive Scroll
+    window.isMobileDevice = false;
+    
     const scroll = new LocomotiveScroll({
       el: scrollRef.current,
       smooth: true,
-      smoothMobile: true,
+      smoothMobile: false,
       multiplier: 0.8,
       lerp: 0.05,
     });

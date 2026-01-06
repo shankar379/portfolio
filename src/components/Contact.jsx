@@ -44,29 +44,58 @@ const Contact = () => {
       }
     };
 
-    const handleScroll = () => {
-      checkScrollPosition();
+    // Throttle function for performance
+    let ticking = false;
+    const throttledCheck = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          checkScrollPosition();
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     // Check on mount
     checkScrollPosition();
 
-    // Listen to Locomotive Scroll events
-    const checkScroll = setInterval(() => {
-      if (window.locomotiveScroll) {
-        clearInterval(checkScroll);
-        window.locomotiveScroll.on('scroll', handleScroll);
-      }
-    }, 100);
+    // Handle scroll - works for both Locomotive Scroll and native scroll
+    const handleScroll = () => {
+      throttledCheck();
+    };
 
-    // Also listen to regular scroll as fallback
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', checkScrollPosition);
+    // Check if Locomotive Scroll is available (desktop)
+    let scrollCheckInterval = null;
+    if (window.locomotiveScroll) {
+      // Locomotive Scroll is already available
+      window.locomotiveScroll.on('scroll', handleScroll);
+    } else {
+      // Wait for Locomotive Scroll to initialize (with timeout for mobile)
+      scrollCheckInterval = setInterval(() => {
+        if (window.locomotiveScroll) {
+          clearInterval(scrollCheckInterval);
+          window.locomotiveScroll.on('scroll', handleScroll);
+        }
+      }, 100);
+      
+      // Set timeout to stop checking after 2 seconds (mobile fallback)
+      setTimeout(() => {
+        if (scrollCheckInterval) {
+          clearInterval(scrollCheckInterval);
+        }
+      }, 2000);
+    }
+
+    // Always listen to native scroll events (works on mobile and as fallback)
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', throttledCheck, { passive: true });
 
     return () => {
-      clearInterval(checkScroll);
+      if (scrollCheckInterval) {
+        clearInterval(scrollCheckInterval);
+      }
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', checkScrollPosition);
+      window.removeEventListener('resize', throttledCheck);
       if (window.locomotiveScroll) {
         window.locomotiveScroll.off('scroll', handleScroll);
       }

@@ -9,6 +9,13 @@ const OrangeRibbonBackground = () => {
   const rendererRef = useRef(null);
   const materialRef = useRef(null);
   const animationFrameRef = useRef(null);
+  
+  // Detect mobile for optimizations
+  const isMobile = typeof window !== 'undefined' && (window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+  
+  // Performance optimization refs
+  const lastFrameTimeRef = useRef(0);
+  const isVisibleRef = useRef(true);
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -21,13 +28,15 @@ const OrangeRibbonBackground = () => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     cameraRef.current = camera;
 
-    // Renderer
+    // Renderer - optimized for mobile
     const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: false
+      antialias: !isMobile, // Disable antialiasing on mobile
+      alpha: false,
+      powerPreference: 'high-performance'
     });
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // Lower pixel ratio on mobile for better performance
+    renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1) : Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -214,16 +223,57 @@ const OrangeRibbonBackground = () => {
     const mesh = new THREE.Mesh(geometry, material);
     scene.add(mesh);
 
+    // Frame rate limiting for mobile (target 30fps instead of 60fps)
+    const targetFPS = isMobile ? 30 : 60;
+    const frameInterval = 1000 / targetFPS;
+    lastFrameTimeRef.current = performance.now();
+
+    // Intersection Observer to pause when not visible
+    isVisibleRef.current = true;
+    let observer = null;
+    
+    setTimeout(() => {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            isVisibleRef.current = entry.isIntersecting;
+          });
+        },
+        { threshold: 0.01, rootMargin: '50px' }
+      );
+      
+      if (containerRef.current) {
+        observer.observe(containerRef.current);
+      }
+    }, 100);
+
     // Animation loop
-    const animate = () => {
+    const animate = (currentTime) => {
+      animationFrameRef.current = requestAnimationFrame(animate);
+      
+      // Frame rate limiting for mobile
+      if (isMobile) {
+        const elapsed = currentTime - lastFrameTimeRef.current;
+        if (elapsed < frameInterval) {
+          return;
+        }
+        lastFrameTimeRef.current = currentTime - (elapsed % frameInterval);
+      } else {
+        lastFrameTimeRef.current = currentTime;
+      }
+      
+      // Skip rendering if not visible (but always render first few frames)
+      if (!isVisibleRef.current && currentTime - lastFrameTimeRef.current > 1000) {
+        return;
+      }
+      
       if (materialRef.current) {
         materialRef.current.uniforms.uTime.value += 0.01;
       }
       renderer.render(scene, camera);
-      animationFrameRef.current = requestAnimationFrame(animate);
     };
 
-    animate();
+    animate(performance.now());
 
     // Handle resize
     const handleResize = () => {
@@ -240,6 +290,11 @@ const OrangeRibbonBackground = () => {
 
     // Cleanup
     return () => {
+      // Cleanup observer
+      if (observer && containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+      
       window.removeEventListener('resize', handleResize);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
@@ -252,6 +307,9 @@ const OrangeRibbonBackground = () => {
       }
       if (materialRef.current) {
         materialRef.current.dispose();
+      }
+      if (geometry) {
+        geometry.dispose();
       }
     };
   }, []);

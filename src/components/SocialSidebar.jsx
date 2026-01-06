@@ -105,7 +105,7 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
   };
 
   useEffect(() => {
-    // Check if contact section is 10% visible
+    // Check if contact section is 30% visible
     const checkContactVisibility = () => {
       const contactSection = document.getElementById('contact');
       if (!contactSection) return;
@@ -126,35 +126,63 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
       }
     };
 
+    // Throttle function for performance
+    let ticking = false;
+    const throttledUpdate = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateIconColors();
+          checkContactVisibility();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
     // Initial update
     const initialTimeout = setTimeout(() => {
       updateIconColors();
       checkContactVisibility();
     }, 500);
 
-    // Update on scroll
+    // Handle scroll - works for both Locomotive Scroll and native scroll
     const handleScroll = () => {
-      updateIconColors();
-      checkContactVisibility();
+      throttledUpdate();
     };
 
-    // Listen to Locomotive Scroll events
-    const checkScroll = setInterval(() => {
-      if (window.locomotiveScroll) {
-        clearInterval(checkScroll);
-        window.locomotiveScroll.on('scroll', handleScroll);
-      }
-    }, 100);
+    // Check if Locomotive Scroll is available (desktop)
+    let scrollCheckInterval = null;
+    if (window.locomotiveScroll) {
+      // Locomotive Scroll is already available
+      window.locomotiveScroll.on('scroll', handleScroll);
+    } else {
+      // Wait for Locomotive Scroll to initialize (with timeout for mobile)
+      scrollCheckInterval = setInterval(() => {
+        if (window.locomotiveScroll) {
+          clearInterval(scrollCheckInterval);
+          window.locomotiveScroll.on('scroll', handleScroll);
+        }
+      }, 100);
+      
+      // Set timeout to stop checking after 2 seconds (mobile fallback)
+      setTimeout(() => {
+        if (scrollCheckInterval) {
+          clearInterval(scrollCheckInterval);
+        }
+      }, 2000);
+    }
 
-    // Also listen to regular scroll as fallback
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', updateIconColors);
+    // Always listen to native scroll events (works on mobile and as fallback)
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', throttledUpdate, { passive: true });
 
     return () => {
       clearTimeout(initialTimeout);
-      clearInterval(checkScroll);
+      if (scrollCheckInterval) {
+        clearInterval(scrollCheckInterval);
+      }
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', updateIconColors);
+      window.removeEventListener('resize', throttledUpdate);
       if (window.locomotiveScroll) {
         window.locomotiveScroll.off('scroll', handleScroll);
       }
