@@ -2,10 +2,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Outfit', sans-serif !important;
 }
 
 html, body {
   overflow: hidden;
+  font-family: 'Outfit', sans-serif;
 }
 
 .App {
@@ -13,6 +15,7 @@ html, body {
   position: relative;
   overflow-x: hidden;
   background: #fafafa;
+  font-family: 'Outfit', sans-serif;
 }
 
 /* Locomotive Scroll Container */
@@ -24,6 +27,12 @@ html, body {
 section {
   position: relative;
   z-index: 2;
+  font-family: 'Outfit', sans-serif;
+}
+
+/* Global Font Override */
+h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, label, div {
+  font-family: 'Outfit', sans-serif !important;
 }
 
 /* Custom Scrollbar - Hidden for smooth scroll */

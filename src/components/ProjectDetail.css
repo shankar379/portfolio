@@ -14,8 +14,8 @@
   align-items: center;
   gap: 0.5rem;
   background: transparent;
-  border: 2px solid #a78bfa;
-  color: #a78bfa;
+  border: 2px solid #ff6d00;
+  color: #ff6d00;
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   font-size: 1rem;
@@ -26,7 +26,7 @@
 }
 
 .back-button:hover {
-  background: #a78bfa;
+  background: #ff6d00;
   color: #ffffff;
   transform: translateX(-5px);
 }
@@ -48,7 +48,7 @@
   display: inline-block;
   font-size: 0.85rem;
   font-weight: 700;
-  color: #a78bfa;
+  color: #ff6d00;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 1rem;
@@ -88,24 +88,24 @@
 }
 
 .live-link {
-  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #ff6d00 0%, #ff4800 100%);
   color: #ffffff;
 }
 
 .live-link:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(167, 139, 250, 0.4);
+  box-shadow: 0 8px 20px rgba(255, 109, 0, 0.4);
 }
 
 .github-link {
-  background: #2d2d50;
+  background: #333333;
   color: #ffffff;
 }
 
 .github-link:hover {
-  background: #1a1a35;
+  background: #222222;
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(45, 45, 80, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .project-detail-body {
@@ -125,7 +125,7 @@
   font-weight: 700;
   color: #2d2d50;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #a78bfa;
+  border-bottom: 2px solid #ff6d00;
   width: fit-content;
 }
 
@@ -147,28 +147,28 @@
 }
 
 .tech-tag {
-  background: linear-gradient(135deg, #e0e7ff 0%, #f3f4f6 100%);
+  background: linear-gradient(135deg, #fff3e0 0%, #f3f4f6 100%);
   color: #2d2d50;
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
-  border: 2px solid rgba(167, 139, 250, 0.3);
+  border: 2px solid rgba(255, 109, 0, 0.3);
   transition: all 0.3s ease;
 }
 
 .tech-tag:hover {
-  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #ff6d00 0%, #ff4800 100%);
   color: #ffffff;
   transform: translateY(-3px);
-  box-shadow: 0 4px 12px rgba(167, 139, 250, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 109, 0, 0.3);
 }
 
 .impact-section {
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0e7ff 100%);
+  background: linear-gradient(135deg, #fff8f0 0%, #fff3e0 100%);
   padding: 2rem;
   border-radius: 16px;
-  border-left: 4px solid #a78bfa;
+  border-left: 4px solid #ff6d00;
 }
 
 .impact-box {
@@ -216,15 +216,15 @@
 }
 
 .case-study-item:hover {
-  border-color: #a78bfa;
-  box-shadow: 0 8px 24px rgba(167, 139, 250, 0.15);
+  border-color: #ff6d00;
+  box-shadow: 0 8px 24px rgba(255, 109, 0, 0.15);
   transform: translateY(-5px);
 }
 
 .case-study-number {
   font-size: 3rem;
   font-weight: 800;
-  color: #a78bfa;
+  color: #ff6d00;
   line-height: 1;
   margin-bottom: 1rem;
 }

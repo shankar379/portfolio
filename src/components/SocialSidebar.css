@@ -10,23 +10,18 @@
 }
 
 .social-sidebar-icon {
-  color: #2d2d50;
+  color: #ff6d00;
   font-size: 1.5rem;
   transition: all 0.3s ease;
   cursor: pointer;
-  filter: drop-shadow(0 2px 4px rgba(255, 255, 255, 0.8));
+  filter: drop-shadow(0 2px 4px rgba(255, 109, 0, 0.3));
 }
 
 .social-sidebar-icon:hover {
-  color: #a78bfa;
+  color: #ff4800;
   transform: translateX(5px);
 }
 
-/* Change icon color on dark sections */
-.about ~ .social-sidebar .social-sidebar-icon,
-.experience-dropping ~ .social-sidebar .social-sidebar-icon {
-  color: #ffffff;
-}
 
 /* Responsive Design */
 @media (max-width: 968px) {

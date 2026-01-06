@@ -14,8 +14,8 @@ const Projects = () => {
       title: 'SETHU WEB APP',
       description: 'Public-facing site for SETHU initiative with storytelling-driven UX. Engineered a high-performance web interface serving 5k+ monthly users, improving engagement by 40%.',
       technologies: ['React', 'Vite', 'Tailwind CSS'],
-      primaryColor: '#1E1B4B',
-      accentColor: '#10B981',
+      primaryColor: '#ff4800',
+      accentColor: '#ffaa00',
       image: '/sethu_web.png',
       liveUrl: 'https://team-sethu.web.app/',
       githubUrl: 'https://github.com/shankar379/SETHU-public'
@@ -25,8 +25,8 @@ const Projects = () => {
       title: 'TIME TABLE GENERATOR',
       description: 'Constraint-driven timetable engine for academic departments. Automated scheduling system handling 500+ weekly schedules with 98% accuracy, cutting generation time from 3 weeks to under 3 hours.',
       technologies: ['Python', 'Django', 'SQLite3'],
-      primaryColor: '#93C5FD',
-      accentColor: '#3B82F6',
+      primaryColor: '#ff6d00',
+      accentColor: '#ffb600',
       image: '/timetable.png',
       liveUrl: 'https://timetable-genaretor-vs.vercel.app/',
       githubUrl: 'https://github.com/shankar379/TG_NEW'
@@ -36,8 +36,8 @@ const Projects = () => {
       title: 'STUDENT COMMUNICATION PLATFORM',
       description: 'Real-time messaging and announcement hub for universities. Scalable chat system supporting 200+ concurrent users, enhancing student collaboration efficiency by 70%.',
       technologies: ['React', 'Firebase', 'Cloud Functions'],
-      primaryColor: '#F97316',
-      accentColor: '#1F2937',
+      primaryColor: '#ff8500',
+      accentColor: '#ff5400',
       image: '/student-communication.png',
       liveUrl: 'https://student-communication-vs.web.app/',
       githubUrl: ''
@@ -47,8 +47,8 @@ const Projects = () => {
       title: 'SMART ATTENDANCE MANAGER',
       description: 'Automated biometric attendance tracking with analytics dashboards. AI-powered system processing 10k+ records monthly, reducing administrative errors by 90%.',
       technologies: ['Python', 'Django', 'SQLite3'],
-      primaryColor: '#F5792A',
-      accentColor: '#1F2937',
+      primaryColor: '#ff9e00',
+      accentColor: '#ff6000',
       image: '/project-attendance.jpg',
       liveUrl: '',
       githubUrl: ''
@@ -58,8 +58,8 @@ const Projects = () => {
       title: 'RACE THE SUN: CHALLENGE EDITION',
       description: '3D infinite runner game with procedural generation and solar energy mechanics. Achieved 90+ FPS performance on mid-range devices through WebGL optimizations.',
       technologies: ['React', 'Three.js', 'WebGL'],
-      primaryColor: '#61DAFB',
-      accentColor: '#1E3A5F',
+      primaryColor: '#ffaa00',
+      accentColor: '#ff7900',
       image: '/project-race.jpg',
       liveUrl: '',
       githubUrl: ''
@@ -154,7 +154,7 @@ const Projects = () => {
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.5 }}
                   onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/800x1000/2d2d50/a78bfa?text=' + encodeURIComponent(currentProject.title);
+                    e.target.src = 'https://via.placeholder.com/800x1000/2d2d50/ff6d00?text=' + encodeURIComponent(currentProject.title);
                   }}
                 />
               </AnimatePresence>

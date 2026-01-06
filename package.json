@@ -10,6 +10,8 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-three/drei": "^9.117.3",
+    "@react-three/fiber": "^8.15.19",
     "firebase": "^12.7.0",
     "framer-motion": "^11.11.10",
     "locomotive-scroll": "^4.1.4",

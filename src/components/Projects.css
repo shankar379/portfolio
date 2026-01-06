@@ -14,12 +14,12 @@
   transform: translateY(-50%);
   font-size: clamp(8rem, 20vw, 16rem);
   font-weight: 900;
-  color: rgba(45, 45, 80, 0.03);
+  color: rgba(255, 109, 0, 0.05);
   letter-spacing: 0.05em;
   z-index: 0;
   pointer-events: none;
   white-space: nowrap;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Outfit', sans-serif;
 }
 
 .projects-wrapper {
@@ -57,10 +57,13 @@
   left: 6rem;
   font-size: 2.8rem;
   font-weight: 900;
-  color: #2d2d50;
+  background: linear-gradient(135deg, #ff4800 0%, #ff6d00 50%, #ffaa00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   letter-spacing: 0.02em;
   text-transform: uppercase;
-  font-family: 'Arial Black', 'Impact', sans-serif;
+  font-family: 'Outfit', sans-serif;
 }
 
 .projects-breadcrumb {
@@ -74,7 +77,10 @@
 .project-main-title {
   font-size: clamp(1.8rem, 3.5vw, 2.8rem);
   font-weight: 900;
-  color: #2d2d50;
+  background: linear-gradient(135deg, #ff4800 0%, #ff6d00 50%, #ffaa00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 1.5rem;
   margin-top: 2rem;
   line-height: 1.2;
@@ -92,7 +98,7 @@
 }
 
 .project-view-button {
-  background: #2d2d50;
+  background: linear-gradient(135deg, #ff4800 0%, #ff6d00 50%, #ffaa00 100%);
   color: #ffffff;
   border: none;
   padding: 1rem 2.5rem;
@@ -105,15 +111,14 @@
 }
 
 .project-view-button:hover {
-  background: #1a1a35;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(45, 45, 80, 0.3);
+  box-shadow: 0 8px 20px rgba(255, 109, 0, 0.4);
 }
 
 /* Right Section */
 .projects-right {
   position: relative;
-  background-color: #1E1B4B;
+  background: linear-gradient(135deg, #ff6d00 0%, #ff9100 50%, #ffb600 100%);
   overflow: visible;
   display: flex;
   align-items: center;
@@ -212,18 +217,18 @@
 }
 
 .nav-button-left {
-  background: #2d2d50;
+  background: linear-gradient(135deg, #ff4800 0%, #ff6d00 100%);
   color: #ffffff;
 }
 
 .nav-button-left:hover {
-  background: #1a1a35;
+  background: linear-gradient(135deg, #ff4800 0%, #ff5400 100%);
   transform: translateX(-3px);
 }
 
 .nav-button-right {
   background: #ffffff;
-  color: #2d2d50;
+  color: #ff6d00;
 }
 
 .nav-button-right:hover {

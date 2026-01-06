@@ -1,12 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LocomotiveScroll from 'locomotive-scroll';
 import 'locomotive-scroll/dist/locomotive-scroll.css';
 import './App.css';
+import Loader from './components/Loader';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
 import Skills from './components/Skills';
+import IceCubeScene from './components/IceCubeScene';
 import Projects from './components/Projects';
 import World from './components/World';
 import Contact from './components/Contact';
@@ -15,7 +17,7 @@ import SocialSidebar from './components/SocialSidebar';
 import Footer from './components/Footer';
 import ExploreWorld from './components/ExploreWorld';
 
-function HomePage() {
+function HomePage({ isLoading }) {
   const scrollRef = useRef(null);
   const scrollInstanceRef = useRef(null);
   const scrollTimeoutRef = useRef(null);
@@ -26,8 +28,11 @@ function HomePage() {
   const [isExploreClicked, setIsExploreClicked] = useState(false);
 
   useEffect(() => {
+    // Don't initialize scroll until loading is complete
+    if (isLoading) return;
+
     // Section IDs to track
-    const sectionIds = ['home', 'about', 'skills', 'projects', 'world', 'contact'];
+    const sectionIds = ['home', 'about', 'skills', 'icecube', 'projects', 'world', 'contact'];
     const scroll = new LocomotiveScroll({
       el: scrollRef.current,
       smooth: true,
@@ -154,7 +159,7 @@ function HomePage() {
       }
       scroll.destroy();
     };
-  }, []);
+  }, [isLoading]);
 
   return (
     <div ref={scrollRef} data-scroll-container>
@@ -168,6 +173,9 @@ function HomePage() {
       </div>
       <div data-scroll-section>
         <Skills />
+      </div>
+      <div data-scroll-section>
+        <IceCubeScene />
       </div>
       <div data-scroll-section>
         <Projects />
@@ -186,14 +194,23 @@ function HomePage() {
 }
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+  };
+
   return (
     <Router>
       <div className="App">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/project/:id" element={<ProjectDetail />} />
-          <Route path="/explore" element={<ExploreWorld />} />
-        </Routes>
+        {isLoading && <Loader onLoadingComplete={handleLoadingComplete} />}
+        <div style={{ visibility: isLoading ? 'hidden' : 'visible' }}>
+          <Routes>
+            <Route path="/" element={<HomePage isLoading={isLoading} />} />
+            <Route path="/project/:id" element={<ProjectDetail />} />
+            <Route path="/explore" element={<ExploreWorld />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );

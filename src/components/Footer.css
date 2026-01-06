@@ -1,6 +1,6 @@
 .footer {
   padding: 5rem 2rem 2rem;
-  background: linear-gradient(135deg, #2d2d50 0%, #1a1a35 50%, #2d2d50 100%);
+  background: linear-gradient(315deg, #cc4400 0%, #b33d00 50%, #993300 100%);
   color: #ffffff;
   position: relative;
   overflow: hidden;
@@ -125,7 +125,7 @@
   left: 0;
   width: 40px;
   height: 3px;
-  background: #a78bfa;
+  background: linear-gradient(90deg, #ff4800 0%, #ff6d00 50%, #ffaa00 100%);
   border-radius: 2px;
 }
 
@@ -206,7 +206,7 @@
   bottom: 2rem;
   width: 8px;
   height: 8px;
-  background: #a78bfa;
+  background: linear-gradient(135deg, #ff4800 0%, #ffaa00 100%);
   border-radius: 50%;
   z-index: 3;
 }

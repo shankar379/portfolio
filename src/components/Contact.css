@@ -43,7 +43,10 @@
 .contact-title {
   font-size: clamp(1.75rem, 4vw, 2.25rem);
   font-weight: 800;
-  color: #2d2d50;
+  background: linear-gradient(135deg, #ff4800 0%, #ff6d00 50%, #ffaa00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   margin-bottom: 0.75rem;
   display: flex;
   align-items: center;
@@ -54,7 +57,7 @@
 .title-dot {
   width: 10px;
   height: 10px;
-  background: #a78bfa;
+  background: #ff6d00;
   border-radius: 50%;
   display: inline-block;
 }
@@ -66,14 +69,14 @@
 }
 
 .contact-subtitle a {
-  color: #a78bfa;
+  color: #ff6d00;
   text-decoration: underline;
   font-weight: 500;
   transition: color 0.3s ease;
 }
 
 .contact-subtitle a:hover {
-  color: #8b5cf6;
+  color: #ff4800;
 }
 
 .contact-form {
@@ -127,8 +130,8 @@
 
 .form-input:focus,
 .form-textarea:focus {
-  border-color: #a78bfa;
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.1);
+  border-color: #ff6d00;
+  box-shadow: 0 0 0 3px rgba(255, 109, 0, 0.1);
 }
 
 .form-input::placeholder,
@@ -153,11 +156,11 @@
 
 .form-input:focus + .input-icon,
 .form-textarea:focus + .input-icon {
-  color: #a78bfa;
+  color: #ff6d00;
 }
 
 .email-icon {
-  color: #a78bfa;
+  color: #ff6d00;
 }
 
 .message-icon {
@@ -198,7 +201,7 @@
 .btn-send {
   flex: 1;
   padding: 0.95rem 2rem;
-  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #ff6d00 0%, #ff4800 100%);
   color: #ffffff;
   border: none;
   border-radius: 12px;
@@ -206,12 +209,12 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 109, 0, 0.3);
 }
 
 .btn-send:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(167, 139, 250, 0.4);
+  box-shadow: 0 6px 20px rgba(255, 109, 0, 0.4);
 }
 
 @media (max-width: 968px) {
