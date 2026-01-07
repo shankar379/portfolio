@@ -212,8 +212,10 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
 
     let time = 0;
     const initialCameraZ = 2.5;
+    let lastUpdateTime = performance.now();
     
     // Frame rate limiting for mobile (target 30fps instead of 60fps)
+    // But we'll always update rotation smoothly using delta time
     const targetFPS = isMobile ? 30 : 60;
     const frameInterval = 1000 / targetFPS;
     lastFrameTimeRef.current = performance.now();
@@ -243,10 +245,36 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
     const animate = (currentTime) => {
       animationFrameRef.current = requestAnimationFrame(animate);
       
-      // Frame rate limiting for mobile
+      // Calculate delta time FIRST for smooth rotation (frame-independent)
+      // This must be done before frame rate limiting so rotation updates smoothly
+      const deltaTime = Math.min((currentTime - lastUpdateTime) / 1000, 0.033); // Cap at ~30fps max delta to prevent spikes
+      lastUpdateTime = currentTime;
+      
+      // Always update rotation smoothly on EVERY frame (even when skipping rendering)
+      // This ensures buttery smooth rotation regardless of frame rate
+      if (!isDraggingRef.current && !isExplodingRef.current) {
+        const morphAmount = morphProgressRef.current;
+        // Smooth constant rotation speed - 0.4 to 0.7 radians per second (~25-40 degrees/sec)
+        const rotationSpeed = 0.4 + morphAmount * 0.3;
+        currentRotationRef.current.y += rotationSpeed * deltaTime;
+        targetRotationRef.current.y = currentRotationRef.current.y; // Keep target in sync
+      } else if (isDraggingRef.current && !isExplodingRef.current) {
+        // When dragging, smoothly lerp to target rotation (frame-rate independent)
+        const lerpFactor = 1 - Math.pow(0.0001, deltaTime); // Smooth exponential interpolation
+        currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * lerpFactor;
+        currentRotationRef.current.y += (targetRotationRef.current.y - currentRotationRef.current.y) * lerpFactor;
+      }
+      
+      // Always apply rotation immediately for smooth animation
+      particleSystem.rotation.y = currentRotationRef.current.y;
+      particleSystem.rotation.x = currentRotationRef.current.x;
+      
+      // Frame rate limiting for mobile (only affects rendering, NOT rotation)
       if (isMobile) {
         const elapsed = currentTime - lastFrameTimeRef.current;
         if (elapsed < frameInterval) {
+          // Rotation already updated above, just skip rendering this frame
+          // This ensures rotation is smooth even at 30fps rendering
           return;
         }
         lastFrameTimeRef.current = currentTime - (elapsed % frameInterval);
@@ -254,12 +282,13 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
         lastFrameTimeRef.current = currentTime;
       }
       
-      // Skip rendering if not visible (but always render on first few frames to initialize)
+      // Skip rendering if not visible (but always render first few frames to initialize)
+      // Rotation still updates above, so it will be smooth when section becomes visible
       if (!isVisibleRef.current && !isExplodingRef.current && time > 0.1) {
         return;
       }
       
-      time += 0.016;
+      time += deltaTime;
 
       const positionAttr = particleSystem.geometry.attributes.position;
       const positionsArray = positionAttr.array;
@@ -406,14 +435,8 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
         positionAttr.needsUpdate = true;
         colorAttr.needsUpdate = true;
 
-        if (!isDraggingRef.current) {
-          const rotationSpeed = 0.001 + morphAmount * 0.002;
-          targetRotationRef.current.y += rotationSpeed;
-        }
-
-        currentRotationRef.current.x += (targetRotationRef.current.x - currentRotationRef.current.x) * 0.05;
-        currentRotationRef.current.y += (targetRotationRef.current.y - currentRotationRef.current.y) * 0.05;
-
+        // Rotation is updated at the top of animate function on EVERY frame
+        // Just ensure it's synced here (no duplicate updates)
         particleSystem.rotation.y = currentRotationRef.current.y;
         particleSystem.rotation.x = currentRotationRef.current.x;
       }
