@@ -416,3 +416,294 @@
     height: 16px;
   }
 }
+
+/* Node Detail Modal - n8n Style */
+.node-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.node-modal {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.node-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 2px solid #e2e8f0;
+  background: #f8fafc;
+}
+
+.node-modal-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.node-modal-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.node-modal-icon .node-icon-svg {
+  width: 20px;
+  height: 20px;
+}
+
+.node-modal-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.node-modal-subtitle {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 2px 0 0 0;
+}
+
+.node-modal-close {
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.node-modal-close:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+/* Modal Tabs */
+.node-modal-tabs {
+  display: flex;
+  border-bottom: 1px solid #e2e8f0;
+  background: #fafafa;
+}
+
+.node-modal-tab {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.node-modal-tab:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+.node-modal-tab.active {
+  color: #1e293b;
+  background: #ffffff;
+}
+
+.node-modal-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #3b82f6;
+}
+
+/* Modal Content */
+.node-modal-content {
+  padding: 1rem 1.25rem;
+  overflow-y: auto;
+  max-height: calc(85vh - 140px);
+}
+
+.node-modal-panel h4 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 0.75rem 0;
+}
+
+.node-modal-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.node-modal-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.node-modal-item:hover {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+}
+
+.node-modal-item-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.node-modal-item-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.3;
+}
+
+.node-modal-item-subtitle {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.node-modal-item-output {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+.node-modal-empty {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-style: italic;
+  padding: 1rem;
+  text-align: center;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+}
+
+/* Description Section */
+.node-modal-description {
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.node-modal-description h4 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 0.5rem 0;
+}
+
+.node-modal-description p {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+.node-modal-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.node-modal-skill-tag {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #475569;
+  transition: all 0.2s ease;
+}
+
+.node-modal-skill-tag:hover {
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  border-color: #cbd5e1;
+}
+
+.node-modal-output-text {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #166534;
+  font-size: 0.85rem;
+}
+
+/* Modal Responsive */
+@media (max-width: 600px) {
+  .node-modal {
+    max-width: 100%;
+    max-height: 90vh;
+    margin: 0.5rem;
+  }
+
+  .node-modal-header {
+    padding: 0.875rem 1rem;
+  }
+
+  .node-modal-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .node-modal-title {
+    font-size: 1rem;
+  }
+
+  .node-modal-content {
+    padding: 0.875rem 1rem;
+  }
+}
