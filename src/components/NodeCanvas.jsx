@@ -8,41 +8,39 @@ const NODE_HEIGHT = 65;
 
 // Skills flow structure - Updated based on actual learning/usage path
 const initialNodes = [
-  // Entry Points (Two paths)
-  { id: 'react', x: 80, y: 50, title: 'React', subtitle: 'Frontend Framework', type: 'trigger', category: 'frontend' },
-  { id: 'django', x: 560, y: 50, title: 'Django', subtitle: 'Backend Framework', type: 'trigger', category: 'backend' },
+  // Entry Points
+  { id: 'react', x: 60, y: 40, title: 'React', subtitle: 'Frontend Framework', type: 'trigger', category: 'frontend' },
+  { id: 'django', x: 400, y: 40, title: 'Django', subtitle: 'Backend Framework', type: 'trigger', category: 'backend' },
+  { id: 'android', x: 580, y: 40, title: 'Android Studio', subtitle: 'Native Android', type: 'trigger', category: 'mobile' },
 
   // React ecosystem - 3D path
-  { id: 'threejs', x: 80, y: 150, title: 'Three.js', subtitle: '3D Graphics Library', type: 'action', category: 'frontend' },
+  { id: 'threejs', x: 60, y: 140, title: 'Three.js', subtitle: '3D Graphics Library', type: 'action', category: 'frontend' },
 
   // Mobile path (Three.js can be used here too)
-  { id: 'reactnative', x: 80, y: 250, title: 'React Native', subtitle: '+ Expo', type: 'action', category: 'mobile' },
-  { id: 'android', x: 270, y: 250, title: 'Android Studio', subtitle: 'Native Android', type: 'action', category: 'mobile' },
+  { id: 'reactnative', x: 60, y: 240, title: 'React Native', subtitle: '+ Expo', type: 'action', category: 'mobile' },
 
   // Game Development
-  { id: 'unreal', x: 560, y: 150, title: 'Unreal Engine', subtitle: 'Game Development', type: 'action', category: 'frontend' },
+  { id: 'unreal', x: 400, y: 140, title: 'Unreal Engine', subtitle: 'Game Development', type: 'action', category: 'frontend' },
 
   // DevOps - Everything converges to GitHub first
-  { id: 'github', x: 320, y: 360, title: 'GitHub', subtitle: 'Version Control', type: 'action', category: 'devops' },
+  { id: 'github', x: 320, y: 350, title: 'GitHub', subtitle: 'Version Control', type: 'action', category: 'devops' },
 
   // Deployment targets (after GitHub)
-  { id: 'firebase', x: 180, y: 470, title: 'Firebase', subtitle: 'Hosting & BaaS', type: 'output', category: 'backend' },
-  { id: 'aws', x: 460, y: 470, title: 'AWS EC2', subtitle: '+ CI/CD Pipeline', type: 'output', category: 'devops' },
+  { id: 'firebase', x: 180, y: 460, title: 'Firebase', subtitle: 'Hosting & BaaS', type: 'output', category: 'backend' },
+  { id: 'aws', x: 460, y: 460, title: 'AWS EC2', subtitle: '+ CI/CD Pipeline', type: 'output', category: 'devops' },
 ];
 
 // Define connections - Updated flow
 const connections = [
-  // React ecosystem
+  // React ecosystem - Three.js can be used in React
   { from: 'react', to: 'threejs', label: 'uses' },
 
-  // Three.js flows to React Native (can be used in both)
+  // Three.js can also be used in React Native
   { from: 'threejs', to: 'reactnative', label: 'also used in' },
 
-  // React Native to Android Studio
-  { from: 'reactnative', to: 'android', label: 'builds to' },
-
-  // All paths to GitHub first
+  // All paths connect to GitHub directly
   { from: 'react', to: 'github', label: 'via' },
+  { from: 'reactnative', to: 'github', label: 'via' },
   { from: 'android', to: 'github', label: 'via' },
   { from: 'django', to: 'github', label: 'via' },
   { from: 'unreal', to: 'github', label: 'server via' },
@@ -440,8 +438,8 @@ const NodeCanvas = () => {
 
         {/* Flow description */}
         <div className="flow-description">
-          <p><strong>React</strong> → Three.js → React Native → Android Studio</p>
-          <p>All paths → <strong>GitHub</strong> → Firebase / AWS EC2 + CI/CD</p>
+          <p><strong>React</strong> → Three.js → React Native | <strong>Django</strong> | <strong>Android Studio</strong> | <strong>Unreal</strong></p>
+          <p>All → <strong>GitHub</strong> → Firebase / AWS EC2 + CI/CD</p>
         </div>
       </div>
     </motion.section>
