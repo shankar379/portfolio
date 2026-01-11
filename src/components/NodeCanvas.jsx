@@ -2,50 +2,52 @@ import { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import './NodeCanvas.css';
 
-// Node dimensions matching n8n style
-const NODE_WIDTH = 160;
-const NODE_HEIGHT = 70;
-const HANDLE_SIZE = 10;
+// Node dimensions
+const NODE_WIDTH = 150;
+const NODE_HEIGHT = 65;
 
-// Skills flow structure
+// Skills flow structure - Updated based on actual learning/usage path
 const initialNodes = [
-  // Frontend Workshop (Entry Point)
-  { id: 'react', x: 420, y: 30, title: 'React', subtitle: 'Frontend Framework', type: 'trigger', category: 'frontend' },
+  // Entry Points (Two paths)
+  { id: 'react', x: 100, y: 50, title: 'React', subtitle: 'Frontend Framework', type: 'trigger', category: 'frontend' },
+  { id: 'django', x: 580, y: 50, title: 'Django', subtitle: 'Backend Framework', type: 'trigger', category: 'backend' },
 
-  // Three branches from React
-  { id: 'threejs', x: 120, y: 140, title: 'Three.js', subtitle: '3D Graphics', type: 'action', category: 'frontend' },
-  { id: 'django', x: 420, y: 140, title: 'Django', subtitle: 'Backend Framework', type: 'action', category: 'backend' },
-  { id: 'reactnative', x: 720, y: 140, title: 'React Native', subtitle: '+ Expo', type: 'action', category: 'mobile' },
+  // React ecosystem
+  { id: 'threejs', x: 100, y: 160, title: 'Three.js', subtitle: '3D Graphics Library', type: 'action', category: 'frontend' },
+  { id: 'firebase', x: 290, y: 160, title: 'Firebase', subtitle: 'BaaS Platform', type: 'action', category: 'backend' },
 
-  // Second level
-  { id: 'unreal', x: 120, y: 250, title: 'Unreal Engine', subtitle: 'Game Dev', type: 'action', category: 'frontend' },
-  { id: 'firebase', x: 420, y: 250, title: 'Firebase', subtitle: 'BaaS Platform', type: 'action', category: 'backend' },
-  { id: 'android', x: 720, y: 250, title: 'Android Studio', subtitle: 'Native Android', type: 'action', category: 'mobile' },
+  // Mobile path (Three.js can be used here too)
+  { id: 'reactnative', x: 100, y: 270, title: 'React Native', subtitle: '+ Expo', type: 'action', category: 'mobile' },
+  { id: 'android', x: 290, y: 270, title: 'Android Studio', subtitle: 'Native Android', type: 'action', category: 'mobile' },
 
-  // Deployment Hub
-  { id: 'github', x: 420, y: 360, title: 'GitHub', subtitle: 'Version Control', type: 'action', category: 'devops' },
-  { id: 'aws', x: 420, y: 470, title: 'AWS EC2', subtitle: '+ CI/CD Pipeline', type: 'output', category: 'devops' },
+  // Game Development
+  { id: 'unreal', x: 580, y: 160, title: 'Unreal Engine', subtitle: 'Game Development', type: 'action', category: 'frontend' },
+
+  // DevOps - Everything converges here
+  { id: 'github', x: 340, y: 380, title: 'GitHub', subtitle: 'Version Control', type: 'action', category: 'devops' },
+  { id: 'aws', x: 340, y: 490, title: 'AWS EC2', subtitle: '+ CI/CD Pipeline', type: 'output', category: 'devops' },
 ];
 
-// Define connections between nodes
+// Define connections - Updated flow
 const connections = [
-  // From React to three branches
-  { from: 'react', to: 'threejs' },
-  { from: 'react', to: 'django' },
-  { from: 'react', to: 'reactnative' },
+  // React ecosystem
+  { from: 'react', to: 'threejs', label: 'uses' },
+  { from: 'react', to: 'firebase', label: 'connects' },
 
-  // Second level connections
-  { from: 'threejs', to: 'unreal' },
-  { from: 'django', to: 'firebase' },
-  { from: 'reactnative', to: 'android' },
+  // Three.js flows to React Native (can be used in both)
+  { from: 'threejs', to: 'reactnative', label: 'also used in' },
 
-  // All converge to GitHub
-  { from: 'unreal', to: 'github' },
-  { from: 'firebase', to: 'github' },
-  { from: 'android', to: 'github' },
+  // React Native to Android Studio
+  { from: 'reactnative', to: 'android', label: 'builds to' },
+
+  // All paths to GitHub
+  { from: 'firebase', to: 'github', label: 'via' },
+  { from: 'android', to: 'github', label: 'via' },
+  { from: 'django', to: 'github', label: 'via' },
+  { from: 'unreal', to: 'github', label: 'server via' },
 
   // GitHub to AWS
-  { from: 'github', to: 'aws' },
+  { from: 'github', to: 'aws', label: 'deploys to' },
 ];
 
 const NodeCanvas = () => {
@@ -99,13 +101,12 @@ const NodeCanvas = () => {
     return nodes.find(n => n.id === id);
   }, [nodes]);
 
-  // SmoothStep path calculation for vertical and horizontal flows
+  // Smart path calculation - determines best connection points
   const getConnectionPath = useCallback((fromId, toId) => {
     const sourceNode = getNodeById(fromId);
     const targetNode = getNodeById(toId);
-    if (!sourceNode || !targetNode) return '';
+    if (!sourceNode || !targetNode) return { path: '', labelPos: { x: 0, y: 0 } };
 
-    // Determine connection direction based on positions
     const sourceCenter = {
       x: sourceNode.x + NODE_WIDTH / 2,
       y: sourceNode.y + NODE_HEIGHT / 2
@@ -119,37 +120,42 @@ const NodeCanvas = () => {
     const dy = targetCenter.y - sourceCenter.y;
 
     let sourceX, sourceY, targetX, targetY;
+    let sourceDir, targetDir;
 
-    // Determine handle positions based on relative node positions
-    if (Math.abs(dy) > Math.abs(dx)) {
-      // Vertical connection (top/bottom handles)
-      if (dy > 0) {
-        // Target is below source
-        sourceX = sourceNode.x + NODE_WIDTH / 2;
-        sourceY = sourceNode.y + NODE_HEIGHT;
-        targetX = targetNode.x + NODE_WIDTH / 2;
-        targetY = targetNode.y;
-      } else {
-        // Target is above source
-        sourceX = sourceNode.x + NODE_WIDTH / 2;
-        sourceY = sourceNode.y;
-        targetX = targetNode.x + NODE_WIDTH / 2;
-        targetY = targetNode.y + NODE_HEIGHT;
-      }
-    } else {
-      // Horizontal connection (left/right handles)
+    // Determine optimal connection points based on relative positions
+    if (Math.abs(dx) > Math.abs(dy)) {
+      // Horizontal connection
       if (dx > 0) {
-        // Target is to the right
         sourceX = sourceNode.x + NODE_WIDTH;
         sourceY = sourceNode.y + NODE_HEIGHT / 2;
         targetX = targetNode.x;
         targetY = targetNode.y + NODE_HEIGHT / 2;
+        sourceDir = 'right';
+        targetDir = 'left';
       } else {
-        // Target is to the left
         sourceX = sourceNode.x;
         sourceY = sourceNode.y + NODE_HEIGHT / 2;
         targetX = targetNode.x + NODE_WIDTH;
         targetY = targetNode.y + NODE_HEIGHT / 2;
+        sourceDir = 'left';
+        targetDir = 'right';
+      }
+    } else {
+      // Vertical connection
+      if (dy > 0) {
+        sourceX = sourceNode.x + NODE_WIDTH / 2;
+        sourceY = sourceNode.y + NODE_HEIGHT;
+        targetX = targetNode.x + NODE_WIDTH / 2;
+        targetY = targetNode.y;
+        sourceDir = 'bottom';
+        targetDir = 'top';
+      } else {
+        sourceX = sourceNode.x + NODE_WIDTH / 2;
+        sourceY = sourceNode.y;
+        targetX = targetNode.x + NODE_WIDTH / 2;
+        targetY = targetNode.y + NODE_HEIGHT;
+        sourceDir = 'top';
+        targetDir = 'bottom';
       }
     }
 
@@ -158,48 +164,50 @@ const NodeCanvas = () => {
     const absDx = Math.abs(newDx);
     const absDy = Math.abs(newDy);
 
-    const borderRadius = 8;
+    const borderRadius = 10;
+    let path;
 
     // Straight line for aligned nodes
-    if (absDx < 5 && absDy > 0) {
-      return `M ${sourceX} ${sourceY} L ${targetX} ${targetY}`;
-    }
-    if (absDy < 5 && absDx > 0) {
-      return `M ${sourceX} ${sourceY} L ${targetX} ${targetY}`;
-    }
-
-    // SmoothStep path with 90-degree turns
-    const r = Math.min(borderRadius, absDy / 3, absDx / 3);
-
-    if (absDy > absDx) {
-      // Primarily vertical - step horizontally in the middle
-      const midY = sourceY + newDy / 2;
-      const dirX = newDx > 0 ? 1 : -1;
-      const dirY = newDy > 0 ? 1 : -1;
-
-      return [
-        `M ${sourceX} ${sourceY}`,
-        `L ${sourceX} ${midY - r * dirY}`,
-        `A ${r} ${r} 0 0 ${(dirX > 0) !== (dirY > 0) ? 1 : 0} ${sourceX + r * dirX} ${midY}`,
-        `L ${targetX - r * dirX} ${midY}`,
-        `A ${r} ${r} 0 0 ${(dirX > 0) === (dirY > 0) ? 1 : 0} ${targetX} ${midY + r * dirY}`,
-        `L ${targetX} ${targetY}`
-      ].join(' ');
+    if (absDx < 5 || absDy < 5) {
+      path = `M ${sourceX} ${sourceY} L ${targetX} ${targetY}`;
     } else {
-      // Primarily horizontal - step vertically in the middle
-      const midX = sourceX + newDx / 2;
+      // SmoothStep path with rounded corners
+      const r = Math.min(borderRadius, absDy / 3, absDx / 3);
       const dirX = newDx > 0 ? 1 : -1;
       const dirY = newDy > 0 ? 1 : -1;
 
-      return [
-        `M ${sourceX} ${sourceY}`,
-        `L ${midX - r * dirX} ${sourceY}`,
-        `A ${r} ${r} 0 0 ${(dirX > 0) === (dirY > 0) ? 1 : 0} ${midX} ${sourceY + r * dirY}`,
-        `L ${midX} ${targetY - r * dirY}`,
-        `A ${r} ${r} 0 0 ${(dirX > 0) !== (dirY > 0) ? 1 : 0} ${midX + r * dirX} ${targetY}`,
-        `L ${targetX} ${targetY}`
-      ].join(' ');
+      if (sourceDir === 'bottom' || sourceDir === 'top') {
+        // Vertical first, then horizontal
+        const midY = sourceY + newDy / 2;
+        path = [
+          `M ${sourceX} ${sourceY}`,
+          `L ${sourceX} ${midY - r * dirY}`,
+          `A ${r} ${r} 0 0 ${(dirX > 0) !== (dirY > 0) ? 1 : 0} ${sourceX + r * dirX} ${midY}`,
+          `L ${targetX - r * dirX} ${midY}`,
+          `A ${r} ${r} 0 0 ${(dirX > 0) === (dirY > 0) ? 1 : 0} ${targetX} ${midY + r * dirY}`,
+          `L ${targetX} ${targetY}`
+        ].join(' ');
+      } else {
+        // Horizontal first, then vertical
+        const midX = sourceX + newDx / 2;
+        path = [
+          `M ${sourceX} ${sourceY}`,
+          `L ${midX - r * dirX} ${sourceY}`,
+          `A ${r} ${r} 0 0 ${(dirX > 0) === (dirY > 0) ? 1 : 0} ${midX} ${sourceY + r * dirY}`,
+          `L ${midX} ${targetY - r * dirY}`,
+          `A ${r} ${r} 0 0 ${(dirX > 0) !== (dirY > 0) ? 1 : 0} ${midX + r * dirX} ${targetY}`,
+          `L ${targetX} ${targetY}`
+        ].join(' ');
+      }
     }
+
+    // Calculate label position (midpoint)
+    const labelPos = {
+      x: (sourceX + targetX) / 2,
+      y: (sourceY + targetY) / 2
+    };
+
+    return { path, labelPos };
   }, [getNodeById]);
 
   // Get icon for each skill
@@ -232,7 +240,7 @@ const NodeCanvas = () => {
       ),
       unreal: (
         <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-9.5v5l4-2.5-4-2.5z"/>
         </svg>
       ),
       firebase: (
@@ -267,9 +275,9 @@ const NodeCanvas = () => {
   const getCategoryColor = (category) => {
     const colors = {
       frontend: { bg: 'linear-gradient(135deg, #61dafb 0%, #21a1c4 100%)', border: '#61dafb' },
-      backend: { bg: 'linear-gradient(135deg, #092e20 0%, #0c4b33 100%)', border: '#0c4b33' },
+      backend: { bg: 'linear-gradient(135deg, #092e20 0%, #0c4b33 100%)', border: '#44a340' },
       mobile: { bg: 'linear-gradient(135deg, #61dafb 0%, #3ddc84 100%)', border: '#3ddc84' },
-      devops: { bg: 'linear-gradient(135deg, #f90 0%, #232f3e 100%)', border: '#f90' },
+      devops: { bg: 'linear-gradient(135deg, #ff9900 0%, #232f3e 100%)', border: '#ff9900' },
     };
     return colors[category] || colors.frontend;
   };
@@ -291,14 +299,14 @@ const NodeCanvas = () => {
           transition={{ duration: 0.5 }}
         >
           <h2 className="node-canvas-title">My Skills Flow</h2>
-          <p className="node-canvas-subtitle">How I learned and connected each technology in my journey</p>
+          <p className="node-canvas-subtitle">How my technologies connect and deploy together</p>
         </motion.div>
 
         {/* Legend */}
         <div className="skill-legend">
           <div className="legend-item">
             <span className="legend-dot frontend"></span>
-            <span>Frontend</span>
+            <span>Frontend / 3D</span>
           </div>
           <div className="legend-item">
             <span className="legend-dot backend"></span>
@@ -326,28 +334,44 @@ const NodeCanvas = () => {
 
           {/* Connection Lines */}
           <svg className="node-connections">
+            <defs>
+              {/* Arrow marker */}
+              <marker
+                id="arrowhead"
+                markerWidth="8"
+                markerHeight="6"
+                refX="7"
+                refY="3"
+                orient="auto"
+                markerUnits="strokeWidth"
+              >
+                <polygon points="0 0, 8 3, 0 6" fill="#94a3b8" />
+              </marker>
+            </defs>
             {connections.map((conn) => {
-              const pathData = getConnectionPath(conn.from, conn.to);
+              const { path, labelPos } = getConnectionPath(conn.from, conn.to);
               const sourceNode = getNodeById(conn.from);
+              const color = getCategoryColor(sourceNode?.category).border;
               return (
                 <g key={`${conn.from}-${conn.to}`}>
                   {/* Connection line shadow */}
                   <path
-                    d={pathData}
-                    stroke="rgba(0, 0, 0, 0.08)"
-                    strokeWidth="4"
+                    d={path}
+                    stroke="rgba(0, 0, 0, 0.06)"
+                    strokeWidth="5"
                     fill="none"
                     strokeLinecap="round"
                   />
                   {/* Main connection line */}
                   <path
-                    d={pathData}
-                    stroke={getCategoryColor(sourceNode?.category).border}
+                    d={path}
+                    stroke={color}
                     strokeWidth="2"
                     fill="none"
                     strokeLinecap="round"
                     className="connection-path"
-                    strokeOpacity="0.6"
+                    strokeOpacity="0.7"
+                    markerEnd="url(#arrowhead)"
                   />
                 </g>
               );
@@ -372,15 +396,22 @@ const NodeCanvas = () => {
                 onMouseDown={(e) => handleMouseDown(e, node.id)}
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: index * 0.08, type: 'spring', stiffness: 200 }}
+                transition={{ delay: index * 0.06, type: 'spring', stiffness: 200 }}
                 drag={false}
               >
-                {/* Input Handle */}
-                {node.type !== 'trigger' && (
-                  <div className="n8n-handle n8n-handle-input n8n-handle-top">
-                    <div className="n8n-handle-inner" style={{ background: categoryStyle.border }} />
-                  </div>
-                )}
+                {/* Handles */}
+                <div className="n8n-handle n8n-handle-top">
+                  <div className="n8n-handle-inner" style={{ background: categoryStyle.border }} />
+                </div>
+                <div className="n8n-handle n8n-handle-bottom">
+                  <div className="n8n-handle-inner" style={{ background: categoryStyle.border }} />
+                </div>
+                <div className="n8n-handle n8n-handle-left">
+                  <div className="n8n-handle-inner" style={{ background: categoryStyle.border }} />
+                </div>
+                <div className="n8n-handle n8n-handle-right">
+                  <div className="n8n-handle-inner" style={{ background: categoryStyle.border }} />
+                </div>
 
                 {/* Node Content */}
                 <div className="n8n-node-content">
@@ -396,15 +427,19 @@ const NodeCanvas = () => {
                   </div>
                 </div>
 
-                {/* Output Handle */}
-                {node.type !== 'output' && (
-                  <div className="n8n-handle n8n-handle-output n8n-handle-bottom">
-                    <div className="n8n-handle-inner" style={{ background: categoryStyle.border }} />
-                  </div>
+                {/* Entry point badge for triggers */}
+                {node.type === 'trigger' && (
+                  <div className="n8n-node-badge">Entry</div>
                 )}
               </motion.div>
             );
           })}
+        </div>
+
+        {/* Flow description */}
+        <div className="flow-description">
+          <p><strong>React</strong> → Three.js (3D) → React Native → Android Studio</p>
+          <p><strong>React</strong> → Firebase | <strong>Django</strong> + <strong>Unreal</strong> → GitHub → AWS EC2</p>
         </div>
       </div>
     </motion.section>

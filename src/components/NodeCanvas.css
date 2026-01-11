@@ -181,30 +181,30 @@
   cursor: crosshair;
 }
 
-/* Top handle (input) */
+/* Top handle */
 .n8n-handle-top {
-  top: -6px;
+  top: -5px;
   left: 50%;
   transform: translateX(-50%);
 }
 
-/* Bottom handle (output) */
+/* Bottom handle */
 .n8n-handle-bottom {
-  bottom: -6px;
+  bottom: -5px;
   left: 50%;
   transform: translateX(-50%);
 }
 
 /* Left handle */
-.n8n-handle-input:not(.n8n-handle-top) {
-  left: -6px;
+.n8n-handle-left {
+  left: -5px;
   top: 50%;
   transform: translateY(-50%);
 }
 
 /* Right handle */
-.n8n-handle-output:not(.n8n-handle-bottom) {
-  right: -6px;
+.n8n-handle-right {
+  right: -5px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -291,6 +291,42 @@
 /* Success Status Indicator - hidden by default for skills flow */
 .n8n-node-status {
   display: none;
+}
+
+/* Entry point badge */
+.n8n-node-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+/* Flow description */
+.flow-description {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+}
+
+.flow-description p {
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.flow-description strong {
+  color: #1e293b;
 }
 
 /* Responsive Design */
