@@ -9,23 +9,23 @@ const NODE_HEIGHT = 65;
 // Skills flow structure - Updated based on actual learning/usage path
 const initialNodes = [
   // Entry Points - Top row
-  { id: 'react', x: 50, y: 40, title: 'React', subtitle: 'Frontend Framework', type: 'trigger', category: 'frontend' },
-  { id: 'reactnative', x: 50, y: 140, title: 'React Native', subtitle: '+ Expo', type: 'trigger', category: 'mobile' },
-  { id: 'django', x: 450, y: 40, title: 'Django', subtitle: 'Backend Framework', type: 'trigger', category: 'backend' },
-  { id: 'android', x: 620, y: 40, title: 'Android Studio', subtitle: 'Native Android', type: 'trigger', category: 'mobile' },
+  { id: 'react', x: 50, y: 30, title: 'React', subtitle: 'Frontend Framework', type: 'trigger', category: 'frontend' },
+  { id: 'reactnative', x: 50, y: 120, title: 'React Native', subtitle: '+ Expo', type: 'trigger', category: 'mobile' },
+  { id: 'django', x: 450, y: 30, title: 'Django', subtitle: 'Backend Framework', type: 'trigger', category: 'backend' },
+  { id: 'android', x: 620, y: 30, title: 'Android Studio', subtitle: 'Native Android', type: 'trigger', category: 'mobile' },
 
   // Three.js - Used by both React and React Native (middle)
-  { id: 'threejs', x: 230, y: 90, title: 'Three.js', subtitle: '3D Graphics Library', type: 'action', category: 'frontend' },
+  { id: 'threejs', x: 230, y: 75, title: 'Three.js', subtitle: '3D Graphics Library', type: 'action', category: 'frontend' },
 
   // Game Development
-  { id: 'unreal', x: 450, y: 140, title: 'Unreal Engine', subtitle: 'Game Development', type: 'action', category: 'frontend' },
+  { id: 'unreal', x: 450, y: 120, title: 'Unreal Engine', subtitle: 'Game Development', type: 'action', category: 'frontend' },
 
   // DevOps - Everything converges to GitHub first
-  { id: 'github', x: 340, y: 260, title: 'GitHub', subtitle: 'Version Control', type: 'action', category: 'devops' },
+  { id: 'github', x: 340, y: 230, title: 'GitHub', subtitle: 'Version Control', type: 'action', category: 'devops' },
 
   // Deployment targets (after GitHub)
-  { id: 'firebase', x: 200, y: 370, title: 'Firebase', subtitle: 'Hosting & BaaS', type: 'output', category: 'backend' },
-  { id: 'aws', x: 480, y: 370, title: 'AWS EC2', subtitle: '+ CI/CD Pipeline', type: 'output', category: 'devops' },
+  { id: 'firebase', x: 200, y: 350, title: 'Firebase', subtitle: 'Hosting & BaaS', type: 'output', category: 'backend' },
+  { id: 'aws', x: 480, y: 350, title: 'AWS EC2', subtitle: '+ CI/CD Pipeline', type: 'output', category: 'devops' },
 ];
 
 // Define connections - Updated flow
@@ -435,11 +435,6 @@ const NodeCanvas = () => {
           })}
         </div>
 
-        {/* Flow description */}
-        <div className="flow-description">
-          <p><strong>React</strong> & <strong>React Native</strong> → Direct to GitHub + via Three.js (3D)</p>
-          <p><strong>Django</strong> | <strong>Android Studio</strong> | <strong>Unreal</strong> → GitHub → Firebase / AWS</p>
-        </div>
       </div>
     </motion.section>
   );
