@@ -266,26 +266,6 @@ const NodeCanvas = () => {
           <p className="node-canvas-subtitle">How my technologies connect and deploy together</p>
         </motion.div>
 
-        {/* Legend */}
-        <div className="skill-legend">
-          <div className="legend-item">
-            <span className="legend-dot frontend"></span>
-            <span>Frontend / 3D</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-dot backend"></span>
-            <span>Backend</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-dot mobile"></span>
-            <span>Mobile</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-dot devops"></span>
-            <span>DevOps</span>
-          </div>
-        </div>
-
         <div
           ref={canvasRef}
           className="node-canvas"
