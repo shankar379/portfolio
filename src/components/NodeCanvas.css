@@ -163,6 +163,14 @@
   border-top: 3px solid #f90;
 }
 
+.n8n-node.firebase {
+  border-top: 3px solid #ffca28;
+}
+
+.n8n-node.unreal {
+  border-top: 3px solid #313131;
+}
+
 /* Trigger node special style */
 .n8n-node.trigger {
   border-top-width: 4px;

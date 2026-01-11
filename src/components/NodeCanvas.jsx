@@ -28,12 +28,12 @@ const initialNodes = [
   { id: 'threejs', x: 260, y: 170, title: 'Three.js', subtitle: '3D Graphics Library', type: 'action', category: 'frontend' },
 
   // Third row - middle
-  { id: 'unreal', x: 50, y: 310, title: 'Unreal Engine', subtitle: 'Game Development', type: 'action', category: 'frontend' },
+  { id: 'unreal', x: 50, y: 310, title: 'Unreal Engine', subtitle: 'Game Development', type: 'action', category: 'unreal' },
   { id: 'github', x: 340, y: 310, title: 'GitHub', subtitle: 'Version Control', type: 'action', category: 'devops' },
   { id: 'android', x: 630, y: 310, title: 'Android Studio', subtitle: 'Native Android', type: 'trigger', category: 'mobile' },
 
   // Bottom row - Deployment targets
-  { id: 'firebase', x: 220, y: 480, title: 'Firebase', subtitle: 'Hosting & BaaS', type: 'output', category: 'backend' },
+  { id: 'firebase', x: 220, y: 480, title: 'Firebase', subtitle: 'Hosting & BaaS', type: 'output', category: 'firebase' },
   { id: 'aws', x: 460, y: 480, title: 'AWS EC2', subtitle: '+ CI/CD Pipeline', type: 'output', category: 'devops' },
 ];
 
@@ -238,6 +238,8 @@ const NodeCanvas = () => {
       backend: { bg: 'linear-gradient(135deg, #092e20 0%, #0c4b33 100%)', border: '#44a340' },
       mobile: { bg: 'linear-gradient(135deg, #61dafb 0%, #3ddc84 100%)', border: '#3ddc84' },
       devops: { bg: 'linear-gradient(135deg, #ff9900 0%, #232f3e 100%)', border: '#ff9900' },
+      firebase: { bg: 'linear-gradient(135deg, #ffca28 0%, #ff9900 100%)', border: '#ffca28' },
+      unreal: { bg: 'linear-gradient(135deg, #313131 0%, #0e0e0e 100%)', border: '#313131' },
     };
     return colors[category] || colors.frontend;
   };
