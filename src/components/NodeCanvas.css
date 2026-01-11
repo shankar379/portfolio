@@ -147,8 +147,12 @@
 }
 
 /* Category border colors */
-.n8n-node.frontend {
+.n8n-node.react {
   border-top: 3px solid #61dafb;
+}
+
+.n8n-node.threejs {
+  border-top: 3px solid #000000;
 }
 
 .n8n-node.backend {
