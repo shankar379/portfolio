@@ -9,10 +9,10 @@ const HANDLE_SIZE = 12;
 
 const NodeCanvas = () => {
   const [nodes, setNodes] = useState([
-    { id: 1, x: 100, y: 180, title: 'When clicking', subtitle: 'Test workflow', type: 'trigger', icon: 'play' },
-    { id: 2, x: 350, y: 160, title: 'HTTP Request', subtitle: 'GET /api/data', type: 'action', icon: 'http' },
-    { id: 3, x: 600, y: 200, title: 'Code', subtitle: 'Transform data', type: 'action', icon: 'code' },
-    { id: 4, x: 850, y: 160, title: 'Respond', subtitle: 'Send response', type: 'output', icon: 'send' },
+    { id: 1, x: 80, y: 200, title: 'When clicking', subtitle: 'Test workflow', type: 'trigger', icon: 'play' },
+    { id: 2, x: 320, y: 120, title: 'HTTP Request', subtitle: 'GET /api/data', type: 'action', icon: 'http' },
+    { id: 3, x: 560, y: 220, title: 'Code', subtitle: 'Transform data', type: 'action', icon: 'code' },
+    { id: 4, x: 800, y: 140, title: 'Respond', subtitle: 'Send response', type: 'output', icon: 'send' },
   ]);
   const [draggedNode, setDraggedNode] = useState(null);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -58,25 +58,53 @@ const NodeCanvas = () => {
     setDraggedNode(null);
   }, []);
 
-  // Calculate bezier curve path for connections (like n8n)
-  const getBezierPath = useCallback((sourceNode, targetNode) => {
+  // SmoothStep path calculation (like n8n uses via Vue Flow)
+  // Creates paths with 90-degree turns and rounded corners
+  const getSmoothStepPath = useCallback((sourceNode, targetNode) => {
     // Connection points: output handle (right) to input handle (left)
     const sourceX = sourceNode.x + NODE_WIDTH + HANDLE_SIZE / 2;
     const sourceY = sourceNode.y + NODE_HEIGHT / 2;
     const targetX = targetNode.x - HANDLE_SIZE / 2;
     const targetY = targetNode.y + NODE_HEIGHT / 2;
 
-    // n8n uses smooth horizontal bezier curves
     const dx = targetX - sourceX;
-    const controlOffset = Math.min(Math.abs(dx) * 0.5, 100);
+    const dy = targetY - sourceY;
+    const absDy = Math.abs(dy);
 
-    // Simple horizontal bezier curve like n8n
-    const cp1x = sourceX + controlOffset;
-    const cp1y = sourceY;
-    const cp2x = targetX - controlOffset;
-    const cp2y = targetY;
+    // Configuration matching n8n/Vue Flow defaults
+    const borderRadius = 8; // Rounded corners
+    const offset = 20; // Spacing from handles before first bend
 
-    return `M ${sourceX} ${sourceY} C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${targetX} ${targetY}`;
+    // If nodes are roughly aligned horizontally, use simple curve
+    if (absDy < 5) {
+      // Simple horizontal bezier for aligned nodes
+      const controlOffset = Math.min(Math.abs(dx) * 0.4, 80);
+      return `M ${sourceX} ${sourceY} C ${sourceX + controlOffset} ${sourceY}, ${targetX - controlOffset} ${targetY}, ${targetX} ${targetY}`;
+    }
+
+    // SmoothStep path with 90-degree turns
+    // Path: source → horizontal → turn → vertical → turn → horizontal → target
+    const midX = sourceX + dx / 2; // Midpoint for the vertical segment
+    const r = Math.min(borderRadius, absDy / 2, Math.abs(dx) / 4);
+    const direction = dy > 0 ? 1 : -1; // 1 = down, -1 = up
+
+    // Build path with rounded corners using arc commands
+    // M = move to, L = line to, A = arc (rx ry rotation large-arc sweep-flag x y)
+    const path = [
+      `M ${sourceX} ${sourceY}`,
+      // Horizontal line from source to first bend
+      `L ${midX - r} ${sourceY}`,
+      // First rounded corner (turn vertical)
+      `A ${r} ${r} 0 0 ${dy > 0 ? 1 : 0} ${midX} ${sourceY + r * direction}`,
+      // Vertical line
+      `L ${midX} ${targetY - r * direction}`,
+      // Second rounded corner (turn horizontal)
+      `A ${r} ${r} 0 0 ${dy > 0 ? 0 : 1} ${midX + r} ${targetY}`,
+      // Horizontal line to target
+      `L ${targetX} ${targetY}`
+    ].join(' ');
+
+    return path;
   }, []);
 
   // Get node icon based on type
@@ -145,12 +173,12 @@ const NodeCanvas = () => {
           {/* Dot Grid Background */}
           <div className="node-canvas-grid" />
 
-          {/* Connection Lines - n8n style Bezier Curves */}
+          {/* Connection Lines - n8n style SmoothStep paths */}
           <svg className="node-connections">
             {nodes.slice(0, -1).map((node, index) => {
               const nextNode = nodes[index + 1];
               if (!nextNode) return null;
-              const pathData = getBezierPath(node, nextNode);
+              const pathData = getSmoothStepPath(node, nextNode);
               return (
                 <g key={`connection-${node.id}-${nextNode.id}`}>
                   {/* Connection line shadow */}
