@@ -1,5 +1,16 @@
-import { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
+import {
+  SiDjango,
+  SiReact,
+  SiThreedotjs,
+  SiUnrealengine,
+  SiAndroidstudio,
+  SiAmazonec2,
+  SiExpo,
+  SiFirebase
+} from 'react-icons/si';
+import { FaGithub } from 'react-icons/fa';
 import './NodeCanvas.css';
 
 // Node dimensions
@@ -209,65 +220,17 @@ const NodeCanvas = () => {
     return { path, labelPos };
   }, [getNodeById]);
 
-  // Get icon for each skill
-  const getSkillIcon = (id) => {
-    const icons = {
-      react: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-          <circle cx="12" cy="12" r="2.5"/>
-          <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" strokeWidth="1.5"/>
-          <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" strokeWidth="1.5" transform="rotate(60 12 12)"/>
-          <ellipse cx="12" cy="12" rx="10" ry="4" fill="none" stroke="currentColor" strokeWidth="1.5" transform="rotate(120 12 12)"/>
-        </svg>
-      ),
-      threejs: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-          <path d="M3 3l18 4.5L12 21 3 3zm2.5 2.5l11.5 3-7 10.5-4.5-13.5z"/>
-        </svg>
-      ),
-      django: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-          <path d="M7 2v20l3-1.5V14h2c3.5 0 5-2.5 5-5.5S15.5 3 12 3H7zm3 3h2c1.5 0 2 1 2 2.5S13.5 10 12 10h-2V5z"/>
-        </svg>
-      ),
-      reactnative: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-          <rect x="5" y="2" width="14" height="20" rx="2" fill="none" stroke="currentColor" strokeWidth="1.5"/>
-          <circle cx="12" cy="12" r="3"/>
-          <circle cx="12" cy="19" r="1"/>
-        </svg>
-      ),
-      unreal: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-2-9.5v5l4-2.5-4-2.5z"/>
-        </svg>
-      ),
-      firebase: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-          <path d="M4.5 21L7 4l5 9.5L17 8l2.5 13H4.5z"/>
-        </svg>
-      ),
-      android: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-          <path d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-4.97-5.84l1.3-1.3c.2-.2.2-.51 0-.71-.2-.2-.51-.2-.71 0l-1.48 1.48A5.84 5.84 0 0012 1c-.96 0-1.86.23-2.66.63L7.85.15c-.2-.2-.51-.2-.71 0-.2.2-.2.51 0 .71l1.31 1.31A5.983 5.983 0 006 7h12c0-1.99-.97-3.75-2.47-4.84zM10 5H9V4h1v1zm5 0h-1V4h1v1z"/>
-        </svg>
-      ),
-      github: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-          <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.268 2.75 1.026A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
-        </svg>
-      ),
-      aws: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-          <path d="M6.5 17.5l-4-2V8l4 2v7.5zM7 7.5L3 5.5l4-2 4 2-4 2zm10.5 10l-4-2V8l4 2v7.5zm.5-10l-4-2 4-2 4 2-4 2zm-6 12.5l-4-2v-7.5l4 2v7.5zm.5-8l-4-2 4-2 4 2-4 2z"/>
-        </svg>
-      ),
-    };
-    return icons[id] || (
-      <svg viewBox="0 0 24 24" fill="currentColor" className="node-icon-svg">
-        <circle cx="12" cy="12" r="8"/>
-      </svg>
-    );
+  // Get icon component for each skill
+  const skillIcons = {
+    react: SiReact,
+    threejs: SiThreedotjs,
+    django: SiDjango,
+    reactnative: SiExpo,
+    unreal: SiUnrealengine,
+    firebase: SiFirebase,
+    android: SiAndroidstudio,
+    github: FaGithub,
+    aws: SiAmazonec2,
   };
 
   // Get category color
@@ -418,7 +381,7 @@ const NodeCanvas = () => {
                     className="n8n-node-icon"
                     style={{ background: categoryStyle.bg }}
                   >
-                    {getSkillIcon(node.id)}
+                    {skillIcons[node.id] && React.createElement(skillIcons[node.id], { className: 'node-icon-svg' })}
                   </div>
                   <div className="n8n-node-info">
                     <div className="n8n-node-title">{node.title}</div>
