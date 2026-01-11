@@ -22,7 +22,7 @@ const initialNodes = [
   // Top row - Entry points
   { id: 'react', x: 50, y: 30, title: 'React', subtitle: 'Frontend Framework', type: 'trigger', category: 'react' },
   { id: 'django', x: 340, y: 30, title: 'Django', subtitle: 'Backend Framework', type: 'trigger', category: 'backend' },
-  { id: 'reactnative', x: 630, y: 30, title: 'React Native', subtitle: '+ Expo', type: 'trigger', category: 'mobile' },
+  { id: 'reactnative', x: 630, y: 30, title: 'React Native', subtitle: '+ Expo', type: 'trigger', category: 'reactnative' },
 
   // Second row
   { id: 'threejs', x: 260, y: 170, title: 'Three.js', subtitle: '3D Graphics Library', type: 'action', category: 'threejs' },
@@ -30,7 +30,7 @@ const initialNodes = [
   // Third row - middle
   { id: 'unreal', x: 50, y: 310, title: 'Unreal Engine', subtitle: 'Game Development', type: 'action', category: 'unreal' },
   { id: 'github', x: 340, y: 310, title: 'GitHub', subtitle: 'Version Control', type: 'action', category: 'devops' },
-  { id: 'android', x: 630, y: 310, title: 'Android Studio', subtitle: 'Native Android', type: 'trigger', category: 'mobile' },
+  { id: 'android', x: 630, y: 310, title: 'Android Studio', subtitle: 'Native Android', type: 'trigger', category: 'android' },
 
   // Bottom row - Deployment targets
   { id: 'firebase', x: 220, y: 480, title: 'Firebase', subtitle: 'Hosting & BaaS', type: 'output', category: 'firebase' },
@@ -235,9 +235,10 @@ const NodeCanvas = () => {
   const getCategoryColor = (category) => {
     const colors = {
       react: { bg: 'linear-gradient(135deg, #61dafb 0%, #21a1c4 100%)', border: '#61dafb' },
+      reactnative: { bg: 'linear-gradient(135deg, #61dbfb 0%, #087ea4 100%)', border: '#61dbfb' },
       threejs: { bg: 'linear-gradient(135deg, #000000 0%, #333333 100%)', border: '#000000' },
       backend: { bg: 'linear-gradient(135deg, #092e20 0%, #0c4b33 100%)', border: '#44a340' },
-      mobile: { bg: 'linear-gradient(135deg, #61dafb 0%, #3ddc84 100%)', border: '#3ddc84' },
+      android: { bg: 'linear-gradient(135deg, #3ddc84 0%, #2da866 100%)', border: '#3ddc84' },
       devops: { bg: 'linear-gradient(135deg, #ff9900 0%, #232f3e 100%)', border: '#ff9900' },
       firebase: { bg: 'linear-gradient(135deg, #ffca28 0%, #ff9900 100%)', border: '#ffca28' },
       unreal: { bg: 'linear-gradient(135deg, #313131 0%, #0e0e0e 100%)', border: '#313131' },

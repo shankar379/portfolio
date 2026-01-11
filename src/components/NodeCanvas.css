@@ -159,7 +159,11 @@
   border-top: 3px solid #0c4b33;
 }
 
-.n8n-node.mobile {
+.n8n-node.reactnative {
+  border-top: 3px solid #61dbfb;
+}
+
+.n8n-node.android {
   border-top: 3px solid #3ddc84;
 }
 
