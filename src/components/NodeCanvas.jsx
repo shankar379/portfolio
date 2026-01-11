@@ -9,30 +9,31 @@ const NODE_HEIGHT = 65;
 // Skills flow structure - Updated based on actual learning/usage path
 const initialNodes = [
   // Entry Points (Two paths)
-  { id: 'react', x: 100, y: 50, title: 'React', subtitle: 'Frontend Framework', type: 'trigger', category: 'frontend' },
-  { id: 'django', x: 580, y: 50, title: 'Django', subtitle: 'Backend Framework', type: 'trigger', category: 'backend' },
+  { id: 'react', x: 80, y: 50, title: 'React', subtitle: 'Frontend Framework', type: 'trigger', category: 'frontend' },
+  { id: 'django', x: 560, y: 50, title: 'Django', subtitle: 'Backend Framework', type: 'trigger', category: 'backend' },
 
-  // React ecosystem
-  { id: 'threejs', x: 100, y: 160, title: 'Three.js', subtitle: '3D Graphics Library', type: 'action', category: 'frontend' },
-  { id: 'firebase', x: 290, y: 160, title: 'Firebase', subtitle: 'BaaS Platform', type: 'action', category: 'backend' },
+  // React ecosystem - 3D path
+  { id: 'threejs', x: 80, y: 150, title: 'Three.js', subtitle: '3D Graphics Library', type: 'action', category: 'frontend' },
 
   // Mobile path (Three.js can be used here too)
-  { id: 'reactnative', x: 100, y: 270, title: 'React Native', subtitle: '+ Expo', type: 'action', category: 'mobile' },
-  { id: 'android', x: 290, y: 270, title: 'Android Studio', subtitle: 'Native Android', type: 'action', category: 'mobile' },
+  { id: 'reactnative', x: 80, y: 250, title: 'React Native', subtitle: '+ Expo', type: 'action', category: 'mobile' },
+  { id: 'android', x: 270, y: 250, title: 'Android Studio', subtitle: 'Native Android', type: 'action', category: 'mobile' },
 
   // Game Development
-  { id: 'unreal', x: 580, y: 160, title: 'Unreal Engine', subtitle: 'Game Development', type: 'action', category: 'frontend' },
+  { id: 'unreal', x: 560, y: 150, title: 'Unreal Engine', subtitle: 'Game Development', type: 'action', category: 'frontend' },
 
-  // DevOps - Everything converges here
-  { id: 'github', x: 340, y: 380, title: 'GitHub', subtitle: 'Version Control', type: 'action', category: 'devops' },
-  { id: 'aws', x: 340, y: 490, title: 'AWS EC2', subtitle: '+ CI/CD Pipeline', type: 'output', category: 'devops' },
+  // DevOps - Everything converges to GitHub first
+  { id: 'github', x: 320, y: 360, title: 'GitHub', subtitle: 'Version Control', type: 'action', category: 'devops' },
+
+  // Deployment targets (after GitHub)
+  { id: 'firebase', x: 180, y: 470, title: 'Firebase', subtitle: 'Hosting & BaaS', type: 'output', category: 'backend' },
+  { id: 'aws', x: 460, y: 470, title: 'AWS EC2', subtitle: '+ CI/CD Pipeline', type: 'output', category: 'devops' },
 ];
 
 // Define connections - Updated flow
 const connections = [
   // React ecosystem
   { from: 'react', to: 'threejs', label: 'uses' },
-  { from: 'react', to: 'firebase', label: 'connects' },
 
   // Three.js flows to React Native (can be used in both)
   { from: 'threejs', to: 'reactnative', label: 'also used in' },
@@ -40,13 +41,14 @@ const connections = [
   // React Native to Android Studio
   { from: 'reactnative', to: 'android', label: 'builds to' },
 
-  // All paths to GitHub
-  { from: 'firebase', to: 'github', label: 'via' },
+  // All paths to GitHub first
+  { from: 'react', to: 'github', label: 'via' },
   { from: 'android', to: 'github', label: 'via' },
   { from: 'django', to: 'github', label: 'via' },
   { from: 'unreal', to: 'github', label: 'server via' },
 
-  // GitHub to AWS
+  // GitHub to Firebase and AWS (both are deployment targets)
+  { from: 'github', to: 'firebase', label: 'deploys to' },
   { from: 'github', to: 'aws', label: 'deploys to' },
 ];
 
@@ -438,8 +440,8 @@ const NodeCanvas = () => {
 
         {/* Flow description */}
         <div className="flow-description">
-          <p><strong>React</strong> → Three.js (3D) → React Native → Android Studio</p>
-          <p><strong>React</strong> → Firebase | <strong>Django</strong> + <strong>Unreal</strong> → GitHub → AWS EC2</p>
+          <p><strong>React</strong> → Three.js → React Native → Android Studio</p>
+          <p>All paths → <strong>GitHub</strong> → Firebase / AWS EC2 + CI/CD</p>
         </div>
       </div>
     </motion.section>
