@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { preloadAssets } from '../utils/preloadAssets';
 import './Loader.css';
 
 const Loader = ({ onLoadingComplete }) => {
@@ -7,26 +8,73 @@ const Loader = ({ onLoadingComplete }) => {
   const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
-    // Simulate loading progress
-    const interval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            setIsComplete(true);
-            setTimeout(() => {
-              onLoadingComplete();
-            }, 500);
-          }, 300);
-          return 100;
-        }
-        // Faster at start, slower near end
-        const increment = prev < 70 ? Math.random() * 15 + 5 : Math.random() * 5 + 1;
-        return Math.min(prev + increment, 100);
-      });
-    }, 100);
+    let progressInterval;
+    let isMounted = true;
 
-    return () => clearInterval(interval);
+    // Start preloading assets
+    const loadAssets = async () => {
+      // Start progress animation
+      progressInterval = setInterval(() => {
+        if (!isMounted) return;
+        setProgress(prev => {
+          // Cap at 90% until assets are loaded
+          if (prev >= 90) {
+            return 90;
+          }
+          const increment = prev < 70 ? Math.random() * 15 + 5 : Math.random() * 3 + 1;
+          return Math.min(prev + increment, 90);
+        });
+      }, 100);
+
+      try {
+        // Wait for critical assets to load
+        await preloadAssets();
+        
+        if (!isMounted) return;
+
+        // Complete progress to 100%
+        setProgress(100);
+        
+        // Clear progress interval
+        if (progressInterval) {
+          clearInterval(progressInterval);
+        }
+
+        // Small delay for smooth transition
+        setTimeout(() => {
+          if (!isMounted) return;
+          setIsComplete(true);
+          setTimeout(() => {
+            if (!isMounted) return;
+            onLoadingComplete();
+          }, 500);
+        }, 300);
+      } catch (error) {
+        console.error('Error preloading assets:', error);
+        // Even if preload fails, continue after a delay
+        if (progressInterval) {
+          clearInterval(progressInterval);
+        }
+        setProgress(100);
+        setTimeout(() => {
+          if (!isMounted) return;
+          setIsComplete(true);
+          setTimeout(() => {
+            if (!isMounted) return;
+            onLoadingComplete();
+          }, 500);
+        }, 300);
+      }
+    };
+
+    loadAssets();
+
+    return () => {
+      isMounted = false;
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
+    };
   }, [onLoadingComplete]);
 
   return (

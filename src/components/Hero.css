@@ -45,28 +45,57 @@
 }
 
 .hero-content {
-  max-width: 1200px;
+  max-width: 1400px;
   width: 100%;
-  text-align: center;
   z-index: 2;
   padding: 0 2rem;
   position: relative;
   pointer-events: auto;
 }
 
-.hero-text-container {
-  max-width: 100%;
-  margin: 0 auto;
+.hero-layout {
+  display: flex;
+  align-items: center;
+  gap: 4rem;
   width: 100%;
+}
+
+.hero-text-container {
+  flex: 1;
+  text-align: left;
+  max-width: 100%;
   overflow: visible;
+}
+
+.hero-image-container {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image-card {
+  width: 400px;
+  height: 550px;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hero-profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 30px;
 }
 
 .hero-greeting {
   font-size: 1.5rem;
-  background: linear-gradient(135deg, #ffffff 0%, #fff5f0 20%, #ffe8d6 40%, #ffd4b3 60%, #ffc299 80%, #ffb380 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ff6d00;
   font-weight: 700;
   font-family: 'Outfit', sans-serif;
   margin-bottom: 0.5rem;
@@ -77,10 +106,6 @@
 .hero-name {
   font-size: clamp(3rem, 8vw, 6.5rem);
   font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 0%, #fff5f0 20%, #ffe8d6 40%, #ffd4b3 60%, #ffc299 80%, #ffb380 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
   line-height: 1.1;
   margin-bottom: 1.5rem;
   letter-spacing: -1px;
@@ -92,12 +117,12 @@
   overflow: visible;
 }
 
-.hero-name span {
-  display: inline-block;
-  background: linear-gradient(135deg, #ffffff 0%, #fff5f0 20%, #ffe8d6 40%, #ffd4b3 60%, #ffc299 80%, #ffb380 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.hero-name-first {
+  color: #ff6d00;
+}
+
+.hero-name-last {
+  color: #ffffff;
 }
 
 .name-accent {
@@ -117,21 +142,25 @@
   gap: 2rem;
   margin-bottom: 2rem;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .role-item {
-  font-size: 1.1rem;
-  color: #4a5568;
-  font-weight: 600;
-  letter-spacing: 1px;
+  font-size: 1.4rem;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 3px;
   position: relative;
   transition: all 0.3s ease;
   cursor: default;
+  text-transform: uppercase;
+  font-family: 'Outfit', sans-serif;
 }
 
 .role-item:hover {
-  color: #2d2d50;
+  transform: translateY(-2px);
+  color: #ffffff;
+  filter: brightness(1.1);
 }
 
 .role-item:hover::before {
@@ -162,14 +191,17 @@
 }
 
 .hero-description {
-  font-size: 1.3rem;
-  color: #4a5568;
-  line-height: 1.6;
+  font-size: 1.5rem;
+  background: linear-gradient(90deg, #ffffff 0%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.8;
   margin-bottom: 3rem;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  font-weight: 300;
+  max-width: 700px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  font-family: 'Outfit', sans-serif;
 }
 
 .cursor {
@@ -198,7 +230,7 @@
   transition: all 0.3s ease;
   letter-spacing: 0.5px;
   box-shadow: 0 4px 15px rgba(255, 109, 0, 0.3);
-  margin: 0 auto;
+  margin: 0;
 }
 
 .hero-cta:hover {
@@ -231,12 +263,42 @@
     width: 100%;
   }
 
+  .hero-layout {
+    flex-direction: column;
+    gap: 3rem;
+  }
+
+  .hero-text-container {
+    text-align: center;
+  }
+
   .hero-roles {
+    justify-content: center;
     gap: 1rem;
   }
 
   .role-item:not(:last-child)::after {
     margin-left: 1rem;
+  }
+
+  .role-item {
+    font-size: 1.2rem;
+    letter-spacing: 2.5px;
+  }
+
+  .hero-description {
+    font-size: 1.3rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero-cta {
+    margin: 0 auto;
+  }
+
+  .hero-image-card {
+    width: 350px;
+    height: 500px;
   }
 }
 
@@ -257,16 +319,48 @@
     max-width: 100%;
   }
 
+  .hero-layout {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .hero-text-container {
+    text-align: center;
+    order: 2;
+  }
+
+  .hero-image-container {
+    order: 1;
+  }
+
   .hero-name {
     font-size: 2.5rem;
   }
 
+  .hero-name-first,
+  .hero-name-last {
+    color: #ff6d00;
+  }
+
   .hero-description {
-    font-size: 1rem;
+    font-size: 1.1rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .role-item {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
   }
 
   .hero-cta {
     padding: 0.875rem 2rem;
     font-size: 0.9rem;
+    margin: 0 auto;
+  }
+
+  .hero-image-card {
+    width: 300px;
+    height: 450px;
   }
 }

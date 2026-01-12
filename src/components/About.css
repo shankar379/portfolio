@@ -114,4 +114,10 @@
   .about-subtitle {
     font-size: 1rem;
   }
+
+  .about-bg-svg {
+    max-width: 120%;
+    max-height: 150%;
+    transform: scale(1.5) translateX(-20px) translateY(-30px);
+  }
 }

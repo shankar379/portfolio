@@ -180,7 +180,8 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
           const size = new THREE.Vector3();
           boundingBox.getSize(size);
           const maxDim = Math.max(size.x, size.y, size.z);
-          const scale = 2.5 / maxDim;
+          const baseScale = isMobile ? 1.5 : 2.5;
+          const scale = baseScale / maxDim;
 
           for (let i = 0; i < particleCount; i++) {
             const i3 = i * 3;

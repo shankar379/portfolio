@@ -16,7 +16,7 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
   ];
 
   // Update icon colors based on their position relative to sections
-  const updateIconColors = () => {
+  const updateIconColors = useRef(() => {
     const newColors = {};
 
     // Get all sections
@@ -38,7 +38,8 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
       let currentSection = null;
       let sectionRect = null;
 
-      // Check which section the icon is currently in (in order)
+      // Check which section the icon is currently in (check from bottom to top)
+      // Check contact first (lowest on page)
       if (contactSection) {
         sectionRect = contactSection.getBoundingClientRect();
         if (iconCenterY >= sectionRect.top && iconCenterY <= sectionRect.bottom) {
@@ -102,7 +103,7 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
     });
 
     setIconColors(newColors);
-  };
+  });
 
   useEffect(() => {
     // Check if contact section is 30% visible
@@ -131,7 +132,7 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
     const throttledUpdate = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          updateIconColors();
+          updateIconColors.current();
           checkContactVisibility();
           ticking = false;
         });
@@ -139,11 +140,11 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
       }
     };
 
-    // Initial update
+    // Initial update with delay to ensure DOM is ready
     const initialTimeout = setTimeout(() => {
-      updateIconColors();
+      updateIconColors.current();
       checkContactVisibility();
-    }, 500);
+    }, 300);
 
     // Handle scroll - works for both Locomotive Scroll and native scroll
     const handleScroll = () => {
@@ -152,34 +153,58 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
 
     // Check if Locomotive Scroll is available (desktop)
     let scrollCheckInterval = null;
+    let scrollCheckTimeout = null;
+    
     if (window.locomotiveScroll) {
       // Locomotive Scroll is already available
       window.locomotiveScroll.on('scroll', handleScroll);
+      // Force an initial update
+      setTimeout(() => {
+        updateIconColors.current();
+        checkContactVisibility();
+      }, 100);
     } else {
       // Wait for Locomotive Scroll to initialize (with timeout for mobile)
       scrollCheckInterval = setInterval(() => {
         if (window.locomotiveScroll) {
           clearInterval(scrollCheckInterval);
           window.locomotiveScroll.on('scroll', handleScroll);
+          // Force an initial update when Locomotive Scroll is ready
+          setTimeout(() => {
+            updateIconColors.current();
+            checkContactVisibility();
+          }, 100);
         }
       }, 100);
       
-      // Set timeout to stop checking after 2 seconds (mobile fallback)
-      setTimeout(() => {
+      // Set timeout to stop checking after 3 seconds (mobile fallback)
+      scrollCheckTimeout = setTimeout(() => {
         if (scrollCheckInterval) {
           clearInterval(scrollCheckInterval);
         }
-      }, 2000);
+        // Force an update even if Locomotive Scroll isn't available (mobile)
+        updateIconColors.current();
+        checkContactVisibility();
+      }, 3000);
     }
 
     // Always listen to native scroll events (works on mobile and as fallback)
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', throttledUpdate, { passive: true });
+    
+    // Also use a polling mechanism as a fallback for smooth color updates
+    const pollInterval = setInterval(() => {
+      throttledUpdate();
+    }, 200); // Update every 200ms
 
     return () => {
       clearTimeout(initialTimeout);
+      clearInterval(pollInterval);
       if (scrollCheckInterval) {
         clearInterval(scrollCheckInterval);
+      }
+      if (scrollCheckTimeout) {
+        clearTimeout(scrollCheckTimeout);
       }
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', throttledUpdate);

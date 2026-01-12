@@ -12,6 +12,7 @@ import {
 } from 'react-icons/si';
 import { FaGithub } from 'react-icons/fa';
 import './Skills.css';
+import NodeCanvas from './NodeCanvas';
 
 const Skills = () => {
   const [hoveredSkill, setHoveredSkill] = useState(null);
@@ -96,6 +97,9 @@ const Skills = () => {
             );
           })}
         </motion.div>
+
+        {/* Node Canvas Section */}
+        <NodeCanvas />
       </div>
     </section>
   );
