@@ -66,23 +66,6 @@ const Hero = () => {
               <span className="cursor">|</span>
             </motion.p>
           </motion.div>
-
-          <motion.div
-            className="hero-image-container"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            <div className="hero-image-card">
-              <img 
-                src="/profile.png" 
-                alt="Durga Shankar" 
-                className="hero-profile-image"
-                loading="eager"
-                fetchpriority="high"
-              />
-            </div>
-          </motion.div>
         </div>
       </div>
     </section>

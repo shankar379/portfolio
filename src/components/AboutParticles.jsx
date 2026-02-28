@@ -12,6 +12,7 @@ const AboutParticles = () => {
   const shapeIndexRef = useRef(0);
   const targetPositionsRef = useRef(null);
   const currentPositionsRef = useRef(null);
+  const isVisibleRef = useRef(true);
   const particleCount = 1500;
   const color = new THREE.Color(0xff6d00);
   
@@ -277,8 +278,19 @@ const AboutParticles = () => {
       morphToShape(shapeIndexRef.current);
     }, 4000);
 
+    const checkVisibility = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      isVisibleRef.current = rect.bottom > -100 && rect.top < viewportHeight + 100;
+    };
+
     const animate = () => {
       animationFrameRef.current = requestAnimationFrame(animate);
+
+      // Skip rendering when off-screen to save GPU/CPU
+      checkVisibility();
+      if (!isVisibleRef.current) return;
 
       const positionAttr = particleSystem.geometry.attributes.position;
       const positions = positionAttr.array;

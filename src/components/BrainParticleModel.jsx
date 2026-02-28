@@ -221,26 +221,18 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
     const frameInterval = 1000 / targetFPS;
     lastFrameTimeRef.current = performance.now();
 
-    // Intersection Observer to pause when not visible
-    // Initialize as visible to ensure first render
+    // Manual visibility check compatible with Locomotive Scroll's transform-based scrolling
+    // IntersectionObserver doesn't work correctly because Locomotive Scroll moves sections
+    // via CSS transforms, which don't affect layout position that the observer checks.
     isVisibleRef.current = true;
-    let observer = null;
-    
-    // Delay observer setup to ensure container is mounted and visible
-    setTimeout(() => {
-      observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            isVisibleRef.current = entry.isIntersecting;
-          });
-        },
-        { threshold: 0.01, rootMargin: '100px' } // Lower threshold and add margin
-      );
-      
-      if (containerRef.current) {
-        observer.observe(containerRef.current);
-      }
-    }, 200);
+
+    const checkVisibility = () => {
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      // Element is visible if any part is within the viewport (with 100px margin)
+      isVisibleRef.current = rect.bottom > -100 && rect.top < viewportHeight + 100;
+    };
 
     // Animation loop
     const animate = (currentTime) => {
@@ -248,7 +240,7 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
       
       // Calculate delta time FIRST for smooth rotation (frame-independent)
       // This must be done before frame rate limiting so rotation updates smoothly
-      const deltaTime = Math.min((currentTime - lastUpdateTime) / 1000, 0.033); // Cap at ~30fps max delta to prevent spikes
+      const deltaTime = Math.min((currentTime - lastUpdateTime) / 1000, 0.05); // Cap at 50ms to prevent large jumps after pause
       lastUpdateTime = currentTime;
       
       // Always update rotation smoothly on EVERY frame (even when skipping rendering)
@@ -283,6 +275,9 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
         lastFrameTimeRef.current = currentTime;
       }
       
+      // Check visibility using getBoundingClientRect (works with Locomotive Scroll transforms)
+      checkVisibility();
+
       // Skip rendering if not visible (but always render first few frames to initialize)
       // Rotation still updates above, so it will be smooth when section becomes visible
       if (!isVisibleRef.current && !isExplodingRef.current && time > 0.1) {
@@ -537,11 +532,6 @@ const BrainParticleModel = ({ isExploding = false, onExplodeComplete, shouldMorp
     window.addEventListener('resize', handleResize);
 
     return () => {
-      // Cleanup observer
-      if (observer && containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-      
       window.removeEventListener('resize', handleResize);
 
       if (renderer && renderer.domElement) {

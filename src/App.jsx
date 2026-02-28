@@ -69,7 +69,7 @@ function HomePage({ isLoading }) {
       smooth: true,
       smoothMobile: false,
       multiplier: 0.8,
-      lerp: 0.05,
+      lerp: 0.08,
     });
 
     scrollInstanceRef.current = scroll;

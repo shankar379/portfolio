@@ -8,7 +8,17 @@
       "Bash(npm run build:*)",
       "Bash(firebase deploy:*)",
       "WebFetch(domain:particle-love.com)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(cat:*)",
+      "WebFetch(domain:www.igloo.inc)",
+      "WebSearch",
+      "WebFetch(domain:www.awwwards.com)",
+      "WebFetch(domain:discourse.threejs.org)",
+      "WebFetch(domain:docs.n8n.io)",
+      "WebFetch(domain:community.n8n.io)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:reactflow.dev)",
+      "Bash(rm:*)"
     ]
   }
 }
