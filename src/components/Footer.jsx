@@ -15,7 +15,7 @@ const Footer = () => {
 
   const connectLinks = [
     { label: 'GitHub', url: 'https://github.com/durga369shankar' },
-    { label: 'LinkedIn', url: 'https://linkedin.com/in/durga-shankar' },
+    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/durga-shankar-react-native-developer/' },
     { label: 'YouTube', url: 'https://youtube.com' },
     { label: 'Email', url: 'mailto:durga369shankar@gmail.com' }
   ];
@@ -34,7 +34,7 @@ const Footer = () => {
           >
             <div className="footer-logo">
               <div className="logo-square">
-                <img src="/ds_logo.png" alt="DS Logo" className="logo-letter" />
+                <img src="/ds_logo.webp" alt="DS Logo" className="logo-letter" />
               </div>
               <h2 className="footer-name">Durga Shankar</h2>
             </div>

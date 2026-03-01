@@ -181,7 +181,7 @@ const GreetingModel = ({ shouldPlay = false }) => {
                   }
                 }
 
-                // Apply world matrix
+                // Apply object transform matrix
                 skinnedVertex.applyMatrix4(mesh.matrixWorld);
                 sampledPositions.push(skinnedVertex);
               }

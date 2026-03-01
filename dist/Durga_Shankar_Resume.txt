@@ -1,112 +1,70 @@
 DURGA SHANKAR GUTTULA
+React Native and Full-Stack Developer
 
-Android Developer | Full-Stack Engineer | 3D & Interactive Systems Developer
-
-📍 India
-📧 durga369shankar@gmail.com
-📞 +91 6303449205
-🔗 Portfolio: Durga Shankar
-🔗 GitHub: https://github.com/shankar379
-🔗 LinkedIn: https://www.linkedin.com/in/durga-shankar-295286249/
-
----
+Location: Rajahmundry, Andhra Pradesh, India
+Phone: +91 6303449205
+Email: durga369shankar@gmail.com
+Portfolio: https://durga-shankar-portfolio.web.app/
+GitHub: https://github.com/shankar379
+LinkedIn: https://www.linkedin.com/in/durga-shankar-react-native-developer/
 
 PROFESSIONAL SUMMARY
+React Native and full-stack developer with hands-on experience building cross-platform mobile apps and scalable web systems. Skilled in React Native, Android, Node.js, MongoDB, Firebase, and AWS, with additional experience in Three.js and interactive 3D development. Strong focus on production stability, modular architecture, and performance optimization.
 
-Android Developer with strong full-stack engineering experience and a solid foundation in building real-world, production-oriented applications. Proven ability to design and deliver scalable systems using React Native, Android, Node.js, MongoDB, AWS, and Firebase. Experienced in AI-integrated platforms and interactive 3D workflows using Blender, Three.js, and Unreal Engine. Passionate about immersive technologies, clean architecture, and practical problem-solving.
-
----
+CORE SKILLS
+Languages: JavaScript, TypeScript, Python, Java, C, C++
+Frontend: React, React Native, Next.js, Vite, Tailwind CSS
+Backend: Node.js, Express, Django, Flask
+Databases: MongoDB, Firebase Realtime Database, SQLite
+Cloud and DevOps: AWS EC2, AWS S3, Docker, GitHub Actions, CI/CD
+Realtime and Integrations: WebSockets, Push Notifications, Twilio, Google Gemini API
+3D and Creative: Three.js, Blender, Unreal Engine, Figma
 
 PROFESSIONAL EXPERIENCE
+Tickets99 and EventTitans - React Native Developer
+Hyderabad, India | Jun 2025 - Present
+- Working on migration of a large Android application to React Native for Android and iOS.
+- Maintaining and improving multi-screen production workflows for ticketing and event operations.
+- Integrating backend APIs and improving app reliability, maintainability, and runtime performance.
+- Collaborating with cross-functional teams to ship updates faster and reduce production issues.
 
-Android Developer
-Tickets99 | India
-2024 – Present
+SELECTED PROJECTS
+MediVoice - Medicine Reminder and Assistance Platform
+Tech Stack: React Native, Next.js, Node.js, MongoDB, AWS S3, Firebase, WebSockets, Twilio, Google Gemini
+- Built a multi-role platform for patients, sellers, and doctors with real-time medicine workflows.
+- Implemented reminders using local alarms, TTS voice alerts, and push notifications.
+- Added missed-dose escalation with SMS and automated calls to guardians via Twilio.
+- Integrated AI chat assistant with persistent history for user guidance.
+- Set up CI/CD pipeline using GitHub Actions, Docker, and AWS EC2 deployment.
 
-• Developing and maintaining Android applications used in live event and ticketing workflows.
-• Implementing REST API integrations, secure data handling, and optimized UI flows.
-• Collaborating with backend teams to ensure stable real-time updates and reliable app behavior.
-• Debugging production issues and improving overall performance and maintainability.
+Time Table Generator
+Tech Stack: Python, Django, SQLite
+- Built a constraint-based timetable generation system for academic scheduling.
+- Automated schedule creation and reduced manual planning effort significantly.
+- Improved scheduling accuracy and reduced generation time from weeks to hours.
 
----
+Student Communication Platform
+Tech Stack: React, Firebase, Cloud Functions
+- Built a real-time communication and announcement system for educational use.
+- Supported concurrent users with stable messaging and notification workflows.
+- Improved collaboration efficiency through centralized communication features.
 
-PERSONAL PROJECT
-
-MediVoice – Medicine Reminder & Assistance Platform
-Tech Stack: React Native, Next.js, Node.js, MongoDB, AWS S3, WebSockets, Firebase, Twilio, Google Gemini AI
-
-• Designed a full-scale medicine management ecosystem with Patient, Seller, and Doctor mobile applications.
-• Implemented medicine reminders using local alarms, voice alerts (TTS), and push notifications.
-• Built missed-dose escalation logic with SMS and automated calls to guardians using Twilio.
-• Integrated an AI chat assistant with persistent conversation history for user guidance.
-• Implemented real-time synchronization using WebSockets.
-• Set up CI/CD pipelines using GitHub Actions, Docker, and AWS EC2 deployments.
-• Focused heavily on elderly-friendly UX and real-world usability constraints.
-
----
-
-B.TECH FINAL YEAR PROJECT
-
-Deep Crack – Image-Based Crack Detection System
+Deep Crack - Image-Based Crack Detection System (B.Tech Project)
 Tech Stack: Python, Flask, MobileNet, CNNs, SQLite, Data Augmentation
-
-• Developed a deep learning-based system to detect surface cracks from uploaded images.
-• Used transfer learning with MobileNet to improve detection accuracy and reduce training time.
-• Applied data augmentation techniques to enhance model generalization.
-• Evaluated model performance using confusion matrices and accuracy metrics.
-• Built a Flask-based web application for real-time image upload and prediction visualization.
-
----
-
-3D, INTERACTIVE & VISUAL DEVELOPMENT
-
-• Created realistic and cinematic 3D scenes using Blender.
-• Built interactive web-based visual experiences using Three.js with React.
-• Experience with character animation pipelines (Mixamo, MetaHuman-ready assets).
-• Strong interest in Unreal Engine workflows for games and immersive experiences.
-
----
-
-TECHNICAL SKILLS
-
-Programming & Development
-• Java, Python, JavaScript, C, C++
-• Android (Native), React, React Native, Next.js
-• Django, Flask, Node.js, Express
-
-Databases & Cloud
-• MongoDB, Firebase Realtime Database, SQLite
-• AWS (EC2, S3), LocalStack
-• CI/CD with GitHub Actions & Docker
-
-3D & Creative Technology
-• Blender (Modeling, Animation, Cinematics)
-• Three.js, Unreal Engine
-• UI/UX: Figma
-
-AI & Integrations
-• Deep Learning (CNNs, Transfer Learning)
-• AI Chat Integration (Google Gemini)
-• Real-time systems (WebSockets, Push Notifications)
-
----
+- Developed a crack detection workflow using transfer learning and data augmentation.
+- Built a Flask interface for image upload and prediction visualization.
+- Evaluated model performance with accuracy metrics and confusion matrix analysis.
 
 EDUCATION
-
-Bachelor of Technology (B.Tech)
-Completed
-
----
+Bachelor of Technology in Computer Science
+Rajahmundry Institute of Engineering and Technology
+Nov 2021 - Nov 2025
 
 CERTIFICATIONS
-
-• Django with Machine Learning – Datapoint, Hyderabad
-• Artificial Intelligence & Machine Learning – Youngminds, Vijayawada
-• Cloud-based DevOps – Datavalley, Hyderabad
-
----
+- Django with Machine Learning - Datapoint, Hyderabad
+- Artificial Intelligence and Machine Learning - Youngminds, Vijayawada
+- Cloud-based DevOps - Datavalley, Hyderabad
 
 ADDITIONAL
-
-• YouTube Creator – "Code and Create" (Programming & 3D content)
-• Strong interest in VFX, Game Development, and Immersive Technologies
+- YouTube creator at Code and Create (programming and 3D content)
+- Interested in mobile architecture, AI-enabled products, game development, and immersive experiences

@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import { FaArrowRight, FaExternalLinkAlt, FaGithub } from 'react-icons/fa';
 import './Projects.css';
 
 const Projects = () => {
   const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(2);
 
   const projects = [
     {
@@ -16,7 +15,7 @@ const Projects = () => {
       technologies: ['React', 'Vite', 'Tailwind CSS'],
       primaryColor: '#ff4800',
       accentColor: '#ffaa00',
-      image: '/sethu_web.png',
+      image: '/sethu_web.webp',
       liveUrl: 'https://team-sethu.web.app/',
       githubUrl: 'https://github.com/shankar379/SETHU-public'
     },
@@ -27,7 +26,7 @@ const Projects = () => {
       technologies: ['Python', 'Django', 'SQLite3'],
       primaryColor: '#ff6d00',
       accentColor: '#ffb600',
-      image: '/timetable.png',
+      image: '/timetable.webp',
       liveUrl: 'https://timetable-genaretor-vs.vercel.app/',
       githubUrl: 'https://github.com/shankar379/TG_NEW'
     },
@@ -38,148 +37,84 @@ const Projects = () => {
       technologies: ['React', 'Firebase', 'Cloud Functions'],
       primaryColor: '#ff8500',
       accentColor: '#ff5400',
-      image: '/student-communication.png',
+      image: '/student-communication.webp',
       liveUrl: 'https://student-communication-vs.web.app/',
-      githubUrl: ''
-    },
-    {
-      id: 4,
-      title: 'SMART ATTENDANCE MANAGER',
-      description: 'Automated biometric attendance tracking with analytics dashboards. AI-powered system processing 10k+ records monthly, reducing administrative errors by 90%.',
-      technologies: ['Python', 'Django', 'SQLite3'],
-      primaryColor: '#ff9e00',
-      accentColor: '#ff6000',
-      image: '/project-attendance.jpg',
-      liveUrl: '',
-      githubUrl: ''
-    },
-    {
-      id: 5,
-      title: 'RACE THE SUN: CHALLENGE EDITION',
-      description: '3D infinite runner game with procedural generation and solar energy mechanics. Achieved 90+ FPS performance on mid-range devices through WebGL optimizations.',
-      technologies: ['React', 'Three.js', 'WebGL'],
-      primaryColor: '#ffaa00',
-      accentColor: '#ff7900',
-      image: '/project-race.jpg',
-      liveUrl: '',
       githubUrl: ''
     }
   ];
 
-  const currentProject = projects[currentIndex];
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % projects.length);
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
-  };
-
-  const handleProjectClick = () => {
-    navigate(`/project/${currentProject.id}`);
-  };
-
-  // Keyboard navigation
-  useEffect(() => {
-    const handleKeyPress = (e) => {
-      if (e.key === 'ArrowLeft') {
-        setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
-      } else if (e.key === 'ArrowRight') {
-        setCurrentIndex((prev) => (prev + 1) % projects.length);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [projects.length]);
-
   return (
     <section id="projects" className="projects">
-      <div className="projects-background-text">PROJECTS</div>
-      <div className="projects-wrapper">
-        <div className="projects-content">
-          {/* Left Section - Text Content */}
-          <div className="projects-left">
-            <div className="projects-logo">PROJECTS</div>
-            <div className="projects-breadcrumb">Home / Projects</div>
-            <motion.h1
-              key={currentProject.id}
-              className="project-main-title"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.4 }}
-            >
-              {currentProject.title}
-            </motion.h1>
-            <motion.p
-              key={`desc-${currentProject.id}`}
-              className="project-description"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-            >
-              {currentProject.description}
-            </motion.p>
-            <motion.button
-              className="project-view-button"
-              onClick={handleProjectClick}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              View Details
-            </motion.button>
-          </div>
-
-          {/* Right Section - Image with Diagonal Cut */}
-          <div
-            className="projects-right"
-            style={{ backgroundColor: currentProject.primaryColor }}
-          >
-            <div
-              className="project-diagonal-cut"
-              style={{ backgroundColor: currentProject.accentColor }}
-            ></div>
-            <div className="project-image-container">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={currentProject.id}
-                  src={currentProject.image}
-                  alt={currentProject.title}
-                  className="project-image"
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.5 }}
-                  onError={(e) => {
-                    e.target.src = 'https://via.placeholder.com/800x1000/2d2d50/ff6d00?text=' + encodeURIComponent(currentProject.title);
-                  }}
-                />
-              </AnimatePresence>
-            </div>
-            {/* Project Indicators */}
-            <div className="project-indicators">
-              {projects.map((_, index) => (
-                <div
-                  key={index}
-                  className={`indicator ${index === currentIndex ? 'active' : ''}`}
-                  onClick={() => setCurrentIndex(index)}
-                />
-              ))}
-            </div>
-          </div>
+      <div className="projects-bg"></div>
+      <div className="projects-container">
+        <div className="projects-header">
+          <h2 className="projects-title">Projects</h2>
+          <p className="projects-subtitle">Neumorphic 3D project cards</p>
         </div>
 
-        {/* Navigation Buttons */}
-        <div className="projects-navigation">
-          <button className="nav-button nav-button-left" onClick={handlePrev}>
-            <FaChevronLeft />
-          </button>
-          <button className="nav-button nav-button-right" onClick={handleNext}>
-            <FaChevronRight />
-          </button>
+        <div className="projects-grid">
+          {projects.map((project, index) => (
+            <motion.article
+              key={project.id}
+              className="project-neu-card"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.45, delay: index * 0.07 }}
+              whileHover={{ y: -8, scale: 1.01 }}
+            >
+              <div className="project-neu-media">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="project-neu-image"
+                  onError={(e) => {
+                    e.currentTarget.src = `https://via.placeholder.com/1200x800/2d2d50/ff6d00?text=${encodeURIComponent(project.title)}`;
+                  }}
+                />
+                <div className="project-neu-gradient"></div>
+                <div className="project-neu-media-content">
+                  <div>
+                    <h3 className="project-neu-title">{project.title}</h3>
+                    <p className="project-neu-subtitle">{project.technologies[0]} Build</p>
+                  </div>
+                  <div className="project-neu-pill">#{project.id}</div>
+                </div>
+              </div>
+
+              <div className="project-neu-info">
+                <h4 className="project-neu-label">Project Overview</h4>
+                <p className="project-neu-description">{project.description}</p>
+
+                <div className="project-neu-tech-list">
+                  {project.technologies.map((tech) => (
+                    <span key={tech} className="project-neu-tech-pill">{tech}</span>
+                  ))}
+                </div>
+
+                <div className="project-neu-actions">
+                  <button
+                    className="project-neu-primary-btn"
+                    onClick={() => navigate(`/project/${project.id}`)}
+                  >
+                    View Details <FaArrowRight />
+                  </button>
+                  {project.liveUrl && (
+                    <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="project-neu-icon-btn" aria-label="Live Demo">
+                      <FaExternalLinkAlt />
+                    </a>
+                  )}
+                  {project.githubUrl && (
+                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="project-neu-icon-btn" aria-label="Github Repo">
+                      <FaGithub />
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              <div className="project-neu-side"></div>
+            </motion.article>
+          ))}
         </div>
       </div>
     </section>

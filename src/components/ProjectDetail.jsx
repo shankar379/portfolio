@@ -59,40 +59,6 @@ const ProjectDetail = () => {
       ],
       technologies: ['React', 'Node.js', 'FireBase'],
       summary: 'Scalable real-time messaging system designed to facilitate seamless communication and collaboration among students and faculty, featuring instant messaging, group chats, and announcement capabilities.'
-    },
-    4: {
-      id: 4,
-      title: 'Smart Attendance Manager',
-      subtitle: 'Automated biometric attendance tracking with analytics dashboards.',
-      liveUrl: '',
-      githubUrl: '',
-      challenge: 'Manual attendance tracking was error-prone, time-consuming, and difficult to manage across large institutions processing 10k+ records monthly.',
-      solution: 'Developed an AI-powered attendance system using Python and Django with automated face recognition, QR code scanning, and biometric integration. Implemented machine learning algorithms for improved recognition accuracy and intelligent reporting features.',
-      impactPoints: [
-        'Processes 10k+ attendance records monthly with minimal intervention',
-        'Reduced administrative errors by 90%',
-        'Automated face recognition and biometric integration',
-        'Real-time analytics and reporting dashboards'
-      ],
-      technologies: ['Python', 'Django', 'SQLite3'],
-      summary: 'An AI-powered attendance system that automates and streamlines attendance tracking in educational institutions with automated recognition, intelligent reporting, and comprehensive analytics.'
-    },
-    5: {
-      id: 5,
-      title: 'Race the Sun: Challenge Edition',
-      subtitle: '3D infinite runner game with procedural generation and solar energy mechanics.',
-      liveUrl: '',
-      githubUrl: '',
-      challenge: 'Creating an engaging 3D browser-based game with procedural generation while maintaining high frame rates (90+ FPS) on mid-range devices.',
-      solution: 'Developed a 3D infinite runner game using React, Three.js, and WebGL. Implemented procedural generation algorithms, optimized WebGL rendering pipelines, efficient geometry management, and intelligent level-of-detail (LOD) systems for optimal performance.',
-      impactPoints: [
-        'Achieved 90+ FPS performance on mid-range devices through WebGL optimizations',
-        'Procedurally generated environments ensure unique gameplay experiences',
-        'Solar energy mechanics and physics-based movement systems',
-        'Stunning 3D graphics rendered entirely in the browser'
-      ],
-      technologies: ['React', 'Three.js', 'WebGL'],
-      summary: 'An innovative 3D infinite runner game featuring procedural generation, solar energy mechanics, and stunning graphics. Demonstrates the power of modern web technologies in game development with optimized performance.'
     }
   };
 

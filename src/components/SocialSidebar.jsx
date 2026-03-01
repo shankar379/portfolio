@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 import { FaLinkedin, FaGithub, FaDribbble, FaYoutube, FaInstagram } from 'react-icons/fa';
 import './SocialSidebar.css';
 
-const SocialSidebar = ({ isExploreClicked = false }) => {
+const SocialSidebar = () => {
   const iconRefs = useRef([]);
   const [iconColors, setIconColors] = useState({});
   const [shouldHide, setShouldHide] = useState(false);
   const socialLinks = [
-    { icon: FaLinkedin, url: 'https://www.linkedin.com/in/durga-shankar-295286249/', name: 'LinkedIn' },
+    { icon: FaLinkedin, url: 'https://www.linkedin.com/in/durga-shankar-react-native-developer/', name: 'LinkedIn' },
     { icon: FaGithub, url: 'https://github.com/shankar379/', name: 'GitHub' },
     { icon: FaDribbble, url: 'https://dribbble.com/Durgashankar3616', name: 'Dribbble' },
     { icon: FaYoutube, url: 'https://www.youtube.com/@CodeAndCreate369', name: 'YouTube' },
@@ -24,7 +24,6 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
     const skillsSection = document.getElementById('skills');
     const projectsSection = document.getElementById('projects');
     const aboutSection = document.getElementById('about');
-    const worldSection = document.getElementById('world');
     const contactSection = document.getElementById('contact');
 
     if (!heroSection) return;
@@ -44,13 +43,6 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
         sectionRect = contactSection.getBoundingClientRect();
         if (iconCenterY >= sectionRect.top && iconCenterY <= sectionRect.bottom) {
           currentSection = 'contact';
-        }
-      }
-
-      if (!currentSection && worldSection) {
-        sectionRect = worldSection.getBoundingClientRect();
-        if (iconCenterY >= sectionRect.top && iconCenterY <= sectionRect.bottom) {
-          currentSection = 'world';
         }
       }
 
@@ -84,10 +76,10 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
 
       // Set color based on section
       // White: home, skills, projects
-      // Orange: about, world, contact
+      // Orange: about, contact
       if (currentSection === 'home' || currentSection === 'skills' || currentSection === 'projects') {
         newColors[index] = '#ffffff';
-      } else if (currentSection === 'about' || currentSection === 'world' || currentSection === 'contact') {
+      } else if (currentSection === 'about' || currentSection === 'contact') {
         newColors[index] = '#ff6d00';
       } else {
         // Default: check if below hero section
@@ -218,8 +210,8 @@ const SocialSidebar = ({ isExploreClicked = false }) => {
     <motion.div 
       className="social-sidebar"
       animate={{
-        x: isExploreClicked ? -100 : 0,
-        opacity: isExploreClicked || shouldHide ? 0 : 1
+        x: 0,
+        opacity: shouldHide ? 0 : 1
       }}
       transition={{
         duration: 0.8,

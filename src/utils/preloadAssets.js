@@ -2,9 +2,7 @@
 export const preloadAssets = () => {
   return new Promise((resolve) => {
     const criticalAssets = [
-      '/profile.png', // Hero section image
       '/models/about_bg.svg', // About section background
-      '/models/Demo2.glb', // Brain model (optional, can load in background)
     ];
 
     let loadedCount = 0;

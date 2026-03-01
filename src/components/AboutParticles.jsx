@@ -13,7 +13,10 @@ const AboutParticles = () => {
   const targetPositionsRef = useRef(null);
   const currentPositionsRef = useRef(null);
   const isVisibleRef = useRef(true);
-  const particleCount = 1500;
+  const frameCountRef = useRef(0);
+  const lastFrameTimeRef = useRef(0);
+  const isMobile = typeof window !== 'undefined' && window.innerWidth <= 768;
+  const particleCount = isMobile ? 900 : 1500;
   const color = new THREE.Color(0xff6d00);
   
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -47,12 +50,12 @@ const AboutParticles = () => {
     cameraRef.current = camera;
 
     const renderer = new THREE.WebGLRenderer({ 
-      antialias: true,
+      antialias: !isMobile,
       alpha: true,
       powerPreference: 'high-performance'
     });
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1.2) : Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -81,6 +84,7 @@ const AboutParticles = () => {
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.attributes.position.setUsage(THREE.DynamicDrawUsage);
 
     const material = new THREE.PointsMaterial({
       size: 0.06,
@@ -285,11 +289,24 @@ const AboutParticles = () => {
       isVisibleRef.current = rect.bottom > -100 && rect.top < viewportHeight + 100;
     };
 
-    const animate = () => {
+    const targetFPS = isMobile ? 30 : 60;
+    const frameInterval = 1000 / targetFPS;
+    lastFrameTimeRef.current = performance.now();
+
+    const animate = (currentTime) => {
       animationFrameRef.current = requestAnimationFrame(animate);
+      frameCountRef.current += 1;
+
+      if (isMobile) {
+        const elapsed = currentTime - lastFrameTimeRef.current;
+        if (elapsed < frameInterval) return;
+        lastFrameTimeRef.current = currentTime - (elapsed % frameInterval);
+      }
 
       // Skip rendering when off-screen to save GPU/CPU
-      checkVisibility();
+      if (frameCountRef.current % 6 === 0) {
+        checkVisibility();
+      }
       if (!isVisibleRef.current) return;
 
       const positionAttr = particleSystem.geometry.attributes.position;
@@ -315,7 +332,7 @@ const AboutParticles = () => {
       renderer.render(scene, camera);
     };
 
-    animate();
+    animate(performance.now());
 
     const handleMouseDown = (e) => {
       e.preventDefault();

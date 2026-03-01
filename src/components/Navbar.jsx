@@ -9,7 +9,7 @@ const Navbar = () => {
   const scrollThreshold = 10; // Minimum scroll distance to trigger change
 
   useEffect(() => {
-    const sections = ['home', 'about', 'skills', 'projects', 'world', 'contact'];
+    const sections = ['home', 'about', 'skills', 'projects', 'contact'];
     let ticking = false;
     let lastActiveSectionUpdate = 0;
 
@@ -114,7 +114,6 @@ const Navbar = () => {
     { id: 'about', label: 'ABOUT' },
     { id: 'skills', label: 'SKILLS' },
     { id: 'projects', label: 'PROJECTS' },
-    { id: 'world', label: 'WORLD' },
     { id: 'contact', label: 'CONTACT' }
   ];
 

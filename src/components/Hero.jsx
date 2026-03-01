@@ -1,10 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
-import OrangeRibbonBackground from './OrangeRibbonBackground';
 import './Hero.css';
+
+const LazyOrangeRibbon = lazy(() => import('./OrangeRibbonBackground'));
 
 const Hero = () => {
   const [typedText, setTypedText] = useState('');
+  const [showBg, setShowBg] = useState(false);
+  const sectionRef = useRef(null);
   const fullText = "Welcome To My Space: Where Code Comes To Life.";
   const roles = ["BUILDING", "EVOLVING", "SHIPPING"];
 
@@ -22,10 +25,27 @@ const Hero = () => {
     return () => clearInterval(typingInterval);
   }, []);
 
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setShowBg(true); observer.disconnect(); } },
+      { rootMargin: '200px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="home" className="hero">
-      {/* Background Shader */}
-      <OrangeRibbonBackground />
+    <section id="home" className="hero" ref={sectionRef}>
+      {/* Background Shader - lazy loaded */}
+      {showBg ? (
+        <Suspense fallback={<div className="orange-ribbon-background" />}>
+          <LazyOrangeRibbon />
+        </Suspense>
+      ) : (
+        <div className="orange-ribbon-background" />
+      )}
       
       {/* Main Hero Content */}
       <div className="hero-content">
@@ -68,6 +88,15 @@ const Hero = () => {
           </motion.div>
         </div>
       </div>
+
+      <a
+        href="/Profile.pdf"
+        download="Durga_Shankar_ATS_Resume.pdf"
+        className="hero-resume-stick"
+        aria-label="Download resume"
+      >
+        RESUME
+      </a>
     </section>
   );
 };
