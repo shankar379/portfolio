@@ -28,16 +28,28 @@ const OrangeRibbonBackground = () => {
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
     cameraRef.current = camera;
 
-    // Renderer - optimized for mobile
-    const renderer = new THREE.WebGLRenderer({
-      antialias: !isMobile, // Disable antialiasing on mobile
-      alpha: false,
-      powerPreference: 'high-performance'
-    });
+    // Renderer - optimized for mobile.
+    // Guard against devices where WebGL context creation throws (GPU blocklisted,
+    // hardware acceleration off, headless/privacy contexts). On failure we bail
+    // out of the effect — the CSS .orange-ribbon-background container stays as a
+    // flat fallback instead of crashing the whole page.
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: !isMobile, // Disable antialiasing on mobile
+        alpha: false,
+        powerPreference: 'high-performance'
+      });
+    } catch (err) {
+      console.warn('WebGL unavailable — using static background.', err);
+      return;
+    }
     renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
     // Lower pixel ratio on mobile for better performance
     renderer.setPixelRatio(isMobile ? Math.min(window.devicePixelRatio, 1) : Math.min(window.devicePixelRatio, 2));
-    containerRef.current.appendChild(renderer.domElement);
+    const container = containerRef.current;
+    container.appendChild(renderer.domElement);
+    const rendererDomElement = renderer.domElement;
     rendererRef.current = renderer;
 
     // Geometry - fullscreen plane
@@ -288,29 +300,24 @@ const OrangeRibbonBackground = () => {
 
     window.addEventListener('resize', handleResize);
 
-    // Cleanup
+    // Cleanup — use locals captured in this effect run so StrictMode's
+    // double-mount cleanup can't remove the wrong (next mount's) canvas.
     return () => {
       // Cleanup observer
-      if (observer && containerRef.current) {
-        observer.unobserve(containerRef.current);
+      if (observer) {
+        observer.disconnect();
       }
-      
+
       window.removeEventListener('resize', handleResize);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      if (containerRef.current && rendererRef.current) {
-        containerRef.current.removeChild(rendererRef.current.domElement);
+      if (rendererDomElement && rendererDomElement.parentNode) {
+        rendererDomElement.parentNode.removeChild(rendererDomElement);
       }
-      if (rendererRef.current) {
-        rendererRef.current.dispose();
-      }
-      if (materialRef.current) {
-        materialRef.current.dispose();
-      }
-      if (geometry) {
-        geometry.dispose();
-      }
+      renderer.dispose();
+      material.dispose();
+      geometry.dispose();
     };
   }, []);
 

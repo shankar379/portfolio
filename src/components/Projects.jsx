@@ -4,6 +4,11 @@ import { motion } from 'framer-motion';
 import { FaArrowRight, FaExternalLinkAlt, FaGithub } from 'react-icons/fa';
 import './Projects.css';
 
+// Local inline fallback (orange-themed) — no external placeholder service,
+// so a failed image can never trigger a network retry loop.
+const FALLBACK_IMAGE =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'%3E%3Crect width='1200' height='800' fill='%232d2d50'/%3E%3Crect width='1200' height='800' fill='url(%23g)'/%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ff4800' stop-opacity='0.35'/%3E%3Cstop offset='1' stop-color='%23ffb600' stop-opacity='0.15'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ctext x='50%25' y='50%25' fill='%23ffaa00' font-family='Outfit,Arial,sans-serif' font-size='48' font-weight='700' text-anchor='middle' dominant-baseline='middle'%3EProject Preview%3C/text%3E%3C/svg%3E";
+
 const Projects = () => {
   const navigate = useNavigate();
 
@@ -68,8 +73,14 @@ const Projects = () => {
                   src={project.image}
                   alt={project.title}
                   className="project-neu-image"
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => {
-                    e.currentTarget.src = `https://via.placeholder.com/1200x800/2d2d50/ff6d00?text=${encodeURIComponent(project.title)}`;
+                    // Guard against an infinite onError loop: detach the handler
+                    // before swapping to a local inline fallback (no external service).
+                    const img = e.currentTarget;
+                    img.onerror = null;
+                    img.src = FALLBACK_IMAGE;
                   }}
                 />
                 <div className="project-neu-gradient"></div>

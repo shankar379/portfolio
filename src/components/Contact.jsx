@@ -54,6 +54,7 @@ const Contact = () => {
                     type="text"
                     id="firstName"
                     name="firstName"
+                    autoComplete="given-name"
                     value={formData.firstName}
                     onChange={handleChange}
                     placeholder="Your first name"
@@ -70,6 +71,7 @@ const Contact = () => {
                     type="text"
                     id="lastName"
                     name="lastName"
+                    autoComplete="family-name"
                     value={formData.lastName}
                     onChange={handleChange}
                     placeholder="Your last name"
@@ -87,6 +89,7 @@ const Contact = () => {
                   type="email"
                   id="email"
                   name="email"
+                  autoComplete="email"
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="your.email@example.com"

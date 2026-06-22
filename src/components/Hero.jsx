@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
+import ErrorBoundary from './ErrorBoundary';
 import './Hero.css';
 
 const LazyOrangeRibbon = lazy(() => import('./OrangeRibbonBackground'));
@@ -40,9 +41,11 @@ const Hero = () => {
     <section id="home" className="hero" ref={sectionRef}>
       {/* Background Shader - lazy loaded */}
       {showBg ? (
-        <Suspense fallback={<div className="orange-ribbon-background" />}>
-          <LazyOrangeRibbon />
-        </Suspense>
+        <ErrorBoundary fallback={<div className="orange-ribbon-background" />}>
+          <Suspense fallback={<div className="orange-ribbon-background" />}>
+            <LazyOrangeRibbon />
+          </Suspense>
+        </ErrorBoundary>
       ) : (
         <div className="orange-ribbon-background" />
       )}
