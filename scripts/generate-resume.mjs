@@ -54,7 +54,7 @@ doc.moveDown(0.5);
 
 // ── Summary ───────────────────────────────────────────────────────────────
 sectionTitle('Professional Summary');
-body('React Native Developer with nearly one year of professional experience building and maintaining production Android and iOS applications at Elevents Metaestate Pvt Ltd — including the white-label flavors Tickets99, EventTitans and Poultry India, plus the QuickStaff staffing platform. Experienced in React Native, TypeScript, REST APIs, Firebase, AWS and mobile performance optimization, with hands-on work in payments, NFC, Bluetooth printing and biometric authentication. Regularly uses AI-assisted tools (Claude Code, Cursor AI, GitHub Copilot) to improve development speed and code quality.');
+body('React Native Developer with nearly one year of professional experience building and maintaining production Android and iOS applications at Elevents Metaestate Pvt Ltd. Shipped 7 white-label app flavors from a single React Native codebase — including Tickets99, EventTitans and Poultry India — plus the QuickStaff staffing platform, with 35+ screens and 100+ reusable components. Experienced in React Native, TypeScript, REST APIs, Firebase, AWS and mobile performance optimization, with hands-on work in payments, NFC, Bluetooth printing and biometric authentication. Also skilled in full-stack web (Node.js, MongoDB) and interactive 3D (Three.js, Blender). Regularly uses AI-assisted tools (Claude Code, Cursor AI, GitHub Copilot) to improve development speed and code quality.');
 
 // ── Skills ────────────────────────────────────────────────────────────────
 sectionTitle('Technical Skills');
@@ -72,6 +72,8 @@ skillRow('Cloud & DevOps', 'AWS EC2, AWS S3, GitHub Actions, CI/CD');
 skillRow('Auth & Security', 'JWT, OAuth2, OTP, Face ID, Fingerprint, Secure Storage');
 skillRow('Payments', 'Razorpay, Stripe, Google Pay, Apple Pay');
 skillRow('Hardware', 'Bluetooth, NFC, QR Scanner, Camera APIs, ML Kit');
+skillRow('Realtime & APIs', 'WebSockets, Push Notifications, Twilio, Google Gemini API');
+skillRow('3D & Creative', 'Three.js, Blender, Unreal Engine, Figma');
 skillRow('Tools', 'Git, GitHub, Expo CLI, Firebase Console, VS Code, Cursor AI, Claude Code, GitHub Copilot');
 
 // ── Experience ────────────────────────────────────────────────────────────
@@ -82,10 +84,12 @@ doc.fillColor(GRAY).font('Helvetica-Oblique').fontSize(9).text('June 2025 – Pr
 doc.moveDown(0.2);
 [
   'Develop and maintain Android & iOS apps using React Native and Expo, shipped via EAS Build.',
-  'Build and maintain multiple white-label flavors (Tickets99, EventTitans, Poultry India) from a single codebase.',
+  'Build and manage 7 white-label flavors (Tickets99, EventTitans, Poultry India and more) from one codebase, each with its own branding, configuration and store listing.',
+  'Built 35+ screens and 100+ reusable components across the shared codebase.',
   'Migrate native Android features into the unified React Native codebase.',
-  'Integrate REST APIs, payments (Razorpay/Stripe), NFC, Bluetooth printing, QR scanning and biometric auth.',
-  'Optimize performance, memory and rendering; publish and maintain apps on Google Play and the App Store.',
+  'Integrate REST APIs, payments (Razorpay/Stripe), NFC, Bluetooth printing, QR scanning and biometric authentication (Face ID / Fingerprint).',
+  'Configure CI/CD with GitHub Actions and EAS Build; optimize performance, memory and rendering.',
+  'Publish and maintain apps on Google Play and the Apple App Store; collaborate with AWS/Node.js backend teams.',
 ].forEach(bulletLine);
 doc.moveDown(0.1);
 doc.fillColor(DARK).font('Helvetica-Bold').fontSize(9.5).text('Key products: ', { continued: true })
@@ -110,16 +114,35 @@ const project = (name, tech, desc) => {
 };
 project('White-Label Event Apps  (Tickets99 · EventTitans · Poultry India)',
   'React Native, Expo, TypeScript, Firebase, AWS',
-  'One React Native codebase shipped as multiple branded flavors, each with its own store listing. Payments, NFC, Bluetooth printing, QR check-in and biometric authentication; published to Google Play and the App Store.');
+  'One React Native codebase shipped as 7 branded flavors, each with its own store listing. 35+ screens, 100+ reusable components, payments, NFC, Bluetooth printing, QR check-in and biometric authentication; published to Google Play and the App Store.');
 project('QuickStaff — Event Staffing Platform',
   'React Native, Node.js, PostgreSQL, Python FastAPI, AWS',
   'Multi-role platform with dashboards for workers, agencies, organizers and managers. Facial verification, in-app wallet, attendance tracking and push notifications on a scalable AWS backend.');
 project('Multi-Printer Bluetooth Integration',
   'React Native, Bluetooth Classic, ESC/POS, ZPL',
-  'Cross-platform printing across Zebra, TVS, SUNMI, Brother and DCode printers with auto-reconnect and device discovery.');
+  'Cross-platform printing across Zebra, TVS, SUNMI, Brother and DCode printers with auto-reconnect and device discovery; reused across multiple production apps.');
+project('MediVoice — Medicine Reminder & Assistance Platform',
+  'React Native, Next.js, Node.js, MongoDB, AWS, Firebase, WebSockets, Twilio, Google Gemini',
+  'Multi-role platform (patients, sellers, doctors) with reminders via local alarms, TTS voice alerts and push notifications, missed-dose escalation through SMS/automated calls (Twilio), and an AI chat assistant with persistent history. CI/CD via GitHub Actions, Docker and AWS EC2.');
 project('SETHU Web App',
   'React, Node.js, Firebase',
   'Public-facing storytelling site serving 5k+ monthly users with optimized performance and responsive design.');
+project('Time Table Generator',
+  'Python, Django, SQLite',
+  'Constraint-based scheduling engine that automates academic timetables, cutting generation time from weeks to hours with high accuracy.');
+project('Student Communication Platform',
+  'React, Firebase, Cloud Functions',
+  'Real-time messaging and announcement hub supporting 200+ concurrent users for university collaboration.');
+project('Deep Crack — Image-Based Crack Detection (B.Tech Project)',
+  'Python, Flask, MobileNet, CNNs',
+  'Transfer-learning crack-detection workflow with data augmentation and a Flask interface for image upload and prediction visualization.');
+
+// ── 3D & Interactive ──────────────────────────────────────────────────────
+sectionTitle('3D & Interactive Development');
+[
+  'Build interactive web-based 3D experiences with Three.js and React (this portfolio runs a custom WebGL scene).',
+  'Create 3D models, animation and cinematics in Blender; interest in Unreal Engine and immersive workflows.',
+].forEach(bulletLine);
 
 // ── Education & Certifications ─────────────────────────────────────────────
 sectionTitle('Education');
@@ -130,6 +153,11 @@ doc.fillColor(GRAY).font('Helvetica-Oblique').fontSize(9).text('2021 – 2025');
 sectionTitle('Certifications');
 bulletLine('Deep Learning — Young Minds Co, Vijayawada');
 bulletLine('Django with Machine Learning — DATA POINT, Hyderabad');
+bulletLine('Cloud-based DevOps — Datavalley, Hyderabad');
+
+sectionTitle('Additional');
+bulletLine('YouTube Creator — "Code and Create" (programming & 3D content).');
+bulletLine('Strong interest in VFX, game development and immersive technologies.');
 
 doc.end();
 console.log('Generated', OUT);
