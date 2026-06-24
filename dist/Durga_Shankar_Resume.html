@@ -3,227 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Durga Shankar Guttula - Resume</title>
+    <title>Guttula Durga Shankar - Resume</title>
     <style>
+        :root { --accent: #ff6d00; --dark: #2a3442; --gray: #555f6b; }
         body {
             font-family: 'Arial', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 800px;
+            line-height: 1.5;
+            color: var(--gray);
+            max-width: 820px;
             margin: 0 auto;
-            padding: 20px;
-            background: white;
+            padding: 28px;
+            background: #fff;
         }
-        .header {
-            text-align: center;
-            border-bottom: 2px solid #a78bfa;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-        .name {
-            font-size: 28px;
-            font-weight: bold;
-            color: #a78bfa;
-            margin-bottom: 5px;
-        }
-        .title {
-            font-size: 16px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        .contact {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            font-size: 14px;
-        }
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .section {
-            margin-bottom: 25px;
-        }
+        .name { font-size: 30px; font-weight: 800; color: var(--dark); margin: 0; letter-spacing: .5px; }
+        .title { font-size: 15px; font-weight: 700; color: var(--accent); margin: 4px 0 8px; }
+        .contact { font-size: 12.5px; color: var(--gray); }
+        .rule { height: 2px; background: var(--accent); border: 0; margin: 10px 0 4px; }
         .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #a78bfa;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-            margin-bottom: 15px;
+            font-size: 13px; font-weight: 800; color: var(--accent);
+            border-bottom: 1px solid #e4c9b0; padding-bottom: 4px;
+            margin: 18px 0 8px; letter-spacing: .4px;
         }
-        .job-title {
-            font-weight: bold;
-            color: #333;
-        }
-        .company {
-            font-weight: bold;
-            color: #a78bfa;
-        }
-        .date {
-            font-style: italic;
-            color: #666;
-            font-size: 14px;
-        }
-        .project-name {
-            font-weight: bold;
-            color: #a78bfa;
-        }
-        .tech-stack {
-            font-style: italic;
-            color: #666;
-            margin-bottom: 10px;
-        }
-        .bullet {
-            margin-left: 20px;
-            margin-bottom: 5px;
-        }
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        .skill-category {
-            margin-bottom: 15px;
-        }
-        .skill-category-title {
-            font-weight: bold;
-            color: #a78bfa;
-            margin-bottom: 5px;
-        }
-        .skill-list {
-            margin-left: 10px;
-        }
-        .skill-item {
-            margin-bottom: 3px;
-        }
-        @media print {
-            body {
-                margin: 0;
-                padding: 15px;
-            }
-        }
+        .row { display: flex; gap: 10px; }
+        .skill-label { min-width: 130px; font-weight: 700; color: var(--dark); font-size: 13px; }
+        .skill-val { font-size: 13px; }
+        .job-title { font-weight: 700; color: var(--dark); font-size: 14px; }
+        .company { color: var(--gray); font-weight: 500; }
+        .date { font-style: italic; color: var(--gray); font-size: 12.5px; margin-bottom: 4px; }
+        ul { margin: 4px 0 6px; padding-left: 18px; }
+        li { margin-bottom: 3px; font-size: 13px; }
+        .project-name { font-weight: 700; color: var(--dark); font-size: 13.5px; margin-top: 8px; }
+        .tech { font-style: italic; color: var(--accent); font-size: 12px; margin: 1px 0 3px; }
+        .desc { font-size: 13px; }
+        .key-products { font-size: 13px; margin: 2px 0 0; }
+        .key-products b { color: var(--dark); }
+        @media print { body { padding: 16px; } }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="name">DURGA SHANKAR GUTTULA</div>
-        <div class="title">Android Developer | Full-Stack Engineer | 3D & Interactive Systems Developer</div>
-        <div class="contact">
-            <div class="contact-item">📍 India</div>
-            <div class="contact-item">📧 durga369shankar@gmail.com</div>
-            <div class="contact-item">📞 +91 6303449205</div>
-            <div class="contact-item">🔗 Portfolio: Durga Shankar</div>
-            <div class="contact-item">🔗 GitHub: shankar379</div>
-            <div class="contact-item">🔗 LinkedIn: durga-shankar-react-native-developer</div>
-        </div>
-    </div>
+    <h1 class="name">GUTTULA DURGA SHANKAR</h1>
+    <div class="title">React Native Mobile Developer | Android | iOS | Full Stack</div>
+    <div class="contact">durga369shankar@gmail.com &nbsp;·&nbsp; +91 6303449205 &nbsp;·&nbsp; Rajahmundry, Andhra Pradesh</div>
+    <div class="contact">Portfolio: durga-shankar-portfolio.web.app &nbsp;·&nbsp; GitHub: github.com/shankar379 &nbsp;·&nbsp; LinkedIn: durga-shankar-react-native-developer</div>
+    <hr class="rule">
 
-    <div class="section">
-        <div class="section-title">PROFESSIONAL SUMMARY</div>
-        <p>Android Developer with strong full-stack engineering experience and a solid foundation in building real-world, production-oriented applications. Proven ability to design and deliver scalable systems using React Native, Android, Node.js, MongoDB, AWS, and Firebase. Experienced in AI-integrated platforms and interactive 3D workflows using Blender, Three.js, and Unreal Engine. Passionate about immersive technologies, clean architecture, and practical problem-solving.</p>
-    </div>
+    <div class="section-title">PROFESSIONAL SUMMARY</div>
+    <p>React Native Developer with nearly one year of professional experience building and maintaining production Android and iOS applications at Elevents Metaestate Pvt Ltd — including the white-label flavors Tickets99, EventTitans and Poultry India, plus the QuickStaff staffing platform. Experienced in React Native, TypeScript, REST APIs, Firebase, AWS and mobile performance optimization, with hands-on work in payments, NFC, Bluetooth printing and biometric authentication. Regularly uses AI-assisted tools (Claude Code, Cursor AI, GitHub Copilot) to improve development speed and code quality.</p>
 
-    <div class="section">
-        <div class="section-title">PROFESSIONAL EXPERIENCE</div>
-        <div class="job-title">Android Developer</div>
-        <div class="company">Tickets99 | India</div>
-        <div class="date">2024 – Present</div>
-        <div class="bullet">• Developing and maintaining Android applications used in live event and ticketing workflows.</div>
-        <div class="bullet">• Implementing REST API integrations, secure data handling, and optimized UI flows.</div>
-        <div class="bullet">• Collaborating with backend teams to ensure stable real-time updates and reliable app behavior.</div>
-        <div class="bullet">• Debugging production issues and improving overall performance and maintainability.</div>
-    </div>
+    <div class="section-title">TECHNICAL SKILLS</div>
+    <div class="row"><div class="skill-label">Mobile</div><div class="skill-val">React Native, Expo, React Navigation, Android Studio, Gradle, EAS Build &amp; Submit</div></div>
+    <div class="row"><div class="skill-label">Languages</div><div class="skill-val">JavaScript, TypeScript, Java, Kotlin, Python</div></div>
+    <div class="row"><div class="skill-label">Backend</div><div class="skill-val">Node.js, Express.js, REST APIs, JWT Auth, Python FastAPI</div></div>
+    <div class="row"><div class="skill-label">Databases</div><div class="skill-val">Firebase Firestore, MongoDB, PostgreSQL, SQLite</div></div>
+    <div class="row"><div class="skill-label">Cloud &amp; DevOps</div><div class="skill-val">AWS EC2, AWS S3, GitHub Actions, CI/CD</div></div>
+    <div class="row"><div class="skill-label">Auth &amp; Security</div><div class="skill-val">JWT, OAuth2, OTP, Face ID, Fingerprint, Secure Storage</div></div>
+    <div class="row"><div class="skill-label">Payments</div><div class="skill-val">Razorpay, Stripe, Google Pay, Apple Pay</div></div>
+    <div class="row"><div class="skill-label">Hardware</div><div class="skill-val">Bluetooth, NFC, QR Scanner, Camera APIs, ML Kit</div></div>
+    <div class="row"><div class="skill-label">Tools</div><div class="skill-val">Git, GitHub, Expo CLI, Firebase Console, VS Code, Cursor AI, Claude Code, GitHub Copilot</div></div>
 
-    <div class="section">
-        <div class="section-title">PERSONAL PROJECT</div>
-        <div class="project-name">MediVoice – Medicine Reminder & Assistance Platform</div>
-        <div class="tech-stack">Tech Stack: React Native, Next.js, Node.js, MongoDB, AWS S3, WebSockets, Firebase, Twilio, Google Gemini AI</div>
-        <div class="bullet">• Designed a full-scale medicine management ecosystem with Patient, Seller, and Doctor mobile applications.</div>
-        <div class="bullet">• Implemented medicine reminders using local alarms, voice alerts (TTS), and push notifications.</div>
-        <div class="bullet">• Built missed-dose escalation logic with SMS and automated calls to guardians using Twilio.</div>
-        <div class="bullet">• Integrated an AI chat assistant with persistent conversation history for user guidance.</div>
-        <div class="bullet">• Implemented real-time synchronization using WebSockets.</div>
-        <div class="bullet">• Set up CI/CD pipelines using GitHub Actions, Docker, and AWS EC2 deployments.</div>
-        <div class="bullet">• Focused heavily on elderly-friendly UX and real-world usability constraints.</div>
-    </div>
+    <div class="section-title">PROFESSIONAL EXPERIENCE</div>
+    <div class="job-title">React Native Developer <span class="company">— Elevents Metaestate Pvt Ltd, Hyderabad</span></div>
+    <div class="date">June 2025 – Present</div>
+    <ul>
+        <li>Develop and maintain Android &amp; iOS apps using React Native and Expo, shipped via EAS Build.</li>
+        <li>Build and maintain multiple white-label flavors (Tickets99, EventTitans, Poultry India) from a single codebase.</li>
+        <li>Migrate native Android features into the unified React Native codebase.</li>
+        <li>Integrate REST APIs, payments (Razorpay/Stripe), NFC, Bluetooth printing, QR scanning and biometric auth.</li>
+        <li>Optimize performance, memory and rendering; publish and maintain apps on Google Play and the App Store.</li>
+    </ul>
+    <p class="key-products"><b>Key products:</b> Tickets99, EventTitans, Poultry India, QuickStaff</p>
 
-    <div class="section">
-        <div class="section-title">B.TECH FINAL YEAR PROJECT</div>
-        <div class="project-name">Deep Crack – Image-Based Crack Detection System</div>
-        <div class="tech-stack">Tech Stack: Python, Flask, MobileNet, CNNs, SQLite, Data Augmentation</div>
-        <div class="bullet">• Developed a deep learning-based system to detect surface cracks from uploaded images.</div>
-        <div class="bullet">• Used transfer learning with MobileNet to improve detection accuracy and reduce training time.</div>
-        <div class="bullet">• Applied data augmentation techniques to enhance model generalization.</div>
-        <div class="bullet">• Evaluated model performance using confusion matrices and accuracy metrics.</div>
-        <div class="bullet">• Built a Flask-based web application for real-time image upload and prediction visualization.</div>
-    </div>
+    <div class="job-title" style="margin-top:10px;">Freelance Full Stack Developer</div>
+    <div class="date">August 2023 – May 2025</div>
+    <ul>
+        <li>Built full-stack applications with React, Node.js, Express.js, Firebase and MongoDB.</li>
+        <li>Designed RESTful APIs, authentication and role-based access; handled deployment and cloud hosting.</li>
+    </ul>
 
-    <div class="section">
-        <div class="section-title">3D, INTERACTIVE & VISUAL DEVELOPMENT</div>
-        <div class="bullet">• Created realistic and cinematic 3D scenes using Blender.</div>
-        <div class="bullet">• Built interactive web-based visual experiences using Three.js with React.</div>
-        <div class="bullet">• Experience with character animation pipelines (Mixamo, MetaHuman-ready assets).</div>
-        <div class="bullet">• Strong interest in Unreal Engine workflows for games and immersive experiences.</div>
-    </div>
+    <div class="section-title">KEY PROJECTS</div>
+    <div class="project-name">White-Label Event Apps (Tickets99 · EventTitans · Poultry India)</div>
+    <div class="tech">React Native, Expo, TypeScript, Firebase, AWS</div>
+    <div class="desc">One React Native codebase shipped as multiple branded flavors, each with its own store listing. Payments, NFC, Bluetooth printing, QR check-in and biometric authentication; published to Google Play and the App Store.</div>
 
-    <div class="section">
-        <div class="section-title">TECHNICAL SKILLS</div>
-        <div class="skills-grid">
-            <div class="skill-category">
-                <div class="skill-category-title">Programming & Development</div>
-                <div class="skill-list">
-                    <div class="skill-item">• Java, Python, JavaScript, C, C++</div>
-                    <div class="skill-item">• Android (Native), React, React Native, Next.js</div>
-                    <div class="skill-item">• Django, Flask, Node.js, Express</div>
-                </div>
-            </div>
-            <div class="skill-category">
-                <div class="skill-category-title">Databases & Cloud</div>
-                <div class="skill-list">
-                    <div class="skill-item">• MongoDB, Firebase Realtime Database, SQLite</div>
-                    <div class="skill-item">• AWS (EC2, S3), LocalStack</div>
-                    <div class="skill-item">• CI/CD with GitHub Actions & Docker</div>
-                </div>
-            </div>
-            <div class="skill-category">
-                <div class="skill-category-title">3D & Creative Technology</div>
-                <div class="skill-list">
-                    <div class="skill-item">• Blender (Modeling, Animation, Cinematics)</div>
-                    <div class="skill-item">• Three.js, Unreal Engine</div>
-                    <div class="skill-item">• UI/UX: Figma</div>
-                </div>
-            </div>
-            <div class="skill-category">
-                <div class="skill-category-title">AI & Integrations</div>
-                <div class="skill-list">
-                    <div class="skill-item">• Deep Learning (CNNs, Transfer Learning)</div>
-                    <div class="skill-item">• AI Chat Integration (Google Gemini)</div>
-                    <div class="skill-item">• Real-time systems (WebSockets, Push Notifications)</div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="project-name">QuickStaff — Event Staffing Platform</div>
+    <div class="tech">React Native, Node.js, PostgreSQL, Python FastAPI, AWS</div>
+    <div class="desc">Multi-role platform with dashboards for workers, agencies, organizers and managers. Facial verification, in-app wallet, attendance tracking and push notifications on a scalable AWS backend.</div>
 
-    <div class="section">
-        <div class="section-title">EDUCATION</div>
-        <div class="job-title">Bachelor of Technology (B.Tech)</div>
-        <div class="date">Completed</div>
-    </div>
+    <div class="project-name">Multi-Printer Bluetooth Integration</div>
+    <div class="tech">React Native, Bluetooth Classic, ESC/POS, ZPL</div>
+    <div class="desc">Cross-platform printing across Zebra, TVS, SUNMI, Brother and DCode printers with auto-reconnect and device discovery.</div>
 
-    <div class="section">
-        <div class="section-title">CERTIFICATIONS</div>
-        <div class="bullet">• Django with Machine Learning – Datapoint, Hyderabad</div>
-        <div class="bullet">• Artificial Intelligence & Machine Learning – Youngminds, Vijayawada</div>
-        <div class="bullet">• Cloud-based DevOps – Datavalley, Hyderabad</div>
-    </div>
+    <div class="project-name">SETHU Web App</div>
+    <div class="tech">React, Node.js, Firebase</div>
+    <div class="desc">Public-facing storytelling site serving 5k+ monthly users with optimized performance and responsive design.</div>
 
-    <div class="section">
-        <div class="section-title">ADDITIONAL</div>
-        <div class="bullet">• YouTube Creator – "Code and Create" (Programming & 3D content)</div>
-        <div class="bullet">• Strong interest in VFX, Game Development, and Immersive Technologies</div>
-    </div>
+    <div class="section-title">EDUCATION</div>
+    <div class="job-title">B.Tech, Computer Science &amp; Engineering <span class="company">— Rajamahendri Institute of Engineering &amp; Technology (JNTUK)</span></div>
+    <div class="date">2021 – 2025</div>
+
+    <div class="section-title">CERTIFICATIONS</div>
+    <ul>
+        <li>Deep Learning — Young Minds Co, Vijayawada</li>
+        <li>Django with Machine Learning — DATA POINT, Hyderabad</li>
+    </ul>
 </body>
 </html>

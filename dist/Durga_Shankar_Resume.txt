@@ -1,70 +1,66 @@
-DURGA SHANKAR GUTTULA
-React Native and Full-Stack Developer
+GUTTULA DURGA SHANKAR
+React Native Mobile Developer | Android | iOS | Full Stack
 
-Location: Rajahmundry, Andhra Pradesh, India
-Phone: +91 6303449205
 Email: durga369shankar@gmail.com
+Phone: +91 6303449205
+Location: Rajahmundry, Andhra Pradesh, India
 Portfolio: https://durga-shankar-portfolio.web.app/
 GitHub: https://github.com/shankar379
 LinkedIn: https://www.linkedin.com/in/durga-shankar-react-native-developer/
 
 PROFESSIONAL SUMMARY
-React Native and full-stack developer with hands-on experience building cross-platform mobile apps and scalable web systems. Skilled in React Native, Android, Node.js, MongoDB, Firebase, and AWS, with additional experience in Three.js and interactive 3D development. Strong focus on production stability, modular architecture, and performance optimization.
+React Native Developer with nearly one year of professional experience building and maintaining production Android and iOS applications at Elevents Metaestate Pvt Ltd — including the white-label flavors Tickets99, EventTitans and Poultry India, plus the QuickStaff staffing platform. Experienced in React Native, TypeScript, REST APIs, Firebase, AWS and mobile performance optimization, with hands-on work in payments, NFC, Bluetooth printing and biometric authentication. Regularly uses AI-assisted tools (Claude Code, Cursor AI, GitHub Copilot) to improve development speed and code quality.
 
-CORE SKILLS
-Languages: JavaScript, TypeScript, Python, Java, C, C++
-Frontend: React, React Native, Next.js, Vite, Tailwind CSS
-Backend: Node.js, Express, Django, Flask
-Databases: MongoDB, Firebase Realtime Database, SQLite
-Cloud and DevOps: AWS EC2, AWS S3, Docker, GitHub Actions, CI/CD
-Realtime and Integrations: WebSockets, Push Notifications, Twilio, Google Gemini API
-3D and Creative: Three.js, Blender, Unreal Engine, Figma
+TECHNICAL SKILLS
+Mobile: React Native, Expo, React Navigation, Android Studio, Gradle, EAS Build & Submit
+Languages: JavaScript, TypeScript, Java, Kotlin, Python
+Backend: Node.js, Express.js, REST APIs, JWT Auth, Python FastAPI
+Databases: Firebase Firestore, MongoDB, PostgreSQL, SQLite
+Cloud & DevOps: AWS EC2, AWS S3, GitHub Actions, CI/CD
+Auth & Security: JWT, OAuth2, OTP, Face ID, Fingerprint, Secure Storage
+Payments: Razorpay, Stripe, Google Pay, Apple Pay
+Hardware: Bluetooth, NFC, QR Scanner, Camera APIs, ML Kit
+Tools: Git, GitHub, Expo CLI, Firebase Console, VS Code, Cursor AI, Claude Code, GitHub Copilot
 
 PROFESSIONAL EXPERIENCE
-Tickets99 and EventTitans - React Native Developer
-Hyderabad, India | Jun 2025 - Present
-- Working on migration of a large Android application to React Native for Android and iOS.
-- Maintaining and improving multi-screen production workflows for ticketing and event operations.
-- Integrating backend APIs and improving app reliability, maintainability, and runtime performance.
-- Collaborating with cross-functional teams to ship updates faster and reduce production issues.
+React Native Developer - Elevents Metaestate Pvt Ltd, Hyderabad
+June 2025 - Present
+- Develop and maintain Android & iOS apps using React Native and Expo, shipped via EAS Build.
+- Build and maintain multiple white-label flavors (Tickets99, EventTitans, Poultry India) from a single codebase.
+- Migrate native Android features into the unified React Native codebase.
+- Integrate REST APIs, payments (Razorpay/Stripe), NFC, Bluetooth printing, QR scanning and biometric auth.
+- Optimize performance, memory and rendering; publish and maintain apps on Google Play and the App Store.
+Key products: Tickets99, EventTitans, Poultry India, QuickStaff
 
-SELECTED PROJECTS
-MediVoice - Medicine Reminder and Assistance Platform
-Tech Stack: React Native, Next.js, Node.js, MongoDB, AWS S3, Firebase, WebSockets, Twilio, Google Gemini
-- Built a multi-role platform for patients, sellers, and doctors with real-time medicine workflows.
-- Implemented reminders using local alarms, TTS voice alerts, and push notifications.
-- Added missed-dose escalation with SMS and automated calls to guardians via Twilio.
-- Integrated AI chat assistant with persistent history for user guidance.
-- Set up CI/CD pipeline using GitHub Actions, Docker, and AWS EC2 deployment.
+Freelance Full Stack Developer
+August 2023 - May 2025
+- Built full-stack applications with React, Node.js, Express.js, Firebase and MongoDB.
+- Designed RESTful APIs, authentication and role-based access; handled deployment and cloud hosting.
 
-Time Table Generator
-Tech Stack: Python, Django, SQLite
-- Built a constraint-based timetable generation system for academic scheduling.
-- Automated schedule creation and reduced manual planning effort significantly.
-- Improved scheduling accuracy and reduced generation time from weeks to hours.
+KEY PROJECTS
+White-Label Event Apps (Tickets99, EventTitans, Poultry India)
+Tech: React Native, Expo, TypeScript, Firebase, AWS
+- One React Native codebase shipped as multiple branded flavors, each with its own store listing.
+- Payments, NFC, Bluetooth printing, QR check-in and biometric authentication; published to Google Play and the App Store.
 
-Student Communication Platform
-Tech Stack: React, Firebase, Cloud Functions
-- Built a real-time communication and announcement system for educational use.
-- Supported concurrent users with stable messaging and notification workflows.
-- Improved collaboration efficiency through centralized communication features.
+QuickStaff - Event Staffing Platform
+Tech: React Native, Node.js, PostgreSQL, Python FastAPI, AWS
+- Multi-role platform with dashboards for workers, agencies, organizers and managers.
+- Facial verification, in-app wallet, attendance tracking and push notifications on a scalable AWS backend.
 
-Deep Crack - Image-Based Crack Detection System (B.Tech Project)
-Tech Stack: Python, Flask, MobileNet, CNNs, SQLite, Data Augmentation
-- Developed a crack detection workflow using transfer learning and data augmentation.
-- Built a Flask interface for image upload and prediction visualization.
-- Evaluated model performance with accuracy metrics and confusion matrix analysis.
+Multi-Printer Bluetooth Integration
+Tech: React Native, Bluetooth Classic, ESC/POS, ZPL
+- Cross-platform printing across Zebra, TVS, SUNMI, Brother and DCode printers with auto-reconnect and device discovery.
+
+SETHU Web App
+Tech: React, Node.js, Firebase
+- Public-facing storytelling site serving 5k+ monthly users with optimized performance and responsive design.
 
 EDUCATION
-Bachelor of Technology in Computer Science
-Rajahmundry Institute of Engineering and Technology
-Nov 2021 - Nov 2025
+B.Tech, Computer Science & Engineering
+Rajamahendri Institute of Engineering & Technology (JNTUK)
+2021 - 2025
 
 CERTIFICATIONS
-- Django with Machine Learning - Datapoint, Hyderabad
-- Artificial Intelligence and Machine Learning - Youngminds, Vijayawada
-- Cloud-based DevOps - Datavalley, Hyderabad
-
-ADDITIONAL
-- YouTube creator at Code and Create (programming and 3D content)
-- Interested in mobile architecture, AI-enabled products, game development, and immersive experiences
+- Deep Learning - Young Minds Co, Vijayawada
+- Django with Machine Learning - DATA POINT, Hyderabad
