@@ -5,21 +5,19 @@
   font-family: 'Outfit', sans-serif !important;
 }
 
-html, body {
-  overflow: hidden;
-  font-family: 'Outfit', sans-serif;
+html {
+  /* Root element is the single scroll container so window.scrollY works
+     (needed by the Navbar). overflow-x:hidden clips decorative overflow and
+     prevents horizontal scroll; vertical scrolling stays on the root. */
+  overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
-/* Enable scrolling on mobile devices */
-@media (max-width: 768px) {
-  html, body {
-    overflow: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-  
-  [data-scroll-container] {
-    overflow: visible;
-  }
+body {
+  /* No overflow rules here — keeping body's overflow visible prevents it from
+     becoming a nested scroll container (which would zero out window.scrollY). */
+  -webkit-overflow-scrolling: touch;
+  font-family: 'Outfit', sans-serif;
 }
 
 .App {
@@ -28,11 +26,6 @@ html, body {
   overflow-x: hidden;
   background: #fafafa;
   font-family: 'Outfit', sans-serif;
-}
-
-/* Locomotive Scroll Container */
-[data-scroll-container] {
-  min-height: 100vh;
 }
 
 /* Section Spacing */
@@ -53,7 +46,7 @@ h1, h2, h3, h4, h5, h6, p, span, a, button, input, textarea, label, div {
   display: none;
 }
 
-/* Fixed elements need special handling with locomotive */
+/* Keep the navbar and social sidebar pinned during native scroll */
 .navbar,
 .social-sidebar {
   position: fixed !important;

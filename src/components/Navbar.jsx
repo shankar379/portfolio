@@ -56,10 +56,10 @@ const Navbar = () => {
       }
     };
 
-    const handleLocomotiveScroll = (args) => {
+    const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          const currentScrollY = args.scroll.y;
+          const currentScrollY = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
           // Throttle active section updates (only every 100ms)
           const now = Date.now();
@@ -89,23 +89,13 @@ const Navbar = () => {
       }
     };
 
-    // Wait for Locomotive Scroll to initialize
-    const checkScroll = setInterval(() => {
-      if (window.locomotiveScroll) {
-        clearInterval(checkScroll);
-        window.locomotiveScroll.on('scroll', handleLocomotiveScroll);
-        // Initial update with delay to ensure DOM is ready
-        setTimeout(() => {
-          updateActiveSection();
-        }, 300);
-      }
-    }, 100);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Initial update once the DOM is ready
+    const initialUpdate = setTimeout(updateActiveSection, 300);
 
     return () => {
-      clearInterval(checkScroll);
-      if (window.locomotiveScroll) {
-        window.locomotiveScroll.off('scroll', handleLocomotiveScroll);
-      }
+      window.removeEventListener('scroll', handleScroll);
+      clearTimeout(initialUpdate);
     };
   }, []);
 
@@ -121,12 +111,8 @@ const Navbar = () => {
     e.preventDefault();
     const section = document.getElementById(sectionId);
 
-    if (section && window.locomotiveScroll) {
-      window.locomotiveScroll.scrollTo(section, {
-        offset: 0,
-        duration: 800,
-        easing: [0.25, 0.0, 0.35, 1.0],
-      });
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     setActiveSection(sectionId);

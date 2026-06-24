@@ -274,11 +274,12 @@ const OrangeRibbonBackground = () => {
         lastFrameTimeRef.current = currentTime;
       }
       
-      // Skip rendering if not visible (but always render first few frames)
-      if (!isVisibleRef.current && currentTime - lastFrameTimeRef.current > 1000) {
+      // Pause the shader entirely while the hero is scrolled off-screen so it
+      // stops contending with Locomotive's lerp for GPU/main-thread time.
+      if (!isVisibleRef.current) {
         return;
       }
-      
+
       if (materialRef.current) {
         materialRef.current.uniforms.uTime.value += 0.01;
       }

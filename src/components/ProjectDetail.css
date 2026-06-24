@@ -62,6 +62,16 @@
   line-height: 1.2;
 }
 
+.project-detail-meta {
+  font-size: 0.98rem;
+  color: #4a5568;
+  margin-bottom: 0.6rem;
+}
+
+.project-detail-meta strong {
+  color: #ff6d00;
+}
+
 .project-subtitle {
   font-size: 1.1rem;
   color: #4a5568;
@@ -106,6 +116,50 @@
   background: #222222;
   transform: translateY(-3px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.store-link {
+  background: #ffffff;
+  color: #2d2d50;
+  border: 1px solid rgba(45, 45, 80, 0.18);
+}
+
+.store-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(45, 45, 80, 0.18);
+}
+
+.flavor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.flavor-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem 1rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 14px;
+  background: #f7f8fb;
+  border: 1px solid rgba(45, 45, 80, 0.08);
+}
+
+.flavor-name {
+  min-width: 130px;
+}
+
+.flavor-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2d2d50;
+}
+
+.flavor-links {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
 }
 
 .project-detail-body {
