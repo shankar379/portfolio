@@ -6,13 +6,6 @@ import './Hero.css';
 
 const LazyOrangeRibbon = lazy(() => import('./OrangeRibbonBackground'));
 
-const practice = [
-  'React Native · Android & iOS',
-  'Payments · NFC · Bluetooth',
-  'Web, Backend & Cloud',
-  'AI-Powered Development'
-];
-
 const Hero = () => {
   const [showBg, setShowBg] = useState(false);
   const sectionRef = useRef(null);
@@ -42,6 +35,7 @@ const Hero = () => {
       )}
 
       <div className="hero-content">
+        <div className="hero-main">
         <motion.p
           className="hero-status"
           initial={{ opacity: 0, y: 16 }}
@@ -49,7 +43,7 @@ const Hero = () => {
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <span className="hero-status-dot" aria-hidden="true" />
-          React Native Developer&ensp;·&ensp;Android & iOS&ensp;·&ensp;AI-Powered Development&ensp;·&ensp;Open to Work
+          React Native Developer&ensp;·&ensp;Android & iOS&ensp;·&ensp;Open to Work
         </motion.p>
 
         <h1 className="hero-statement">
@@ -70,41 +64,30 @@ const Hero = () => {
             CREATION.
           </motion.span>
         </h1>
+        </div>
 
         <motion.div
-          className="hero-grid"
+          className="hero-bottom"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.55, ease: 'easeOut' }}
         >
-          <div className="hero-practice">
-            <span className="hero-practice-label">/ Practice</span>
-            <ul className="hero-practice-list">
-              {practice.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="hero-intro">
-            <p className="hero-intro-text">
-              I&apos;m <span className="hero-intro-name">Durga Shankar</span> — React Native
-              developer shipping multi-flavor production apps on Google Play & the App Store,
-              backed by web, cloud and AI. Every idea taken{' '}
-              <span className="hero-intro-accent">from concept to production</span>.
-            </p>
-            <div className="hero-ctas">
-              <a href="#projects" className="hero-cta hero-cta--primary">
-                Selected Work <FiArrowDown aria-hidden="true" />
-              </a>
-              <a
-                href="/Profile.pdf"
-                download="Durga_Shankar_Resume.pdf"
-                className="hero-cta hero-cta--secondary"
-              >
-                Résumé <FiDownload aria-hidden="true" />
-              </a>
-            </div>
+          <p className="hero-intro-text">
+            I&apos;m <span className="hero-intro-name">Durga Shankar</span> —<br />
+            every idea taken<br />
+            <span className="hero-intro-accent">from concept to production</span>.
+          </p>
+          <div className="hero-ctas">
+            <a href="#projects" className="hero-cta hero-cta--primary">
+              Selected Work <FiArrowDown aria-hidden="true" />
+            </a>
+            <a
+              href="/Profile.pdf"
+              download="Durga_Shankar_Resume.pdf"
+              className="hero-cta hero-cta--secondary"
+            >
+              Résumé <FiDownload aria-hidden="true" />
+            </a>
           </div>
         </motion.div>
       </div>
