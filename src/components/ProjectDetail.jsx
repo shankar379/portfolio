@@ -39,8 +39,12 @@ const ProjectDetail = () => {
     );
   }
 
-  const { title, company, role, liveUrl, githubUrl, technologies, stores = [], detail } = project;
+  const {
+    title, company, role, liveUrl, githubUrl, technologies, stores = [], detail,
+    image, icon, icons, primaryColor, accentColor
+  } = project;
   const { subtitle, summary, challenge, solution, impactPoints } = detail;
+  const iconList = icons || (icon ? [icon] : []);
   const { groups: storeGroups, unlabeled: plainStores } = groupStores(stores);
   const storeName = (s) => (s.type === 'app' ? 'App Store' : 'Google Play');
 
@@ -101,6 +105,36 @@ const ProjectDetail = () => {
                 ))}
               </div>
             </div>
+
+            {(image || iconList.length > 0) && (
+              <div className="project-detail-media">
+                {image ? (
+                  <img
+                    src={image}
+                    alt={title}
+                    className="project-detail-image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div
+                    className="project-detail-media-gradient"
+                    style={{ background: `linear-gradient(135deg, ${primaryColor} 0%, ${accentColor} 100%)` }}
+                  >
+                    {iconList.map((src) => (
+                      <img
+                        key={src}
+                        src={src}
+                        alt={`${title} app icon`}
+                        className="project-detail-app-icon"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {storeGroups.length > 0 && (
               <section className="project-section flavors-section">
