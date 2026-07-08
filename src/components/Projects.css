@@ -1,477 +1,208 @@
 .projects {
-  position: relative;
-  padding: 6rem 2rem;
-  background: #e8ecf1;
-  overflow: hidden;
-  z-index: 20;
-}
-
-.projects-bg {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 15% 15%, rgba(255, 109, 0, 0.14), transparent 34%),
-    radial-gradient(circle at 85% 85%, rgba(255, 170, 0, 0.12), transparent 34%);
-  pointer-events: none;
+  background: #fafafa;
+  padding: 1.5rem 3rem 0.75rem;
 }
 
 .projects-container {
-  position: relative;
-  z-index: 1;
-  max-width: 1300px;
+  max-width: 1180px;
   margin: 0 auto;
 }
 
 .projects-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 5rem;
+}
+
+.projects-label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-bottom: 1.75rem;
 }
 
 .projects-title {
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 800;
-  background: linear-gradient(135deg, #ff4800 0%, #ff6d00 55%, #ffaa00 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.18;
+  color: #111111;
 }
 
-.projects-subtitle {
-  margin: 0;
-  color: #55657b;
-  font-size: 1rem;
+.projects-title-accent {
+  color: #ff6d00;
 }
 
-.projects-category {
+/* Case-study list */
+.projects-list {
   display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.5rem 0.9rem;
-  margin: 0 0 1.2rem;
-  padding-bottom: 0.7rem;
-  border-bottom: 1px solid rgba(255, 109, 0, 0.18);
+  flex-direction: column;
+  border-top: 1px solid rgba(17, 17, 17, 0.12);
 }
 
-.projects-category-label {
-  font-size: clamp(1.05rem, 2vw, 1.3rem);
-  font-weight: 800;
-  color: #2a3442;
-  letter-spacing: 0.2px;
-}
-
-.projects-category-note {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #ffffff;
-  background: linear-gradient(135deg, #ff4800 0%, #ff6d00 60%, #ffaa00 100%);
-  border: none;
-  padding: 0.3rem 0.75rem;
-  border-radius: 999px;
-  box-shadow: 0 4px 12px rgba(255, 109, 0, 0.35);
-  letter-spacing: 0.2px;
-}
-
-.projects-grid {
+.case-row {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(260px, 1fr));
-  gap: 1.6rem;
-  margin-bottom: 3rem;
-}
-
-.projects-grid:last-child {
-  margin-bottom: 0;
-}
-
-.project-neu-card {
-  position: relative;
-  background: #e8ecf1;
-  border-radius: 36px;
-  padding: 16px;
-  box-shadow: 18px 18px 40px #c8ccd1, -18px -18px 40px #ffffff;
-  overflow: hidden;
-}
-
-.project-neu-media {
-  position: relative;
-  border-radius: 28px;
-  overflow: hidden;
-  margin-bottom: 14px;
-  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.6);
-}
-
-.project-neu-image {
+  grid-template-columns: 90px 1fr 220px 40px;
+  align-items: center;
+  gap: 2.5rem;
   width: 100%;
-  height: 220px;
-  object-fit: cover;
-  display: block;
-  border-radius: 24px;
-  margin: 4px;
-  width: calc(100% - 8px);
+  text-align: left;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.12);
+  padding: 3rem 2rem;
+  cursor: pointer;
+  border-radius: 0;
+  overflow: hidden;
+  transition: border-radius 0.5s cubic-bezier(0.2, 0, 0.2, 1),
+    transform 0.5s cubic-bezier(0.2, 0, 0.2, 1);
 }
 
-.project-neu-image--gradient {
-  position: relative;
-}
-
-.project-neu-image--gradient::after {
-  /* subtle texture so the gradient panel doesn't read as flat */
+/* Orange flood sweeps in from the bottom, slow and smooth */
+.case-row::before {
   content: '';
   position: absolute;
   inset: 0;
+  background: #ff5a1f;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
   z-index: 0;
   pointer-events: none;
-  background:
-    radial-gradient(circle at 22% 22%, rgba(255, 255, 255, 0.28), transparent 42%),
-    radial-gradient(circle at 80% 78%, rgba(0, 0, 0, 0.18), transparent 46%);
-  border-radius: inherit;
 }
 
-.project-neu-icons {
-  position: absolute;
-  inset: 0;
+.case-row > * {
+  position: relative;
   z-index: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  padding: 0 12px;
 }
 
-.project-neu-app-icon {
-  width: 70px;
-  height: 70px;
-  border-radius: 18px;
-  object-fit: cover;
-  background: #fff;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.3);
-}
-
-/* When a card shows a single icon, let it be a touch larger */
-.project-neu-icons:has(> .project-neu-app-icon:only-child) .project-neu-app-icon {
-  width: 84px;
-  height: 84px;
+.case-row:hover {
   border-radius: 20px;
+  border-bottom-color: transparent;
+  transform: scale(1.012);
+  z-index: 1;
 }
 
-.project-neu-gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.62) 0%, rgba(0, 0, 0, 0.2) 52%, transparent 100%);
+.case-row:hover::before {
+  transform: scaleY(1);
 }
 
-.project-neu-media-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 18px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.project-neu-title {
-  color: #fff;
-  margin: 0 0 4px;
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.project-neu-subtitle {
-  color: rgba(255, 255, 255, 0.82);
-  margin: 0;
+.case-row-number {
+  font-family: 'JetBrains Mono', monospace;
   font-size: 0.78rem;
   font-weight: 500;
+  letter-spacing: 0.08em;
+  color: #6b7280;
+  transition: color 0.35s ease;
 }
 
-.project-neu-pill {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 0.8rem;
-  font-weight: 700;
-}
-
-.project-neu-info {
-  background: #e8ecf1;
-  border-radius: 24px;
-  padding: 16px;
-  box-shadow: 8px 8px 16px #c8ccd1, -8px -8px 16px #ffffff;
-}
-
-.project-neu-label {
-  margin: 0 0 6px;
-  color: #5a6b7c;
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-
-.project-neu-meta {
+.case-row-main {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  margin: 0 0 8px;
+  gap: 0.6rem;
+  min-width: 0;
 }
 
-.project-neu-company {
-  color: #2a3442;
-  font-size: 0.92rem;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-.project-neu-role {
-  color: #ff6d00;
-  font-size: 0.76rem;
+.case-row-title {
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
   font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #111111;
+  transition: color 0.35s ease;
 }
 
-.project-neu-description {
-  margin: 0 0 12px;
-  color: #7b8a9a;
-  font-size: 0.86rem;
-  line-height: 1.45;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.case-row-tagline {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #6b7280;
+  transition: color 0.35s ease;
 }
 
-.project-neu-tech-list {
+.case-row-meta {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-bottom: 12px;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-start;
 }
 
-.project-neu-tech-pill {
-  color: #6b7c8e;
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 4px 9px;
-  border-radius: 999px;
-  background: #e8ecf1;
-  box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.09), inset -2px -2px 4px rgba(255, 255, 255, 0.9);
+.case-row-tags {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  color: #6b7280;
+  transition: color 0.35s ease;
 }
 
-.project-neu-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.project-neu-primary-btn {
-  flex: 1;
-  height: 42px;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ff4800 0%, #ff6d00 60%, #ffaa00 100%);
-  color: #fff;
-  font-weight: 600;
-  font-size: 0.86rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.project-neu-icon-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  text-decoration: none;
-  color: #6b7c8e;
-  background: #e8ecf1;
-  box-shadow: 6px 6px 12px #c8ccd1, -6px -6px 12px #ffffff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.project-neu-store-link {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  text-decoration: none;
-  color: #ff6d00;
-  background: #ffffff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.85rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
-}
-
-.project-neu-store-link:hover {
-  transform: translateY(-1px);
-  color: #ff4800;
-}
-
-.project-neu-stores {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-/* Compact pill that hugs its content: flavor name + its platform icons */
-.project-neu-store-row {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 8px 5px 12px;
-  border-radius: 999px;
-  background: #e8ecf1;
-  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.08), inset -2px -2px 5px rgba(255, 255, 255, 0.9);
-}
-
-.project-neu-store-flavor {
-  font-size: 0.8rem;
+.case-row-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
   font-weight: 700;
-  color: #3a4654;
-  white-space: nowrap;
-}
-
-.project-neu-store-links {
-  display: inline-flex;
-  gap: 5px;
-}
-
-.project-neu-card:hover {
-  box-shadow: 22px 22px 42px #c3c8ce, -20px -20px 40px #ffffff;
-}
-
-.project-neu-icon-btn:hover,
-.project-neu-primary-btn:hover {
-  transform: translateY(-1px);
-}
-
-.project-card {
-  background: #f3f5f8;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 10px 10px 24px #dde1e6, -10px -10px 24px #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  transition: box-shadow 0.3s ease;
-}
-
-.project-card:hover {
-  box-shadow: 14px 14px 30px #d7dce2, -12px -12px 28px #ffffff;
-}
-
-.project-card-image-wrap {
-  position: relative;
-  height: 190px;
-  overflow: hidden;
-}
-
-.project-card-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.project-card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(10, 15, 24, 0.55), rgba(10, 15, 24, 0.1));
-}
-
-.project-card-content {
-  padding: 1.1rem 1rem 1rem;
-}
-
-.project-card-title {
-  margin: 0 0 0.65rem;
-  color: #1f2937;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.project-card-description {
-  margin: 0 0 0.9rem;
-  color: #4a5568;
-  font-size: 0.9rem;
-  line-height: 1.55;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.project-tech-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-bottom: 0.9rem;
-}
-
-.project-tech-pill {
-  font-size: 0.72rem;
+  letter-spacing: 0.14em;
   color: #ff6d00;
-  background: rgba(255, 109, 0, 0.12);
-  border: 1px solid rgba(255, 109, 0, 0.22);
-  padding: 0.26rem 0.5rem;
-  border-radius: 999px;
-  font-weight: 600;
+  transition: color 0.35s ease;
 }
 
-.project-card-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.case-row-dot {
+  font-size: 0.55rem;
+  vertical-align: 1px;
 }
 
-.project-btn {
-  border: 0;
-  border-radius: 12px;
-  height: 38px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  text-decoration: none;
+.case-row-arrow {
+  font-size: 1.15rem;
+  color: #ffffff;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
 }
 
-.project-btn-primary {
-  flex: 1;
-  background: linear-gradient(135deg, #ff4800 0%, #ff6d00 60%, #ffaa00 100%);
-  color: #fff;
-  font-weight: 600;
+/* Hover flood — everything goes white on orange */
+.case-row:hover .case-row-number,
+.case-row:hover .case-row-title,
+.case-row:hover .case-row-tags,
+.case-row:hover .case-row-status {
+  color: #ffffff;
 }
 
-.project-btn-ghost {
-  width: 38px;
-  background: #eef2f7;
-  color: #ff6d00;
-  border: 1px solid rgba(255, 109, 0, 0.25);
+.case-row:hover .case-row-tagline {
+  color: rgba(255, 255, 255, 0.85);
 }
 
-@media (max-width: 1024px) {
-  .projects-grid {
-    grid-template-columns: repeat(2, minmax(240px, 1fr));
-  }
+.case-row:hover .case-row-arrow {
+  opacity: 1;
+  transform: translateX(0);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 968px) {
   .projects {
-    padding: 4rem 1rem;
+    padding: 1rem 1.5rem 3rem;
   }
 
-  .projects-grid {
+  .projects-header {
+    margin-bottom: 3.5rem;
+  }
+
+  .case-row {
     grid-template-columns: 1fr;
     gap: 1rem;
+    padding: 2.25rem 1.25rem;
   }
 
-  .project-neu-image {
-    height: 200px;
+  .case-row-number {
+    color: #ff6d00;
+  }
+
+  .case-row-meta {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .case-row-arrow {
+    display: none;
   }
 }

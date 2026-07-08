@@ -31,7 +31,7 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            I turn ideas into reliable digital products.
+            Give me an idea. I&apos;ll build it.
           </motion.h2>
 
           <motion.p
@@ -41,7 +41,8 @@ const About = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            Clarity and performance are designed, not assumed.
+            Mobile app, website, backend or AI — I build the whole thing, start to finish,
+            powered by top AI tools like Claude Code, Cursor AI and Codex.
           </motion.p>
 
           <motion.div 

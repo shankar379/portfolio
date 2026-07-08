@@ -20,7 +20,10 @@ export const projects = [
     role: 'React Native Developer',
     description:
       'One React Native codebase shipped as multiple white-label flavors — including Tickets99, EventTitans and Poultry India — each with its own branding, configuration and store listing. Payments, NFC, Bluetooth printing, QR check-in and biometric auth.',
-    technologies: ['React Native', 'Expo', 'TypeScript', 'Firebase', 'AWS'],
+    tagline: '7 branded flavors from one codebase — payments, NFC, Bluetooth printing, biometric auth.',
+    tags: 'MOBILE · WHITE-LABEL',
+    status: 'IN PRODUCTION',
+    technologies: ['React Native', 'Expo', 'TypeScript'],
     primaryColor: '#ff4800',
     accentColor: '#ffaa00',
     image: '',
@@ -42,11 +45,12 @@ export const projects = [
       challenge:
         'Deliver several distinctly branded, store-ready apps without maintaining separate codebases, while supporting hardware-heavy on-site workflows (NFC badges, Bluetooth printers, QR check-in) and secure payments across both platforms.',
       solution:
-        'Engineered a flavor-driven React Native + Expo architecture with TypeScript and 100+ reusable components, where branding, theming and feature flags are configuration. Integrated Razorpay/Stripe payments, NFC, Bluetooth printing, QR scanning and Face ID / Fingerprint auth, then shipped each flavor through EAS Build to Google Play and the App Store.',
+        'Engineered a flavor-driven React Native + Expo architecture with TypeScript and 100+ reusable components, where branding, theming and feature flags are configuration. Integrated Razorpay/Stripe payments, NFC, Bluetooth printing, QR scanning and Face ID / Fingerprint auth, then shipped each flavor through EAS Build to Google Play and the App Store. Built a cross-platform multi-printer Bluetooth module supporting Zebra, TVS, SUNMI, Brother and DCode printers — abstracting both ESC/POS (receipts) and ZPL (labels) over Bluetooth Classic with device discovery and auto-reconnect for uninterrupted on-site badge and receipt printing.',
       impactPoints: [
         'Multiple white-label flavors (Tickets99, EventTitans, Poultry India) from one codebase',
         'Branding, theming and features driven by per-flavor configuration',
         'Payments, NFC, Bluetooth printing, QR check-in and biometric auth',
+        'Multi-printer Bluetooth module: single API across Zebra, TVS, SUNMI, Brother and DCode with ESC/POS + ZPL support and auto-reconnect',
         'Each flavor published and maintained on Google Play and the App Store',
       ],
     },
@@ -59,6 +63,9 @@ export const projects = [
     role: 'React Native Developer',
     description:
       'Multi-role event staffing platform with role-based dashboards for workers, agencies, organizers and managers. Facial verification, wallet, attendance tracking and push notifications on a scalable AWS backend.',
+    tagline: 'Four roles, one platform — facial verification, wallet and realtime attendance.',
+    tags: 'MOBILE · MULTI-ROLE',
+    status: 'IN PRODUCTION',
     technologies: ['React Native', 'Node.js', 'PostgreSQL', 'FastAPI', 'AWS'],
     primaryColor: '#ff6d00',
     accentColor: '#ffb600',
@@ -86,39 +93,6 @@ export const projects = [
       ],
     },
   },
-  {
-    id: 3,
-    category: 'production',
-    title: 'Multi-Printer Bluetooth Integration',
-    company: 'Elevents Metaestate Pvt Ltd',
-    role: 'React Native Developer',
-    description:
-      'Cross-platform Bluetooth printing module supporting Zebra, TVS, SUNMI, Brother and DCode printers with auto-reconnect and device discovery across Android and iOS.',
-    technologies: ['React Native', 'Bluetooth Classic', 'ESC/POS', 'ZPL'],
-    primaryColor: '#ff5400',
-    accentColor: '#ffaa00',
-    image: '',
-    icon: '',
-    liveUrl: '',
-    githubUrl: '',
-    stores: [], // internal module — no public store listing
-    detail: {
-      subtitle: 'Cross-platform Bluetooth printing for badges & receipts.',
-      summary:
-        'A reusable Bluetooth printing layer that lets the event apps print badges and receipts to a wide range of thermal and label printers, regardless of brand or protocol.',
-      challenge:
-        'Support many printer brands and two different print protocols (ESC/POS and ZPL) reliably over Bluetooth, with graceful reconnection during live events.',
-      solution:
-        'Built a unified printing module on Bluetooth Classic that abstracts ESC/POS and ZPL, with device discovery and auto-reconnect, validated against Zebra, TVS, SUNMI, Brother and DCode hardware.',
-      impactPoints: [
-        'Single API across Zebra, TVS, SUNMI, Brother and DCode printers',
-        'Supports both ESC/POS (receipts) and ZPL (labels)',
-        'Auto-reconnect and device discovery for uninterrupted on-site printing',
-        'Reused across multiple production event apps',
-      ],
-    },
-  },
-
   // ── ACADEMIC / FREELANCE ─────────────────────────────────────────────────
   {
     id: 4,
@@ -128,6 +102,9 @@ export const projects = [
     role: 'Full Stack Developer',
     description:
       'Public-facing site for the SETHU initiative with storytelling-driven UX. Engineered a high-performance web interface serving 5k+ monthly users, improving engagement by 40%.',
+    tagline: 'Storytelling-driven public site serving 5k+ monthly users.',
+    tags: 'WEB · STORYTELLING',
+    status: 'LIVE',
     technologies: ['React', 'Node.js', 'Firebase'],
     primaryColor: '#ff4800',
     accentColor: '#ffaa00',
@@ -158,6 +135,9 @@ export const projects = [
     role: 'Full Stack Developer',
     description:
       'Constraint-driven timetable engine for academic departments. Automated scheduling system handling 500+ weekly schedules with 98% accuracy, cutting generation time from 3 weeks to under 3 hours.',
+    tagline: 'Constraint engine that cut timetable generation from 3 weeks to 3 hours.',
+    tags: 'AUTOMATION · SCHEDULING',
+    status: 'LIVE',
     technologies: ['Python', 'Django', 'SQLite3'],
     primaryColor: '#ff6d00',
     accentColor: '#ffb600',
@@ -189,6 +169,9 @@ export const projects = [
     role: 'Full Stack Developer',
     description:
       'Real-time messaging and announcement hub for universities. Scalable chat system supporting 200+ concurrent users, enhancing student collaboration efficiency by 70%.',
+    tagline: 'Realtime messaging hub supporting 200+ concurrent users.',
+    tags: 'WEB · REALTIME',
+    status: 'LIVE',
     technologies: ['React', 'Node.js', 'Firebase'],
     primaryColor: '#ff8500',
     accentColor: '#ff5400',

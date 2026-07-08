@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaArrowLeft, FaGithub, FaExternalLinkAlt, FaGooglePlay, FaApple } from 'react-icons/fa';
 import Navbar from './Navbar';
+import WaveLines from './WaveLines';
 import { getProjectById, groupStores } from '../data/projects';
 import './ProjectDetail.css';
 
@@ -65,6 +66,7 @@ const ProjectDetail = () => {
             transition={{ duration: 0.5 }}
           >
             <div className="case-study-header">
+              <WaveLines variant="strip" />
               <span className="case-study-label">Case Study</span>
               <h1 className="project-detail-title">{title}</h1>
               {company && (

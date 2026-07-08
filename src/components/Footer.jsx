@@ -1,144 +1,65 @@
 import { motion } from 'framer-motion';
-import { FaMapMarkerAlt } from 'react-icons/fa';
-import { MdEmail } from 'react-icons/md';
+import WaveLines from './WaveLines';
 import './Footer.css';
 
+const navigationLinks = [
+  { label: 'Home', href: '#home' },
+  { label: 'About', href: '#about' },
+  { label: 'Skills', href: '#skills' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Contact', href: '#contact' }
+];
+
+const connectLinks = [
+  { label: 'GitHub', url: 'https://github.com/shankar379' },
+  { label: 'LinkedIn', url: 'https://www.linkedin.com/in/durga-shankar-react-native-developer/' },
+  { label: 'YouTube', url: 'https://www.youtube.com/@CodeAndCreate369' },
+  { label: 'Email', url: 'mailto:durga369shankar@gmail.com' }
+];
+
 const Footer = () => {
-
-  const navigationLinks = [
-    { label: 'Home', href: '#home' },
-    { label: 'About', href: '#about' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Contact', href: '#contact' }
-  ];
-
-  const connectLinks = [
-    { label: 'GitHub', url: 'https://github.com/durga369shankar' },
-    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/durga-shankar-react-native-developer/' },
-    { label: 'YouTube', url: 'https://youtube.com' },
-    { label: 'Email', url: 'mailto:durga369shankar@gmail.com' }
-  ];
-
   return (
     <footer className="footer">
+      <WaveLines variant="footer" />
       <div className="footer-container">
-        <div className="footer-content">
-          {/* Left Column - Personal Info */}
-          <motion.div
-            className="footer-column footer-personal"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className="footer-logo">
-              <div className="logo-square">
-                <img src="/ds_logo.webp" alt="DS Logo" className="logo-letter" />
-              </div>
-              <h2 className="footer-name">Durga Shankar</h2>
-            </div>
-
-            <p className="footer-role">AI-Powered Creative Technologist</p>
-
-            <p className="footer-description">
-              Building smarter experiences using AI, code, and design.
-            </p>
-
-            <div className="footer-contact">
-              <div className="contact-item">
-                <FaMapMarkerAlt className="contact-icon" />
-                <span>India</span>
-              </div>
-              <div className="contact-item">
-                <MdEmail className="contact-icon" />
-                <a href="mailto:durga369shankar@gmail.com">durga369shankar@gmail.com</a>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Middle Column - Navigation */}
-          <motion.div
-            className="footer-column footer-navigation"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-          >
-            <h3 className="footer-column-title">
-              Navigation
-              <span className="title-underline"></span>
-            </h3>
-            <ul className="footer-links">
-              {navigationLinks.map((link, index) => (
-                <li key={index}>
-                  <a href={link.href}>{link.label}</a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Right Column - Connect */}
-          <motion.div
-            className="footer-column footer-connect"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <h3 className="footer-column-title">
-              Connect
-              <span className="title-underline"></span>
-            </h3>
-            <ul className="footer-links">
-              {connectLinks.map((link, index) => (
-                <li key={index}>
-                  <a href={link.url} target={link.url.startsWith('http') ? '_blank' : '_self'} rel="noopener noreferrer">
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        </div>
-
-        {/* Bottom Section */}
-        <div className="footer-bottom">
-          <motion.p
-            className="footer-copyright"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            © {new Date().getFullYear()} Durga Shankar • All rights reserved
-          </motion.p>
-
-          <div className="footer-legal">
-            <a href="#privacy">Privacy Policy</a>
-            <span className="separator">•</span>
-            <a href="#terms">Terms of Use</a>
-            <span className="separator">•</span>
-            <a href="#sitemap">Sitemap</a>
+        <motion.div
+          className="footer-statement"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: 'easeOut' }}
+        >
+          <h2 className="footer-name">DURGA SHANKAR<span className="footer-dot">.</span></h2>
+          <div className="footer-mantra">
+            <span>Designed.</span>
+            <span>Built.</span>
+            <span>Shipped.</span>
           </div>
+        </motion.div>
 
-          <motion.p
-            className="footer-tagline"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            CRAFTING DIGITAL EXCELLENCE
-          </motion.p>
-
-          <div className="footer-decorative-dot"></div>
+        <div className="footer-links-row">
+          <nav className="footer-nav" aria-label="Footer navigation">
+            {navigationLinks.map((link) => (
+              <a key={link.label} href={link.href}>{link.label}</a>
+            ))}
+          </nav>
+          <div className="footer-connect">
+            {connectLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.url}
+                target={link.url.startsWith('http') ? '_blank' : undefined}
+                rel={link.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
 
-        {/* Background Decorative Elements */}
-        <div className="footer-bg-elements">
-          <div className="bg-year">2025</div>
-          <div className="bg-copyright">©</div>
+        <div className="footer-bottom">
+          <p>© {new Date().getFullYear()} Durga Shankar. All rights reserved.</p>
+          <p className="footer-made">Built with React, Three.js & AI — from idea to production.</p>
         </div>
       </div>
     </footer>

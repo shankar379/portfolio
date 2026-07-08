@@ -1,105 +1,131 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  SiDjango,
-  SiReact,
-  SiThreedotjs,
-  SiUnrealengine,
-  SiAndroidstudio,
-  SiAmazonec2,
-  SiExpo,
-  SiFirebase
-} from 'react-icons/si';
-import { FaGithub } from 'react-icons/fa';
+  FiSmartphone,
+  FiGlobe,
+  FiServer,
+  FiCloud,
+  FiCpu,
+  FiBox
+} from 'react-icons/fi';
+import WaveLines from './WaveLines';
 import './Skills.css';
-import NodeCanvas from './NodeCanvas';
+
+const capabilities = [
+  {
+    icon: FiSmartphone,
+    title: 'Mobile Apps',
+    description:
+      'Production Android & iOS apps with React Native and Expo — payments, NFC, Bluetooth printing, QR check-in and biometric auth.',
+    tags: ['React Native', 'Expo', 'TypeScript']
+  },
+  {
+    icon: FiGlobe,
+    title: 'Web Platforms',
+    description:
+      'Responsive, high-performance web applications with modern component architectures and clean, fast interfaces.',
+    tags: ['React', 'Vite', 'Tailwind']
+  },
+  {
+    icon: FiServer,
+    title: 'Backend & APIs',
+    description:
+      'REST APIs, authentication and role-based access with realtime data — built to stay reliable under load.',
+    tags: ['Node.js', 'FastAPI', 'PostgreSQL']
+  },
+  {
+    icon: FiCloud,
+    title: 'Cloud & DevOps',
+    description:
+      'Deployment pipelines and cloud infrastructure — automated builds, releases and hosting that scale.',
+    tags: ['AWS', 'GitHub Actions', 'CI/CD']
+  },
+  {
+    icon: FiCpu,
+    title: 'AI-Powered Development',
+    description:
+      'AI woven into how I build — agentic coding workflows and LLM features integrated directly into products.',
+    tags: ['Claude Code', 'Cursor', 'Gemini API']
+  },
+  {
+    icon: FiBox,
+    title: '3D & Interactive',
+    description:
+      'Interactive WebGL experiences and 3D content — this portfolio runs a custom shader scene.',
+    tags: ['Three.js', 'Blender', 'WebGL']
+  }
+];
+
+const stack = [
+  'React Native',
+  'Expo',
+  'TypeScript',
+  'React',
+  'Node.js',
+  'FastAPI',
+  'Firebase',
+  'PostgreSQL',
+  'MongoDB',
+  'AWS',
+  'GitHub Actions',
+  'Three.js'
+];
 
 const Skills = () => {
-  const [hoveredSkill, setHoveredSkill] = useState(null);
-
-  const themeColor = '#ff6d00';
-
-  const allSkills = [
-    { name: 'React', icon: SiReact },
-    { name: 'Django', icon: SiDjango },
-    { name: 'Android Studio', icon: SiAndroidstudio },
-    { name: 'React Native + Expo', icon: SiExpo },
-    { name: 'GitHub', icon: FaGithub },
-    { name: 'Three.js', icon: SiThreedotjs },
-    { name: 'Unreal Engine', icon: SiUnrealengine },
-    { name: 'AWS EC2 + CI/CD', icon: SiAmazonec2 },
-    { name: 'Firebase', icon: SiFirebase }
-  ];
-
-
   return (
     <section id="skills" className="skills">
-      {/* Background Elements */}
-      <div className="skills-bg">
-        <div className="skills-grid-pattern"></div>
-        <div className="skills-glow skills-glow-1"></div>
-        <div className="skills-glow skills-glow-2"></div>
-      </div>
-
       <div className="skills-container">
-        {/* Header */}
         <motion.div
           className="skills-header"
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <h2 className="skills-title">Skills & Technologies</h2>
-          <p className="skills-subtitle">Tools and technologies I use to bring ideas to life</p>
+          <span className="skills-label">( 01 )&ensp;What I Build</span>
+          <h2 className="skills-title">Capabilities, <span className="skills-title-accent">not just skills.</span></h2>
         </motion.div>
 
-        {/* Skills Grid */}
-        <motion.div
-          className="skills-grid"
-          layout
-        >
-          {allSkills.map((skill, index) => {
-            const IconComponent = skill.icon;
-            const isHovered = hoveredSkill === skill.name;
-
+        <div className="skills-cards">
+          {capabilities.map((cap, index) => {
+            const Icon = cap.icon;
             return (
-              <motion.div
-                key={skill.name}
-                className={`skill-card ${isHovered ? 'hovered' : ''}`}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+              <motion.article
+                key={cap.title}
+                className="capability-card"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.05 }}
-                onMouseEnter={() => setHoveredSkill(skill.name)}
-                onMouseLeave={() => setHoveredSkill(null)}
-                layout
+                transition={{ duration: 0.5, delay: index * 0.06, ease: 'easeOut' }}
               >
-                <div className="skill-card-inner">
-                  <div
-                    className="skill-icon-wrapper"
-                    style={{
-                      boxShadow: isHovered ? `0 0 30px ${themeColor}40` : 'none'
-                    }}
-                  >
-                    <IconComponent
-                      className="skill-icon"
-                      style={{ color: themeColor }}
-                    />
-                  </div>
-                  <h3 className="skill-name">{skill.name}</h3>
+                <Icon className="capability-icon" aria-hidden="true" />
+                <h3 className="capability-title">{cap.title}</h3>
+                <p className="capability-description">{cap.description}</p>
+                <div className="capability-tags">
+                  {cap.tags.map((tag) => (
+                    <span key={tag} className="capability-tag">{tag}</span>
+                  ))}
                 </div>
-                <div
-                  className="skill-card-glow"
-                  style={{ background: `radial-gradient(circle, ${themeColor}20 0%, transparent 70%)` }}
-                />
-              </motion.div>
+              </motion.article>
             );
           })}
+        </div>
+
+        <motion.div
+          className="skills-stack"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <span className="skills-stack-label">Core stack</span>
+          <div className="skills-stack-list">
+            {stack.map((item) => (
+              <span key={item} className="skills-stack-item">{item}</span>
+            ))}
+          </div>
         </motion.div>
 
-        {/* Node Canvas Section */}
-        <NodeCanvas />
+        <WaveLines variant="divider" className="skills-stack-wave" />
       </div>
     </section>
   );

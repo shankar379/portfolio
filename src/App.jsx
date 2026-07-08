@@ -7,9 +7,12 @@ import Hero from './components/Hero';
 import About from './components/About';
 import Skills from './components/Skills';
 import Projects from './components/Projects';
+import Experience from './components/Experience';
 import Contact from './components/Contact';
 import SocialSidebar from './components/SocialSidebar';
 import Footer from './components/Footer';
+import MouseFollower from './components/MouseFollower';
+import LiveClock from './components/LiveClock';
 
 const ProjectDetail = lazy(() => import('./components/ProjectDetail'));
 
@@ -24,6 +27,7 @@ function HomePage() {
       <About />
       <Skills />
       <Projects />
+      <Experience />
       <Contact />
       <Footer />
     </div>
@@ -40,6 +44,8 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <MouseFollower />
+        <LiveClock />
         {isLoading && <Loader onLoadingComplete={handleLoadingComplete} />}
         <div style={{ visibility: isLoading ? 'hidden' : 'visible' }}>
           <Routes>

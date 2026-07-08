@@ -1,133 +1,139 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaUser, FaEnvelope, FaPaperPlane, FaPaperclip } from 'react-icons/fa';
+import { FiMail, FiGithub, FiLinkedin, FiFileText, FiArrowUpRight } from 'react-icons/fi';
+import WaveLines from './WaveLines';
 import './Contact.css';
 
+const EMAIL = 'durga369shankar@gmail.com';
+
+const quickLinks = [
+  { icon: FiMail, label: 'Email', href: `mailto:${EMAIL}` },
+  { icon: FiGithub, label: 'GitHub', href: 'https://github.com/shankar379' },
+  { icon: FiLinkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/durga-shankar-react-native-developer/' },
+  { icon: FiFileText, label: 'Resume', href: '/Profile.pdf' }
+];
+
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    message: ''
-  });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // No backend — compose the message in the visitor's email client.
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    alert('Message sent! I\'ll get back to you soon.');
-    setFormData({ firstName: '', lastName: '', email: '', message: '' });
+    const subject = encodeURIComponent(`Portfolio contact from ${formData.name || 'a visitor'}`);
+    const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name}\n${formData.email}`);
+    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
   };
 
   return (
     <section id="contact" className="contact">
+      <WaveLines variant="backdrop" />
       <div className="contact-container">
         <motion.div
-          className="contact-form-section"
-          initial={{ opacity: 0, y: 30 }}
+          className="contact-header"
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <div className="contact-header">
-            <h2 className="contact-title">
-              Let&apos;s work together.
-              <span className="title-dot"></span>
-            </h2>
-            <p className="contact-subtitle">
-              Or reach us via: <a href="mailto:durga369shankar@gmail.com">durga369shankar@gmail.com</a>
-            </p>
-          </div>
-
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="firstName">First name</label>
-                <div className="input-wrapper">
-                  <input
-                    type="text"
-                    id="firstName"
-                    name="firstName"
-                    autoComplete="given-name"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    placeholder="Your first name"
-                    className="form-input"
-                  />
-                  <FaUser className="input-icon" />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="lastName">Last name</label>
-                <div className="input-wrapper">
-                  <input
-                    type="text"
-                    id="lastName"
-                    name="lastName"
-                    autoComplete="family-name"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    placeholder="Your last name"
-                    className="form-input"
-                  />
-                  <FaUser className="input-icon" />
-                </div>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <div className="input-wrapper">
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  autoComplete="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="your.email@example.com"
-                  className="form-input"
-                  required
-                />
-                <FaEnvelope className="input-icon email-icon" />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="message">Message</label>
-              <div className="input-wrapper">
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder="Your message here..."
-                  className="form-textarea"
-                  rows="5"
-                  required
-                ></textarea>
-                <FaPaperPlane className="input-icon message-icon" />
-              </div>
-            </div>
-
-            <div className="form-actions">
-              <button type="button" className="btn-attachment">
-                <FaPaperclip className="btn-icon" />
-                Add attachment
-              </button>
-              <button type="submit" className="btn-send">
-                Send message
-              </button>
-            </div>
-          </form>
+          <span className="contact-label">( 04 )&ensp;Connect</span>
+          <h2 className="contact-title">
+            Let&apos;s build something <span className="contact-title-accent">meaningful.</span>
+          </h2>
+          <p className="contact-subtitle">
+            Have an idea, a role, or a product that needs shipping? I&apos;m open to work.
+          </p>
         </motion.div>
+
+        <div className="contact-body">
+          <motion.form
+            className="contact-form"
+            onSubmit={handleSubmit}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+          >
+            <div className="contact-field">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                autoComplete="name"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="Your name"
+              />
+            </div>
+
+            <div className="contact-field">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                autoComplete="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="your.email@example.com"
+                required
+              />
+            </div>
+
+            <div className="contact-field">
+              <label htmlFor="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="5"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Tell me about your project…"
+                required
+              />
+            </div>
+
+            <button type="submit" className="contact-send">
+              Send message <FiArrowUpRight aria-hidden="true" />
+            </button>
+          </motion.form>
+
+          <motion.div
+            className="contact-links"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+          >
+            {quickLinks.map((link) => {
+              const Icon = link.icon;
+              const external = link.href.startsWith('http');
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="contact-link"
+                  target={external ? '_blank' : undefined}
+                  rel={external ? 'noopener noreferrer' : undefined}
+                  download={link.label === 'Resume' ? 'Durga_Shankar_Resume.pdf' : undefined}
+                >
+                  <span className="contact-link-icon"><Icon aria-hidden="true" /></span>
+                  <span className="contact-link-label">{link.label}</span>
+                  <FiArrowUpRight className="contact-link-arrow" aria-hidden="true" />
+                </a>
+              );
+            })}
+            <div className="contact-location">
+              <span className="contact-location-label">Location</span>
+              <span className="contact-location-value">Hyderabad, India</span>
+              <span className="contact-location-note">Remote friendly</span>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

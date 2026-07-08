@@ -1,110 +1,92 @@
-import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import WaveLines from './WaveLines';
 import './Experience.css';
 
+const milestones = [
+  {
+    period: 'Jun 2025 — Present',
+    title: 'React Native Developer',
+    place: 'Elevents Metaestate Pvt Ltd, Hyderabad',
+    detail:
+      '7 white-label app flavors shipped from one codebase — Tickets99, EventTitans, Poultry India and more. 35+ screens, 100+ reusable components, payments, NFC, Bluetooth printing and biometric auth on Google Play and the App Store.'
+  },
+  {
+    period: 'Aug 2023 — May 2025',
+    title: 'Freelance Full Stack Developer',
+    place: 'Remote',
+    detail:
+      'Full-stack applications with React, Node.js, Express, Firebase and MongoDB — RESTful APIs, authentication, role-based access, deployment and cloud hosting.'
+  },
+  {
+    period: '2021 — 2025',
+    title: 'B.Tech, Computer Science & Engineering',
+    place: 'Rajamahendri Institute of Engineering & Technology (JNTUK)',
+    detail:
+      'Deep learning, Django with machine learning, and cloud-based DevOps certifications alongside the degree.'
+  }
+];
+
 const Experience = () => {
-  const [particles, setParticles] = useState([]);
-
-  useEffect(() => {
-    // Generate random particles
-    const generateParticles = () => {
-      const newParticles = [];
-      for (let i = 0; i < 8; i++) {
-        newParticles.push({
-          id: i,
-          x: Math.random() * 20 + 5,
-          y: Math.random() * 30 + 10,
-          size: Math.random() * 6 + 3,
-          delay: Math.random() * 2
-        });
-      }
-      setParticles(newParticles);
-    };
-    generateParticles();
-  }, []);
-
   return (
-    <section id="experience" className="experience-dropping">
-      {/* Background gradient */}
-      <div className="dropping-bg"></div>
-      
-      {/* Floating particles */}
-      <div className="particles-container">
-        {particles.map((particle) => (
-          <motion.div
-            key={particle.id}
-            className="particle"
-            style={{
-              left: `${particle.x}%`,
-              top: `${particle.y}%`,
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
-            }}
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0.4, 1, 0.4],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              delay: particle.delay,
-              ease: "easeInOut"
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Decorative pink circle */}
-      <motion.div 
-        className="pink-circle"
-        animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.6, 0.8, 0.6],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-
-      {/* Main frame */}
-      <div className="dropping-frame">
-        {/* Corner brackets */}
-        <div className="corner corner-tl"></div>
-        <div className="corner corner-tr"></div>
-        <div className="corner corner-bl"></div>
-        <div className="corner corner-br"></div>
-
-        {/* Directional arrows */}
-        <div className="arrow arrow-top">↓</div>
-        <div className="arrow arrow-bottom">↑</div>
-        <div className="arrow arrow-left">→</div>
-        <div className="arrow arrow-right">←</div>
-
-        {/* Main text */}
+    <section id="experience" className="experience">
+      <div className="experience-container">
+        <WaveLines variant="divider" className="experience-wave" />
         <motion.div
-          className="dropping-content"
-          initial={{ opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          className="experience-header"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <h2 className="dropping-title">
-            <span className="title-line">DROPPING</span>
-            <span className="title-line">SOON</span>
-          </h2>
+          <span className="experience-label">( 03 )&ensp;Trajectory</span>
+          <h2 className="experience-title">Experience & <span className="experience-title-accent">milestones.</span></h2>
+        </motion.div>
 
-          {/* Progress bar */}
-          <div className="progress-container">
-            <div className="progress-line"></div>
-            <div className="progress-dots">
-              <span className="dot"></span>
-              <span className="dot"></span>
-              <span className="dot active"></span>
-              <span className="dot"></span>
-              <span className="dot"></span>
+        <div className="experience-timeline">
+          {milestones.map((m, index) => (
+            <motion.div
+              key={m.title}
+              className="experience-item"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1, ease: 'easeOut' }}
+            >
+              <div className="experience-item-marker" aria-hidden="true" />
+              <span className="experience-item-period">{m.period}</span>
+              <h3 className="experience-item-title">{m.title}</h3>
+              <p className="experience-item-place">{m.place}</p>
+              <p className="experience-item-detail">{m.detail}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          className="currently-building"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <div className="currently-building-info">
+            <span className="currently-building-label">( ● )&ensp;On the Bench</span>
+            <h3 className="currently-building-title">
+              Currently building <span className="currently-building-name">MediVoice</span>
+            </h3>
+            <p className="currently-building-description">
+              A multi-role medicine reminder & assistance platform for patients, sellers and
+              doctors — TTS voice alerts, missed-dose escalation through SMS and automated
+              calls, and an AI chat assistant with persistent history.
+            </p>
+            <div className="currently-building-tech">
+              {['React Native', 'Next.js', 'Node.js', 'MongoDB', 'Twilio', 'Gemini'].map((t) => (
+                <span key={t} className="currently-building-chip">{t}</span>
+              ))}
             </div>
+          </div>
+          <div className="currently-building-status">
+            <span className="status-pulse" aria-hidden="true" />
+            <span className="status-text">Active Development</span>
           </div>
         </motion.div>
       </div>

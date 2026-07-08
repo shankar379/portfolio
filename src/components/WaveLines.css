@@ -1,0 +1,38 @@
+.wave-lines {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+}
+
+.wave-lines--divider {
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Sits flush under the Core stack row, same content width */
+.skills-stack-wave {
+  margin-top: 0.25rem;
+}
+
+.experience-wave {
+  margin-bottom: 3rem;
+}
+
+.wave-lines--footer {
+  max-width: 1280px;
+  margin: 0 auto 3rem;
+}
+
+.wave-lines--strip {
+  max-width: 620px;
+  margin: 0 0 2rem;
+}
+
+.wave-lines--backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}

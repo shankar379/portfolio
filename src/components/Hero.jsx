@@ -1,30 +1,21 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
+import { FiArrowDown, FiDownload } from 'react-icons/fi';
 import ErrorBoundary from './ErrorBoundary';
 import './Hero.css';
 
 const LazyOrangeRibbon = lazy(() => import('./OrangeRibbonBackground'));
 
+const practice = [
+  'React Native · Android & iOS',
+  'Payments · NFC · Bluetooth',
+  'Web, Backend & Cloud',
+  'AI-Powered Development'
+];
+
 const Hero = () => {
-  const [typedText, setTypedText] = useState('');
   const [showBg, setShowBg] = useState(false);
   const sectionRef = useRef(null);
-  const fullText = "Welcome To My Space: Where Code Comes To Life.";
-  const roles = ["BUILDING", "EVOLVING", "SHIPPING"];
-
-  useEffect(() => {
-    let index = 0;
-    const typingInterval = setInterval(() => {
-      if (index < fullText.length) {
-        setTypedText(fullText.slice(0, index + 1));
-        index++;
-      } else {
-        clearInterval(typingInterval);
-      }
-    }, 50);
-
-    return () => clearInterval(typingInterval);
-  }, []);
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -49,57 +40,74 @@ const Hero = () => {
       ) : (
         <div className="orange-ribbon-background" />
       )}
-      
-      {/* Main Hero Content */}
+
       <div className="hero-content">
-        <div className="hero-layout">
-          <motion.div
-            className="hero-text-container"
-            initial={{ opacity: 0, y: 30 }}
+        <motion.p
+          className="hero-status"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+        >
+          <span className="hero-status-dot" aria-hidden="true" />
+          React Native Developer&ensp;·&ensp;Android & iOS&ensp;·&ensp;AI-Powered Development&ensp;·&ensp;Open to Work
+        </motion.p>
+
+        <h1 className="hero-statement">
+          <motion.span
+            className="hero-statement-line"
+            initial={{ opacity: 0, y: 60 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.2, 0, 0.2, 1] }}
           >
-            <p className="hero-greeting">Hi I&apos;m</p>
-            <h1 className="hero-name">
-              <span className="hero-name-first">DURGA</span>{' '}
-              <span className="hero-name-last">SHANKAR</span>
-            </h1>
-            
-            <div className="hero-roles">
-              {roles.map((role, index) => (
-                <motion.span
-                  key={index}
-                  className="role-item"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1 + index * 0.2 }}
-                >
-                  {role}
-                </motion.span>
+            LIMITLESS
+          </motion.span>
+          <motion.span
+            className="hero-statement-line hero-statement-accent"
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease: [0.2, 0, 0.2, 1] }}
+          >
+            CREATION.
+          </motion.span>
+        </h1>
+
+        <motion.div
+          className="hero-grid"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.55, ease: 'easeOut' }}
+        >
+          <div className="hero-practice">
+            <span className="hero-practice-label">/ Practice</span>
+            <ul className="hero-practice-list">
+              {practice.map((item) => (
+                <li key={item}>{item}</li>
               ))}
+            </ul>
+          </div>
+
+          <div className="hero-intro">
+            <p className="hero-intro-text">
+              I&apos;m <span className="hero-intro-name">Durga Shankar</span> — React Native
+              developer shipping multi-flavor production apps on Google Play & the App Store,
+              backed by web, cloud and AI. Every idea taken{' '}
+              <span className="hero-intro-accent">from concept to production</span>.
+            </p>
+            <div className="hero-ctas">
+              <a href="#projects" className="hero-cta hero-cta--primary">
+                Selected Work <FiArrowDown aria-hidden="true" />
+              </a>
+              <a
+                href="/Profile.pdf"
+                download="Durga_Shankar_Resume.pdf"
+                className="hero-cta hero-cta--secondary"
+              >
+                Résumé <FiDownload aria-hidden="true" />
+              </a>
             </div>
-
-            <motion.p
-              className="hero-description"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.5 }}
-            >
-              {typedText}
-              <span className="cursor">|</span>
-            </motion.p>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
-
-      <a
-        href="/Profile.pdf"
-        download="Durga_Shankar_ATS_Resume.pdf"
-        className="hero-resume-stick"
-        aria-label="Download resume"
-      >
-        RESUME
-      </a>
     </section>
   );
 };

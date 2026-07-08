@@ -11,9 +11,28 @@
 
 .social-sidebar-icon {
   font-size: 1.5rem;
-  transition: all 0.3s ease;
+  transition: color 0.35s ease, transform 0.3s ease, filter 0.35s ease;
   cursor: pointer;
+}
+
+/* Per-icon theme — black on light sections, orange on accent sections;
+   hover swaps to the opposite color of the pair. */
+.social-sidebar-icon[data-theme='black'] {
+  color: #111111;
+  filter: drop-shadow(0 2px 4px rgba(17, 17, 17, 0.2));
+}
+
+.social-sidebar-icon[data-theme='black']:hover {
+  color: #ff6d00;
+}
+
+.social-sidebar-icon[data-theme='orange'] {
+  color: #ff6d00;
   filter: drop-shadow(0 2px 4px rgba(255, 109, 0, 0.3));
+}
+
+.social-sidebar-icon[data-theme='orange']:hover {
+  color: #111111;
 }
 
 .social-sidebar-icon:hover {

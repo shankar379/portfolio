@@ -1,0 +1,43 @@
+.mouse-follower-dot,
+.mouse-follower-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 9999;
+  opacity: 0;
+  will-change: transform;
+}
+
+.mouse-follower-dot {
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  background: #ff6d00;
+  transition: opacity 0.3s ease;
+}
+
+.mouse-follower-ring {
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  border: 1.5px solid rgba(255, 109, 0, 0.55);
+  transition: opacity 0.3s ease, width 0.35s ease, height 0.35s ease,
+    margin 0.35s ease, border-color 0.35s ease, background-color 0.35s ease;
+}
+
+.mouse-follower-ring.is-active {
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  border-color: rgba(255, 109, 0, 0.9);
+  background: rgba(255, 109, 0, 0.06);
+}
+
+@media (hover: none), (pointer: coarse) {
+  .mouse-follower-dot,
+  .mouse-follower-ring {
+    display: none;
+  }
+}

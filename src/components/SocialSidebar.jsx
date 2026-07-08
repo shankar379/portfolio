@@ -1,11 +1,12 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FaLinkedin, FaGithub, FaDribbble, FaYoutube, FaInstagram } from 'react-icons/fa';
 import './SocialSidebar.css';
 
-// Sections whose backdrop is dark/colorful → white icons; the rest → orange.
-const WHITE_SECTIONS = new Set(['home', 'skills', 'projects']);
-const SECTION_IDS = ['home', 'about', 'skills', 'projects', 'contact'];
+// Icons alternate black / orange — each icon tracks the section under
+// its own position, so colors flip one by one as boundaries cross them.
+const BLACK_SECTIONS = new Set(['home', 'skills', 'projects']);
+const SECTION_IDS = ['home', 'about', 'skills', 'projects', 'experience', 'contact'];
 
 const socialLinks = [
   { icon: FaLinkedin, url: 'https://www.linkedin.com/in/durga-shankar-react-native-developer/', name: 'LinkedIn' },
@@ -16,57 +17,72 @@ const socialLinks = [
 ];
 
 const SocialSidebar = () => {
-  const [iconColor, setIconColor] = useState('#ffffff');
   const [shouldHide, setShouldHide] = useState(false);
+  const iconRefs = useRef([]);
 
+  // Hide the rail once Contact is ≥30% in view.
+  useEffect(() => {
+    const contact = document.getElementById('contact');
+    if (!contact) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShouldHide(entry.isIntersecting && entry.intersectionRatio >= 0.3),
+      { threshold: [0, 0.3] }
+    );
+    observer.observe(contact);
+    return () => observer.disconnect();
+  }, []);
+
+  // Per-icon color: on scroll, find which section sits under each icon's
+  // own center Y and theme that icon alone. rAF-throttled; styles are
+  // mutated directly so nothing re-renders during scroll.
   useEffect(() => {
     const sections = SECTION_IDS
       .map((id) => document.getElementById(id))
       .filter(Boolean);
     if (!sections.length) return;
 
-    // IntersectionObserver reports visual position even under Locomotive's
-    // transform, so we never touch getBoundingClientRect during scroll — zero
-    // forced reflows, zero per-frame setState. Colour follows the most-visible
-    // section; the sidebar hides once Contact is ≥30% in view.
-    const ratios = new Map(SECTION_IDS.map((id) => [id, 0]));
+    let raf = 0;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          ratios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
-          if (entry.target.id === 'contact') {
-            setShouldHide(entry.isIntersecting && entry.intersectionRatio >= 0.3);
+    const applyColors = () => {
+      raf = 0;
+      const ranges = sections.map((el) => {
+        const rect = el.getBoundingClientRect();
+        return { id: el.id, top: rect.top, bottom: rect.bottom };
+      });
+
+      for (const el of iconRefs.current) {
+        if (!el) continue;
+        const iconRect = el.getBoundingClientRect();
+        const y = iconRect.top + iconRect.height / 2;
+        // Which section is under this icon right now?
+        let sectionId = null;
+        for (const r of ranges) {
+          if (y >= r.top && y < r.bottom) {
+            sectionId = r.id;
+            break;
           }
         }
-
-        let activeId = 'home';
-        let best = -1;
-        for (const id of SECTION_IDS) {
-          const r = ratios.get(id) ?? 0;
-          if (r > best) {
-            best = r;
-            activeId = id;
-          }
+        if (!sectionId) continue; // between sections (footer etc.) — keep last color
+        const theme = BLACK_SECTIONS.has(sectionId) ? 'black' : 'orange';
+        if (el.dataset.theme !== theme) {
+          el.dataset.theme = theme;
         }
+      }
+    };
 
-        setIconColor((prev) => {
-          const next = WHITE_SECTIONS.has(activeId) ? '#ffffff' : '#ff6d00';
-          return prev === next ? prev : next;
-        });
-      },
-      { threshold: [0, 0.25, 0.3, 0.5, 0.75, 1] }
-    );
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(applyColors);
+    };
 
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    applyColors();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
   }, []);
-
-  const hoverColor = iconColor === '#ffffff' ? '#ffffff' : '#ff4800';
-  const iconFilter =
-    iconColor === '#ffffff'
-      ? 'drop-shadow(0 2px 4px rgba(255, 255, 255, 0.5))'
-      : 'drop-shadow(0 2px 4px rgba(255, 109, 0, 0.3))';
 
   return (
     <motion.div
@@ -76,16 +92,18 @@ const SocialSidebar = () => {
     >
       {socialLinks.map((social, index) => (
         <motion.a
-          key={index}
+          key={social.name}
+          ref={(el) => { iconRefs.current[index] = el; }}
           href={social.url}
           target="_blank"
           rel="noopener noreferrer"
           className="social-sidebar-icon"
+          data-theme="black"
+          aria-label={social.name}
           initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0, color: iconColor, filter: iconFilter }}
-          transition={{ delay: index * 0.1, color: { duration: 0.3 }, filter: { duration: 0.3 } }}
-          whileHover={{ scale: 1.2, color: hoverColor }}
-          style={{ color: iconColor, filter: iconFilter }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: index * 0.1 }}
+          whileHover={{ scale: 1.2 }}
         >
           <social.icon />
         </motion.a>
