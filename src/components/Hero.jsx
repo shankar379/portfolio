@@ -74,8 +74,8 @@ const Hero = () => {
         >
           <p className="hero-intro-text">
             I&apos;m <span className="hero-intro-name">Durga Shankar</span> —<br />
-            every idea taken<br />
-            <span className="hero-intro-accent">from concept to production</span>.
+            I build React Native apps<br />
+            that <span className="hero-intro-accent">ship to both stores</span>.
           </p>
           <div className="hero-ctas">
             <a href="#projects" className="hero-cta hero-cta--primary">

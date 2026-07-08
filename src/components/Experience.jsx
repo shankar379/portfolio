@@ -61,6 +61,8 @@ const Experience = () => {
           ))}
         </div>
 
+        {/* Currently Building — hidden for now, will be shown in the future */}
+        {false && (
         <motion.div
           className="currently-building"
           initial={{ opacity: 0, y: 24 }}
@@ -89,6 +91,7 @@ const Experience = () => {
             <span className="status-text">Active Development</span>
           </div>
         </motion.div>
+        )}
       </div>
     </section>
   );

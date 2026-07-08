@@ -20,7 +20,7 @@ const connectLinks = [
 const Footer = () => {
   return (
     <footer className="footer">
-      <WaveLines variant="footer" />
+      <WaveLines variant="backdrop" className="footer-backdrop" />
       <div className="footer-container">
         <motion.div
           className="footer-statement"

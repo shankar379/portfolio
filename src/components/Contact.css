@@ -1,6 +1,6 @@
 .contact {
   background: #fafafa;
-  padding: 10rem 3rem;
+  padding: 5.5rem 3rem 5rem;
   position: relative;
   overflow: hidden;
 }
@@ -8,12 +8,10 @@
 .contact-container {
   max-width: 1280px;
   margin: 0 auto;
-  position: relative;
-  z-index: 1;
 }
 
 .contact-header {
-  margin-bottom: 5rem;
+  margin-bottom: 3rem;
 }
 
 .contact-label {
@@ -34,7 +32,7 @@
   line-height: 1.1;
   color: #111111;
   max-width: 900px;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .contact-title-accent {
@@ -48,183 +46,116 @@
   max-width: 560px;
 }
 
-.contact-body {
-  display: grid;
-  grid-template-columns: 7fr 4fr;
-  gap: 6rem;
-  align-items: start;
-}
-
-/* Form */
-.contact-form {
-  display: flex;
-  flex-direction: column;
-  gap: 2.25rem;
-}
-
-.contact-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.contact-field label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #6b7280;
-}
-
-.contact-field input,
-.contact-field textarea {
-  border: none;
-  border-bottom: 1px solid rgba(17, 17, 17, 0.15);
-  background: transparent;
-  padding: 0.75rem 0;
-  font-size: 1.05rem;
-  font-family: 'Outfit', sans-serif;
-  color: #111111;
-  outline: none;
-  resize: vertical;
-  transition: border-color 0.3s ease;
-}
-
-.contact-field input::placeholder,
-.contact-field textarea::placeholder {
-  color: #b0b4bc;
-}
-
-.contact-field input:focus,
-.contact-field textarea:focus {
-  border-bottom-color: #ff6d00;
-}
-
-.contact-send {
-  align-self: flex-start;
+/* The one conversion point — a giant email link */
+.contact-email-cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  background: #ff6d00;
-  color: #ffffff;
-  border: 1px solid #ff6d00;
-  border-radius: 999px;
-  padding: 1rem 2.5rem;
-  font-size: 0.82rem;
+  gap: 0.75rem;
+  font-size: clamp(1.4rem, 3.2vw, 2.6rem);
   font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.contact-send:hover {
-  background: #111111;
-  border-color: #111111;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(17, 17, 17, 0.12);
-}
-
-/* Quick links */
-.contact-links {
-  display: flex;
-  flex-direction: column;
-}
-
-.contact-link {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.4rem 0;
-  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+  letter-spacing: -0.02em;
+  color: #111111;
   text-decoration: none;
-  transition: padding-left 0.35s cubic-bezier(0.2, 0, 0.2, 1);
+  border-bottom: 3px solid #ff6d00;
+  padding-bottom: 0.35rem;
+  margin-bottom: 4rem;
+  transition: color 0.3s ease;
 }
 
-.contact-link:first-child {
-  border-top: 1px solid rgba(17, 17, 17, 0.08);
-}
-
-.contact-link:hover {
-  padding-left: 0.75rem;
-}
-
-.contact-link-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 42px;
-  height: 42px;
-  border: 1px solid rgba(255, 109, 0, 0.35);
-  border-radius: 50%;
+.contact-email-cta:hover {
   color: #ff6d00;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
 }
 
-.contact-link:hover .contact-link-icon {
-  background: #ff6d00;
-  color: #ffffff;
-  border-color: #ff6d00;
-}
-
-.contact-link-label {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #111111;
-  flex: 1;
-}
-
-.contact-link-arrow {
+.contact-email-arrow {
   color: #ff6d00;
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transform: translate(-4px, 4px);
+  transition: transform 0.3s ease;
 }
 
-.contact-link:hover .contact-link-arrow {
-  opacity: 1;
-  transform: translate(0, 0);
+.contact-email-cta:hover .contact-email-arrow {
+  transform: translate(4px, -4px);
 }
 
-.contact-location {
-  margin-top: 2.5rem;
+/* Link grid — thin rule, mono headers */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  border-top: 1px solid rgba(17, 17, 17, 0.1);
+  padding-top: 2.5rem;
+}
+
+.contact-col {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.7rem;
 }
 
-.contact-location-label {
-  font-size: 0.72rem;
-  font-weight: 700;
+.contact-col--right {
+  text-align: right;
+}
+
+.contact-col-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: #6b7280;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.5rem;
 }
 
-.contact-location-value {
-  font-size: 1rem;
+.contact-col-link {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111111;
+  text-decoration: none;
+  width: fit-content;
+  transition: color 0.3s ease;
+}
+
+.contact-col--right .contact-col-link {
+  align-self: flex-end;
+}
+
+.contact-col-link:hover {
+  color: #ff6d00;
+}
+
+.contact-col-text {
+  font-size: 0.95rem;
   font-weight: 600;
   color: #111111;
 }
 
-.contact-location-note {
-  font-size: 0.85rem;
+.contact-col-text--muted {
   color: #6b7280;
+  font-weight: 400;
 }
 
 @media (max-width: 968px) {
   .contact {
-    padding: 6rem 1.5rem;
+    padding: 4.5rem 1.5rem 3.5rem;
   }
 
   .contact-header {
-    margin-bottom: 3.5rem;
+    margin-bottom: 2.5rem;
   }
 
-  .contact-body {
-    grid-template-columns: 1fr;
-    gap: 4rem;
+  .contact-email-cta {
+    font-size: clamp(1.05rem, 4.5vw, 1.5rem);
+    margin-bottom: 3rem;
+  }
+
+  .contact-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem 1.5rem;
+  }
+
+  .contact-col--right {
+    text-align: left;
+  }
+
+  .contact-col--right .contact-col-link {
+    align-self: flex-start;
   }
 }

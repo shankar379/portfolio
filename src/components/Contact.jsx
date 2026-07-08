@@ -1,36 +1,38 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { FiMail, FiGithub, FiLinkedin, FiFileText, FiArrowUpRight } from 'react-icons/fi';
-import WaveLines from './WaveLines';
+import { FiArrowUpRight } from 'react-icons/fi';
 import './Contact.css';
 
 const EMAIL = 'durga369shankar@gmail.com';
 
-const quickLinks = [
-  { icon: FiMail, label: 'Email', href: `mailto:${EMAIL}` },
-  { icon: FiGithub, label: 'GitHub', href: 'https://github.com/shankar379' },
-  { icon: FiLinkedin, label: 'LinkedIn', href: 'https://www.linkedin.com/in/durga-shankar-react-native-developer/' },
-  { icon: FiFileText, label: 'Resume', href: '/Profile.pdf' }
+const columns = [
+  {
+    title: 'Connect',
+    links: [
+      { label: 'GitHub', href: 'https://github.com/shankar379' },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/durga-shankar-react-native-developer/' },
+      { label: 'YouTube', href: 'https://www.youtube.com/@CodeAndCreate369' }
+    ]
+  },
+  {
+    title: 'Contact',
+    links: [
+      { label: EMAIL, href: `mailto:${EMAIL}` },
+      { label: '+91 63034 49205', href: 'tel:+916303449205' }
+    ]
+  },
+  {
+    title: 'Resources',
+    links: [
+      { label: 'Résumé', href: '/Profile.pdf', download: 'Durga_Shankar_Resume.pdf' },
+      { label: 'Selected Work', href: '#projects' }
+    ]
+  }
 ];
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  // No backend — compose the message in the visitor's email client.
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const subject = encodeURIComponent(`Portfolio contact from ${formData.name || 'a visitor'}`);
-    const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name}\n${formData.email}`);
-    window.location.href = `mailto:${EMAIL}?subject=${subject}&body=${body}`;
-  };
-
   return (
     <section id="contact" className="contact">
-      <WaveLines variant="backdrop" />
       <div className="contact-container">
         <motion.div
           className="contact-header"
@@ -48,92 +50,51 @@ const Contact = () => {
           </p>
         </motion.div>
 
-        <div className="contact-body">
-          <motion.form
-            className="contact-form"
-            onSubmit={handleSubmit}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
-          >
-            <div className="contact-field">
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                autoComplete="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Your name"
-              />
-            </div>
+        <motion.a
+          className="contact-email-cta"
+          href={`mailto:${EMAIL}`}
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+        >
+          {EMAIL}
+          <FiArrowUpRight className="contact-email-arrow" aria-hidden="true" />
+        </motion.a>
 
-            <div className="contact-field">
-              <label htmlFor="email">Email</label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                autoComplete="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="your.email@example.com"
-                required
-              />
+        <motion.div
+          className="contact-grid"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+        >
+          {columns.map((col) => (
+            <div className="contact-col" key={col.title}>
+              <h3 className="contact-col-title">{col.title}</h3>
+              {col.links.map((link) => {
+                const external = link.href.startsWith('http');
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className="contact-col-link"
+                    target={external ? '_blank' : undefined}
+                    rel={external ? 'noopener noreferrer' : undefined}
+                    download={link.download}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
             </div>
-
-            <div className="contact-field">
-              <label htmlFor="message">Message</label>
-              <textarea
-                id="message"
-                name="message"
-                rows="5"
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Tell me about your project…"
-                required
-              />
-            </div>
-
-            <button type="submit" className="contact-send">
-              Send message <FiArrowUpRight aria-hidden="true" />
-            </button>
-          </motion.form>
-
-          <motion.div
-            className="contact-links"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
-          >
-            {quickLinks.map((link) => {
-              const Icon = link.icon;
-              const external = link.href.startsWith('http');
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="contact-link"
-                  target={external ? '_blank' : undefined}
-                  rel={external ? 'noopener noreferrer' : undefined}
-                  download={link.label === 'Resume' ? 'Durga_Shankar_Resume.pdf' : undefined}
-                >
-                  <span className="contact-link-icon"><Icon aria-hidden="true" /></span>
-                  <span className="contact-link-label">{link.label}</span>
-                  <FiArrowUpRight className="contact-link-arrow" aria-hidden="true" />
-                </a>
-              );
-            })}
-            <div className="contact-location">
-              <span className="contact-location-label">Location</span>
-              <span className="contact-location-value">Hyderabad, India</span>
-              <span className="contact-location-note">Remote friendly</span>
-            </div>
-          </motion.div>
-        </div>
+          ))}
+          <div className="contact-col contact-col--right">
+            <h3 className="contact-col-title">Location</h3>
+            <span className="contact-col-text">Hyderabad, India</span>
+            <span className="contact-col-text contact-col-text--muted">Remote friendly</span>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
