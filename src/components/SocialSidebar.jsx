@@ -13,7 +13,7 @@ const socialLinks = [
   { icon: FaGithub, url: 'https://github.com/shankar379/', name: 'GitHub' },
   { icon: FaDribbble, url: 'https://dribbble.com/Durgashankar3616', name: 'Dribbble' },
   { icon: FaYoutube, url: 'https://www.youtube.com/@CodeAndCreate369', name: 'YouTube' },
-  { icon: FaInstagram, url: 'https://www.instagram.com/nine_tale_fox369/', name: 'Instagram' },
+  { icon: FaInstagram, url: 'https://www.instagram.com/mr.durga_shankar09/', name: 'Instagram' },
 ];
 
 const SocialSidebar = () => {
