@@ -84,7 +84,7 @@ export default function WatchScene({ progress, activeIndex, skills, reducedMotio
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(32, 1, .001, 10);
     // High three-quarter angle keeps the skill display legible while showing the raised mechanism.
-    camera.position.set(.075, .15, .12); camera.lookAt(0, .018, 0);
+    camera.position.set(0, .188, .07); camera.lookAt(0, .018, 0);
     const pmrem = new THREE.PMREMGenerator(renderer);
     const room = new RoomEnvironment();
     const environment = pmrem.fromScene(room, .04);
@@ -117,7 +117,7 @@ export default function WatchScene({ progress, activeIndex, skills, reducedMotio
       const width = container.clientWidth, height = container.clientHeight;
       if (!width || !height) return;
       renderer.setSize(width, height, false); camera.aspect = width / height;
-      camera.position.set(.075, .15, .12).multiplyScalar(camera.aspect < 1 ? 1.12 : 1);
+      camera.position.set(0, .188, .07).multiplyScalar(camera.aspect < 1 ? 1.12 : 1);
       camera.lookAt(0, .018, 0); camera.updateProjectionMatrix(); dirty = true; wake();
     };
     const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(container);
@@ -155,7 +155,7 @@ export default function WatchScene({ progress, activeIndex, skills, reducedMotio
       if (model) {
         lift.position.y = baseLift + .4 * activation;
         rotor.rotation.y = input.reducedMotion ? rotationTo : THREE.MathUtils.lerp(rotationFrom, rotationTo, ease(turning));
-        model.rotation.y = -.24;
+        model.rotation.y = 0;
         const press = input.reducedMotion ? 0 : Math.max(0, 1 - (now - pulseStart) / .23) * .045;
         for (const { object, x } of buttons) object.position.x = x - Math.sign(x) * press;
         if (dirty || turning < 1 || activation !== previousActivation) {
