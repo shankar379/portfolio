@@ -24,7 +24,7 @@ function useMediaQuery(media) {
   return reduced;
 }
 const SOUND_URLS = {
-  activate: `${import.meta.env.BASE_URL}sounds/watch-activate.mp3`,
+  activate: `${import.meta.env.BASE_URL}sounds/watch-activate-v2.mp3`,
   turn: `${import.meta.env.BASE_URL}sounds/watch-turn.mp3`,
   deactivate: `${import.meta.env.BASE_URL}sounds/watch-deactivate.mp3`,
 };
