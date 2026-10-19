@@ -154,17 +154,17 @@ export default function Skills() {
   return (
     <section id="skills" className={`skills${directMode ? ' skills--direct' : ''}`} aria-labelledby="skills-heading">
       <header className="skills-header">
-        <span className="skills-label">( 01 ) &nbsp; The toolkit</span>
+        <span className="skills-label">( 01 ) &nbsp; The arsenal</span>
         <div className="skills-heading-row">
-          <h2 id="skills-heading">Built different.<br /><span>One skill at a time.</span></h2>
-          <p>Different challenges. The right tools.<br />Explore the stack behind what I build.</p>
+          <h2 id="skills-heading">One builder.<br /><span>Ten forms.</span></h2>
+          <p>Every problem needs a different hero.<br />I pick the right power, transform, and build.</p>
         </div>
       </header>
       <div className="skills-scroll-track" ref={track}>
         <div className="skills-sticky">
           <div className="skills-watch-stage" aria-label="Interactive skill watch">
             <div className="skills-stage-top">
-              <span className="skills-device-label"><i className={activated ? 'is-active' : ''} /> SKILL SELECTOR</span>
+              <span className="skills-device-label"><i className={activated ? 'is-active' : ''} /> ABILITY DIAL</span>
               <button className="skills-sound" onClick={toggleSound} aria-pressed={soundEnabled} aria-label={soundEnabled ? 'Mute watch sounds' : 'Enable watch sounds'}>
                 {soundEnabled ? <FiVolume2 /> : <FiVolumeX />}<span>Sound {soundEnabled ? 'on' : 'off'}</span>
               </button>
@@ -173,25 +173,25 @@ export default function Skills() {
             {nearby && !failed && <SceneBoundary onError={sceneFailed}><Suspense fallback={null}>
               <WatchScene progress={directMode ? (activated ? 1 : 0) : progress} activeIndex={activeIndex} skills={skills} reducedMotion={reducedMotion} onActivate={activate} onReady={sceneReady} onError={sceneFailed} />
             </Suspense></SceneBoundary>}
-            {(!ready || failed) && <div className="skills-scene-fallback" role="status"><div className="skills-fallback-dial"><Icon aria-hidden="true" /></div><span>{failed ? 'Explore the toolkit below' : 'Preparing your selector…'}</span></div>}
+            {(!ready || failed) && <div className="skills-scene-fallback" role="status"><div className="skills-fallback-dial"><Icon aria-hidden="true" /></div><span>{failed ? 'Explore my abilities below' : 'Charging the dial…'}</span></div>}
             <div className="skills-stage-bottom">
-              <span className="skills-stage-status">{activated ? `${String(activeIndex + 1).padStart(2, '0')} / ${String(skills.length).padStart(2, '0')} · ${skill.name}` : 'STANDBY · READY TO BUILD'}</span>
-              {!activated ? <button className="skills-activate" onClick={activate}><FiZap /> Activate</button> : <span className="skills-scroll-hint"><FiArrowDown /> {directMode ? 'Choose a skill below' : 'Scroll to switch'}</span>}
+              <span className="skills-stage-status">{activated ? `${String(activeIndex + 1).padStart(2, '0')} / ${String(skills.length).padStart(2, '0')} · ${skill.name}` : 'STANDBY · CHOOSE A FORM'}</span>
+              {!activated ? <button className="skills-activate" onClick={activate}><FiZap /> Activate</button> : <span className="skills-scroll-hint"><FiArrowDown /> {directMode ? 'Pick an ability below' : 'Scroll to transform'}</span>}
             </div>
           </div>
           <div className="skills-information">
-            <div className="skills-info-top"><span className="skills-label">{activated ? skill.category : 'A little curiosity goes a long way'}</span><span className="skills-info-count">{activated ? String(activeIndex + 1).padStart(2, '0') : '00'}<small> / 10</small></span></div>
+            <div className="skills-info-top"><span className="skills-label">{activated ? skill.category : 'Ten abilities · one builder'}</span><span className="skills-info-count">{activated ? String(activeIndex + 1).padStart(2, '0') : '00'}<small> / 10</small></span></div>
             <div className="skills-copy" key={activated ? skill.id : 'idle'}>
               <div className="skills-detail-icon" aria-hidden="true">{activated ? <Icon /> : <FiZap />}</div>
-              <h3>{activated ? skill.name : 'Choose your capability.'}</h3>
-              <p>{activated ? skill.description : directMode ? 'A toolkit for turning ideas into working products. Activate the watch or choose a skill below to discover what it brings to the build.' : 'A toolkit for turning ideas into working products. Scroll to wake the watch, turn the dial, and discover what each skill brings to the build.'}</p>
-              <div className="skills-tags">{(activated ? skill.tags : ['Web', 'Mobile', 'Cloud', '3D']).map(tag => <span key={tag}>{tag}</span>)}</div>
+              <h3>{activated ? skill.name : 'Pick a power. Watch me build.'}</h3>
+              <p>{activated ? skill.description : directMode ? 'These are the abilities I bring to every product. Activate the dial or pick one below to see what it lets me create.' : 'These are the abilities I bring to every product. Scroll to wake the dial, turn it, and see what each one lets me create.'}</p>
+              <div className="skills-tags">{(activated ? skill.tags : ['Web', 'Mobile', 'Backend', 'Cloud', '3D']).map(tag => <span key={tag}>{tag}</span>)}</div>
             </div>
             <div className="skills-navigation">
-              <div className="skills-navigation-title"><span>EXPLORE THE STACK</span><div className="skills-arrows"><button onClick={() => selectSkill(activeIndex - 1)} disabled={activeIndex <= 0} aria-label="Previous skill"><FiArrowLeft /></button><button onClick={() => selectSkill(activeIndex + 1)} disabled={activeIndex === skills.length - 1} aria-label={activated ? 'Next skill' : 'Activate first skill'}><FiArrowRight /></button></div></div>
+              <div className="skills-navigation-title"><span>ALL ABILITIES</span><div className="skills-arrows"><button onClick={() => selectSkill(activeIndex - 1)} disabled={activeIndex <= 0} aria-label="Previous skill"><FiArrowLeft /></button><button onClick={() => selectSkill(activeIndex + 1)} disabled={activeIndex === skills.length - 1} aria-label={activated ? 'Next skill' : 'Activate first skill'}><FiArrowRight /></button></div></div>
               <div className="skills-index" aria-label="Choose a skill">{skills.map((item, index) => <button key={item.id} onClick={() => selectSkill(index)} aria-pressed={activeIndex === index} className={activeIndex === index ? 'is-selected' : ''}><item.Icon aria-hidden="true" /><span>{item.name}</span></button>)}</div>
             </div>
-            <span className="skills-sr-only" role="status" aria-live="polite">{activated ? `Selected ${skill.name}. ${skill.description}` : 'Watch idle. Activate or select a skill to begin.'}</span>
+            <span className="skills-sr-only" role="status" aria-live="polite">{activated ? `Selected ${skill.name}. ${skill.description}` : 'Dial on standby. Activate it or pick an ability to begin.'}</span>
           </div>
         </div>
       </div>
