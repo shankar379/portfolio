@@ -24,8 +24,8 @@ function useMediaQuery(media) {
   return reduced;
 }
 const SOUND_URLS = {
-  activate: `${import.meta.env.BASE_URL}sounds/watch-activate-v2.mp3`,
-  turn: `${import.meta.env.BASE_URL}sounds/watch-turn.mp3`,
+  activate: `${import.meta.env.BASE_URL}sounds/watch-activate-v3.mp3`,
+  turn: `${import.meta.env.BASE_URL}sounds/watch-turn-v2.mp3`,
   deactivate: `${import.meta.env.BASE_URL}sounds/watch-deactivate.mp3`,
 };
 const MODEL_URL = `${import.meta.env.BASE_URL}models/omnitrix-orange-interactive.glb`;
@@ -76,9 +76,9 @@ function useDialSound(activeIndex) {
     const previous = previousIndex.current;
     previousIndex.current = activeIndex;
     if (!enabled || previous === activeIndex) return;
-    if (previous < 0 && activeIndex >= 0) play('activate', 0.45);
+    if (previous < 0 && activeIndex >= 0) play('activate', 0.75);
     else if (activeIndex < 0) play('deactivate', 0.6);
-    else play('turn', 0.5);
+    else play('turn', 0.4);
   }, [activeIndex, enabled, play]);
   useEffect(() => () => { context.current?.close().catch(() => {}); }, []);
   return [enabled, toggle];
