@@ -52,6 +52,9 @@
 .ship-index { font: 500 12px 'JetBrains Mono', monospace; color: #b0b0b6; }
 .ship-card h3 { font-size: clamp(28px, 2.8vw, 40px); font-weight: 600; letter-spacing: -.045em; line-height: 1.05; margin: 22px 0 8px; }
 .ship-role { margin: 0; color: #8a8a90; font-size: 13px; }
+.ship-company { display: inline-flex; align-items: center; gap: 12px; margin-top: 14px; padding: 6px 14px 6px 12px; border: 1px solid #ececef; border-radius: 12px; align-self: flex-start; background: #fff; }
+.ship-company span { font: 500 9px 'JetBrains Mono', monospace; letter-spacing: .14em; text-transform: uppercase; color: #8a8a90; }
+.ship-company img { height: 34px; width: auto; display: block; }
 .ship-metric { display: flex; align-items: baseline; gap: 12px; margin: 26px 0 18px; padding: 16px 0; border-top: 1px dashed #e3e3e6; border-bottom: 1px dashed #e3e3e6; }
 .ship-metric strong { font-size: 52px; line-height: .9; font-weight: 600; letter-spacing: -.06em; color: #ff6d00; }
 .ship-metric span { color: #4a4a50; font-size: 14px; }

@@ -19,6 +19,7 @@ export const projects = [
     metric: { value: '7', label: 'branded apps from one codebase' },
     platforms: 'Android · iOS',
     company: 'Elevents Metaestate Pvt Ltd',
+    companyLogo: '/elevents_logo.webp',
     role: 'React Native Developer',
     description:
       'One React Native codebase shipped as multiple white-label flavors — including Tickets99, EventTitans and Poultry India — each with its own branding, configuration and store listing. Payments, NFC, Bluetooth printing, QR check-in and biometric auth.',
@@ -64,6 +65,7 @@ export const projects = [
     metric: { value: '4', label: 'user roles, one platform' },
     platforms: 'Android · iOS',
     company: 'Elevents Metaestate Pvt Ltd',
+    companyLogo: '/elevents_logo.webp',
     role: 'React Native Developer',
     description:
       'Multi-role event staffing platform with role-based dashboards for workers, agencies, organizers and managers. Facial verification, wallet, attendance tracking and push notifications on a scalable AWS backend.',

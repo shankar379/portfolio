@@ -63,7 +63,13 @@ function ProductionCard({ project, index }) {
           <span className="ship-index">{String(index + 1).padStart(2, '0')}</span>
         </div>
         <h3>{project.title}</h3>
-        <p className="ship-role">{project.role} · {project.company}</p>
+        <p className="ship-role">{project.role}</p>
+        {project.companyLogo && (
+          <div className="ship-company">
+            <span>Built at</span>
+            <img src={project.companyLogo} alt={project.company} loading="lazy" />
+          </div>
+        )}
         <div className="ship-metric">
           <strong>{project.metric.value}</strong>
           <span>{project.metric.label}</span>
