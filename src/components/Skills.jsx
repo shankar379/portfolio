@@ -156,7 +156,7 @@ export default function Skills() {
       <header className="skills-header">
         <span className="skills-label">( 01 ) &nbsp; The arsenal</span>
         <div className="skills-heading-row">
-          <h2 id="skills-heading">One builder.<br /><span>Ten forms.</span></h2>
+          <h2 id="skills-heading">One techie.<br /><span>Ten forms.</span></h2>
           <p>Every problem needs a different hero.<br />I pick the right power, transform, and build.</p>
         </div>
       </header>
@@ -180,7 +180,7 @@ export default function Skills() {
             </div>
           </div>
           <div className="skills-information">
-            <div className="skills-info-top"><span className="skills-label">{activated ? skill.category : 'Ten abilities · one builder'}</span><span className="skills-info-count">{activated ? String(activeIndex + 1).padStart(2, '0') : '00'}<small> / 10</small></span></div>
+            <div className="skills-info-top"><span className="skills-label">{activated ? skill.category : 'Ten abilities · one techie'}</span><span className="skills-info-count">{activated ? String(activeIndex + 1).padStart(2, '0') : '00'}<small> / 10</small></span></div>
             <div className="skills-copy" key={activated ? skill.id : 'idle'}>
               <div className="skills-detail-icon" aria-hidden="true">{activated ? <Icon /> : <FiZap />}</div>
               <h3>{activated ? skill.name : 'Pick a power. Watch me build.'}</h3>
