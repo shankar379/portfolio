@@ -8,6 +8,22 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 const MODEL_URL = `${import.meta.env.BASE_URL}models/omnitrix-orange-interactive.glb`;
 const clamp = THREE.MathUtils.clamp;
 const ease = (x) => x * x * (3 - 2 * x);
+// Portfolio brand orange (#ff6d00) and its darker shade, applied to the model's orange parts.
+const BRAND = new THREE.Color('#ff6d00');
+const BRAND_DARK = new THREE.Color('#c95000');
+function applyBrandColors(model) {
+  model.traverse((node) => {
+    if (!node.isMesh) return;
+    for (const material of Array.isArray(node.material) ? node.material : [node.material]) {
+      const name = material.name || '';
+      if (name.startsWith('Armor')) { material.color.copy(BRAND); material.metalness = .25; material.roughness = .32; }
+      else if (name.includes('burnt orange')) material.color.copy(BRAND_DARK);
+      else if (name.includes('orange lower accent') || name.includes('amber')) {
+        material.color.copy(BRAND); material.emissive.copy(BRAND).multiplyScalar(.35);
+      }
+    }
+  });
+}
 
 function disposeModel(model) {
   const materials = new Set();
@@ -75,8 +91,8 @@ export default function WatchScene({ progress, activeIndex, skills, reducedMotio
     } catch (error) { inputRef.current.onError?.(error); return undefined; }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.7));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMapping = THREE.NeutralToneMapping; // keeps the brand hue true
+    renderer.toneMappingExposure = 1.05;
     renderer.domElement.setAttribute('aria-label', 'Interactive orange watch. Activate using the adjacent button.');
     renderer.domElement.setAttribute('role', 'img');
     renderer.domElement.style.cssText = 'display:block;width:100%;height:100%;touch-action:pan-y;';
@@ -99,7 +115,7 @@ export default function WatchScene({ progress, activeIndex, skills, reducedMotio
     room.dispose(); pmrem.dispose();
     scene.add(new THREE.HemisphereLight(0xffffff, 0x59301c, 2));
     const key = new THREE.DirectionalLight(0xffecd6, 3); key.position.set(.1, .2, .1); scene.add(key);
-    const rim = new THREE.DirectionalLight(0xff771a, 2); rim.position.set(-.1, .04, -.12); scene.add(rim);
+    const rim = new THREE.DirectionalLight(0xff6d00, 1.4); rim.position.set(-.1, .04, -.12); scene.add(rim);
     let disposed = false, visible = true, frame = 0, last = 0, dirty = true;
     let model, lift, rotor, mount, baseLift = 1.3;
     let selected = -2, displayed = -1, turnStart = 0, rotationFrom = 0, rotationTo = 0;
@@ -180,6 +196,7 @@ export default function WatchScene({ progress, activeIndex, skills, reducedMotio
       model = gltf.scene; lift = model.getObjectByName('DialLift'); rotor = model.getObjectByName('BezelRotor'); mount = model.getObjectByName('ScreenMount');
       if (!lift || !rotor || !mount) { disposeModel(model); model = null; inputRef.current.onError?.(new Error('Incomplete watch rig')); return; }
       baseLift = lift.position.y;
+      applyBrandColors(model);
       model.traverse((object) => {
         if (object.name.startsWith('Emblem_')) object.visible = false;
         if (object.name.startsWith('Button_') && !object.name.endsWith('Socket')) buttons.push({ object, x: object.position.x });
