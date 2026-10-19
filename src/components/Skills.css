@@ -8,9 +8,9 @@
 .skills-heading-row > p { color: #6b6b72; font-size: 14px; line-height: 1.7; margin: 0 0 5px; }
 .skills-scroll-track { height: 540svh; position: relative; }
 .skills-sticky { position: sticky; top: 80px; height: calc(100svh - 100px); min-height: 540px; max-height: 850px; display: grid; grid-template-columns: 1.12fr 1fr; gap: clamp(28px, 4.5vw, 72px); align-items: center; }
-.skills-watch-stage { height: 100%; max-height: 700px; min-width: 0; position: relative; overflow: hidden; isolation: isolate; border-radius: 26px; background: radial-gradient(ellipse at 52% 45%, #fff3e6 0%, #f6efe8 48%, #ece8e4 100%); border: 1px solid #e4dfda; }
+.skills-watch-stage { height: 100%; max-height: 700px; min-width: 0; position: relative; overflow: hidden; isolation: isolate; background: transparent; border: 0; }
 .skills-watch-stage canvas { display: block; }
-.skills-stage-grid { pointer-events: none; position: absolute; z-index: -1; inset: 0; opacity: .5; background-image: linear-gradient(#00000010 1px, transparent 1px), linear-gradient(90deg, #00000010 1px, transparent 1px); background-size: 44px 44px; mask-image: linear-gradient(transparent, #000 50%, transparent); }
+.skills-stage-grid { display: none; pointer-events: none; position: absolute; z-index: -1; inset: 0; opacity: .5; background-image: linear-gradient(#00000010 1px, transparent 1px), linear-gradient(90deg, #00000010 1px, transparent 1px); background-size: 44px 44px; mask-image: linear-gradient(transparent, #000 50%, transparent); }
 .skills-stage-top, .skills-stage-bottom { position: absolute; left: 24px; right: 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; z-index: 2; pointer-events: none; }
 .skills-stage-top { top: 24px; }
 .skills-stage-bottom { bottom: 24px; }
@@ -69,7 +69,6 @@
   .skills-header { padding-bottom: 28px; }
   .skills-heading-row > p { font-size: 13px; }
   .skills-sticky { height: calc(100svh - 92px); min-height: 590px; max-height: 900px; grid-template-columns: 1fr; grid-template-rows: minmax(210px, 1fr) auto; gap: 15px; align-items: stretch; }
-  .skills-watch-stage { border-radius: 18px; }
   .skills-stage-top { top: 13px; }
   .skills-stage-bottom { bottom: 13px; }
   .skills-information { padding: 0; }
