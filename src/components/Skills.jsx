@@ -76,7 +76,7 @@ function useDialSound(activeIndex) {
     const previous = previousIndex.current;
     previousIndex.current = activeIndex;
     if (!enabled || previous === activeIndex) return;
-    if (previous < 0 && activeIndex >= 0) play('activate', 0.75);
+    if (previous < 0 && activeIndex >= 0) play('activate', 0.45);
     else if (activeIndex < 0) play('deactivate', 0.6);
     else play('turn', 0.5);
   }, [activeIndex, enabled, play]);
