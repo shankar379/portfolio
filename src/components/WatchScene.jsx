@@ -16,8 +16,12 @@ function applyBrandColors(model) {
     if (!node.isMesh) return;
     for (const material of Array.isArray(node.material) ? node.material : [node.material]) {
       const name = material.name || '';
-      if (name.startsWith('Armor')) { material.color.copy(BRAND); material.metalness = .25; material.roughness = .32; }
-      else if (name.includes('burnt orange')) material.color.copy(BRAND_DARK);
+      if (name.startsWith('Armor')) {
+        // Matte shell rendered outside tone mapping so the brand orange isn't washed toward pink.
+        material.color.copy(BRAND).multiplyScalar(.62); material.metalness = 0; material.roughness = .6;
+        material.envMapIntensity = .15; material.emissive.copy(BRAND).multiplyScalar(.12); material.toneMapped = false;
+      }
+      else if (name.includes('burnt orange')) { material.color.copy(BRAND_DARK); material.envMapIntensity = .5; }
       else if (name.includes('orange lower accent') || name.includes('amber')) {
         material.color.copy(BRAND); material.emissive.copy(BRAND).multiplyScalar(.35);
       }
@@ -113,7 +117,7 @@ export default function WatchScene({ progress, activeIndex, skills, reducedMotio
     const environment = pmrem.fromScene(room, .04);
     scene.environment = environment.texture; scene.environmentIntensity = .9;
     room.dispose(); pmrem.dispose();
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x59301c, 2));
+    scene.add(new THREE.HemisphereLight(0xfff1e4, 0x3a2416, 1.3));
     const key = new THREE.DirectionalLight(0xffecd6, 3); key.position.set(.1, .2, .1); scene.add(key);
     const rim = new THREE.DirectionalLight(0xff6d00, 1.4); rim.position.set(-.1, .04, -.12); scene.add(rim);
     let disposed = false, visible = true, frame = 0, last = 0, dirty = true;
