@@ -1,134 +1,170 @@
-import { motion } from 'framer-motion';
-import {
-  FiSmartphone,
-  FiGlobe,
-  FiServer,
-  FiCloud,
-  FiCpu,
-  FiBox
-} from 'react-icons/fi';
-import WaveLines from './WaveLines';
+import { Component, Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
+import { FiArrowDown, FiArrowLeft, FiArrowRight, FiVolume2, FiVolumeX, FiZap } from 'react-icons/fi';
+import { skills } from '../data/skills';
 import './Skills.css';
-
-const capabilities = [
-  {
-    icon: FiSmartphone,
-    title: 'Mobile Apps',
-    description:
-      'Production Android & iOS apps with React Native and Expo — payments, NFC, Bluetooth printing, QR check-in and biometric auth.',
-    tags: ['React Native', 'Expo', 'TypeScript']
-  },
-  {
-    icon: FiGlobe,
-    title: 'Web Platforms',
-    description:
-      'Responsive, high-performance web applications with modern component architectures and clean, fast interfaces.',
-    tags: ['React', 'Vite', 'Tailwind']
-  },
-  {
-    icon: FiServer,
-    title: 'Backend & APIs',
-    description:
-      'REST APIs, authentication and role-based access with realtime data — built to stay reliable under load.',
-    tags: ['Node.js', 'FastAPI', 'PostgreSQL']
-  },
-  {
-    icon: FiCloud,
-    title: 'Cloud & DevOps',
-    description:
-      'Deployment pipelines and cloud infrastructure — automated builds, releases and hosting that scale.',
-    tags: ['AWS', 'GitHub Actions', 'CI/CD']
-  },
-  {
-    icon: FiCpu,
-    title: 'AI-Powered Development',
-    description:
-      'AI woven into how I build — agentic coding workflows and LLM features integrated directly into products.',
-    tags: ['Claude Code', 'Cursor', 'Gemini API']
-  },
-  {
-    icon: FiBox,
-    title: '3D & Interactive',
-    description:
-      'Interactive WebGL experiences and 3D content — this portfolio runs a custom shader scene.',
-    tags: ['Three.js', 'Blender', 'WebGL']
-  }
-];
-
-const stack = [
-  'React Native',
-  'Expo',
-  'TypeScript',
-  'React',
-  'Node.js',
-  'FastAPI',
-  'Firebase',
-  'PostgreSQL',
-  'MongoDB',
-  'AWS',
-  'GitHub Actions',
-  'Three.js'
-];
-
-const Skills = () => {
+const WatchScene = lazy(() => import('./WatchScene'));
+const ACTIVATION = 0.1;
+const STICKY_TOP = 80;
+class SceneBoundary extends Component {
+  state = { failed: false };
+  static getDerivedStateFromError() { return { failed: true }; }
+  // eslint-disable-next-line react/prop-types
+  componentDidCatch() { this.props.onError(); }
+  // eslint-disable-next-line react/prop-types
+  render() { return this.state.failed ? null : this.props.children; }
+}
+function useMediaQuery(media) {
+  const [reduced, setReduced] = useState(() => window.matchMedia(media).matches);
+  useEffect(() => {
+    const query = window.matchMedia(media);
+    const update = () => setReduced(query.matches);
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, [media]);
+  return reduced;
+}
+function useDialSound(activeIndex) {
+  const [enabled, setEnabled] = useState(false);
+  const context = useRef(null);
+  const previousIndex = useRef(activeIndex);
+  const click = useCallback(() => {
+    const audio = context.current;
+    if (!audio || audio.state !== 'running') return;
+    // Original short synthesized mechanical detent and its tail.
+    [0, 0.028].forEach((offset, index) => {
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      const start = audio.currentTime + offset;
+      oscillator.type = 'triangle';
+      oscillator.frequency.setValueAtTime(index ? 620 : 1600, start);
+      oscillator.frequency.exponentialRampToValueAtTime(90, start + 0.035);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(index ? 0.06 : 0.12, start + 0.002);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.045);
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+      oscillator.start(start);
+      oscillator.stop(start + 0.05);
+      oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+    });
+  }, []);
+  const toggle = async () => {
+    if (enabled) { setEnabled(false); return; }
+    try {
+      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+      if (!context.current) context.current = new AudioContextClass();
+      await context.current.resume();
+      if (context.current.state === 'running') { setEnabled(true); click(); }
+    } catch { setEnabled(false); }
+  };
+  useEffect(() => {
+    if (previousIndex.current !== activeIndex && activeIndex >= 0 && enabled) click();
+    previousIndex.current = activeIndex;
+  }, [activeIndex, enabled, click]);
+  useEffect(() => () => { context.current?.close().catch(() => {}); }, []);
+  return [enabled, toggle];
+}
+export default function Skills() {
+  const track = useRef(null);
+  const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+  const shortViewport = useMediaQuery('(max-height: 650px)');
+  const directMode = reducedMotion || shortViewport;
+  const [progress, setProgress] = useState(0);
+  const [manualIndex, setManualIndex] = useState(-1);
+  const [nearby, setNearby] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const scrollIndex = progress < ACTIVATION ? -1 : Math.min(skills.length - 1, Math.floor((progress - ACTIVATION) / (1 - ACTIVATION) * skills.length));
+  const activeIndex = directMode ? manualIndex : scrollIndex;
+  const skill = skills[Math.max(0, activeIndex)];
+  const Icon = skill.Icon;
+  const [soundEnabled, toggleSound] = useDialSound(activeIndex);
+  const sceneReady = useCallback(() => setReady(true), []);
+  const sceneFailed = useCallback(() => setFailed(true), []);
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setNearby(true); observer.disconnect(); }
+    }, { rootMargin: '500px' });
+    observer.observe(track.current);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    if (directMode) return;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const rect = track.current.getBoundingClientRect();
+      const distance = Math.max(1, rect.height - track.current.firstElementChild.offsetHeight);
+      setProgress(Math.min(1, Math.max(0, (STICKY_TOP - rect.top) / distance)));
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
+    update();
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+    };
+  }, [directMode]);
+  const selectSkill = useCallback((index) => {
+    const selected = Math.min(skills.length - 1, Math.max(0, index));
+    if (directMode) { setManualIndex(selected); return; }
+    const rect = track.current.getBoundingClientRect();
+    const distance = rect.height - track.current.firstElementChild.offsetHeight;
+    const target = ACTIVATION + ((selected + 0.35) / skills.length) * (1 - ACTIVATION);
+    // Position directly to avoid traversing intermediate skills on explicit selection.
+    window.scrollTo({ top: window.scrollY + rect.top - STICKY_TOP + target * distance, behavior: 'instant' });
+  }, [directMode]);
+  const activate = useCallback(() => selectSkill(0), [selectSkill]);
+  const activated = activeIndex >= 0;
   return (
-    <section id="skills" className="skills">
-      <div className="skills-container">
-        <motion.div
-          className="skills-header"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-        >
-          <span className="skills-label">( 01 )&ensp;What I Build</span>
-          <h2 className="skills-title">Capabilities, <span className="skills-title-accent">not just skills.</span></h2>
-        </motion.div>
-
-        <div className="skills-cards">
-          {capabilities.map((cap, index) => {
-            const Icon = cap.icon;
-            return (
-              <motion.article
-                key={cap.title}
-                className="capability-card"
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.06, ease: 'easeOut' }}
-              >
-                <Icon className="capability-icon" aria-hidden="true" />
-                <h3 className="capability-title">{cap.title}</h3>
-                <p className="capability-description">{cap.description}</p>
-                <div className="capability-tags">
-                  {cap.tags.map((tag) => (
-                    <span key={tag} className="capability-tag">{tag}</span>
-                  ))}
-                </div>
-              </motion.article>
-            );
-          })}
+    <section id="skills" className={`skills${directMode ? ' skills--direct' : ''}`} aria-labelledby="skills-heading">
+      <header className="skills-header">
+        <span className="skills-label">( 01 ) &nbsp; The toolkit</span>
+        <div className="skills-heading-row">
+          <h2 id="skills-heading">Built different.<br /><span>One skill at a time.</span></h2>
+          <p>Different challenges. The right tools.<br />Explore the stack behind what I build.</p>
         </div>
-
-        <motion.div
-          className="skills-stack"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <span className="skills-stack-label">Core stack</span>
-          <div className="skills-stack-list">
-            {stack.map((item) => (
-              <span key={item} className="skills-stack-item">{item}</span>
-            ))}
+      </header>
+      <div className="skills-scroll-track" ref={track}>
+        <div className="skills-sticky">
+          <div className="skills-watch-stage" aria-label="Interactive skill watch">
+            <div className="skills-stage-top">
+              <span className="skills-device-label"><i className={activated ? 'is-active' : ''} /> SKILL SELECTOR</span>
+              <button className="skills-sound" onClick={toggleSound} aria-pressed={soundEnabled} aria-label={soundEnabled ? 'Mute watch sounds' : 'Enable watch sounds'}>
+                {soundEnabled ? <FiVolume2 /> : <FiVolumeX />}<span>Sound {soundEnabled ? 'on' : 'off'}</span>
+              </button>
+            </div>
+            <div className="skills-stage-grid" aria-hidden="true" />
+            {nearby && !failed && <SceneBoundary onError={sceneFailed}><Suspense fallback={null}>
+              <WatchScene progress={directMode ? (activated ? 1 : 0) : progress} activeIndex={activeIndex} skills={skills} reducedMotion={reducedMotion} onActivate={activate} onReady={sceneReady} onError={sceneFailed} />
+            </Suspense></SceneBoundary>}
+            {(!ready || failed) && <div className="skills-scene-fallback" role="status"><div className="skills-fallback-dial"><Icon aria-hidden="true" /></div><span>{failed ? 'Explore the toolkit below' : 'Preparing your selector…'}</span></div>}
+            <div className="skills-stage-bottom">
+              <span className="skills-stage-status">{activated ? `${String(activeIndex + 1).padStart(2, '0')} / ${String(skills.length).padStart(2, '0')} · ${skill.name}` : 'STANDBY · READY TO BUILD'}</span>
+              {!activated ? <button className="skills-activate" onClick={activate}><FiZap /> Activate</button> : <span className="skills-scroll-hint"><FiArrowDown /> {directMode ? 'Choose a skill below' : 'Scroll to switch'}</span>}
+            </div>
           </div>
-        </motion.div>
-
-        <WaveLines variant="divider" className="skills-stack-wave" />
+          <div className="skills-information">
+            <div className="skills-info-top"><span className="skills-label">{activated ? skill.category : 'A little curiosity goes a long way'}</span><span className="skills-info-count">{activated ? String(activeIndex + 1).padStart(2, '0') : '00'}<small> / 10</small></span></div>
+            <div className="skills-copy" key={activated ? skill.id : 'idle'}>
+              <div className="skills-detail-icon" aria-hidden="true">{activated ? <Icon /> : <FiZap />}</div>
+              <h3>{activated ? skill.name : 'Choose your capability.'}</h3>
+              <p>{activated ? skill.description : directMode ? 'A toolkit for turning ideas into working products. Activate the watch or choose a skill below to discover what it brings to the build.' : 'A toolkit for turning ideas into working products. Scroll to wake the watch, turn the dial, and discover what each skill brings to the build.'}</p>
+              <div className="skills-tags">{(activated ? skill.tags : ['Web', 'Mobile', 'Cloud', '3D']).map(tag => <span key={tag}>{tag}</span>)}</div>
+            </div>
+            <div className="skills-navigation">
+              <div className="skills-navigation-title"><span>EXPLORE THE STACK</span><div className="skills-arrows"><button onClick={() => selectSkill(activeIndex - 1)} disabled={activeIndex <= 0} aria-label="Previous skill"><FiArrowLeft /></button><button onClick={() => selectSkill(activeIndex + 1)} disabled={activeIndex === skills.length - 1} aria-label={activated ? 'Next skill' : 'Activate first skill'}><FiArrowRight /></button></div></div>
+              <div className="skills-index" aria-label="Choose a skill">{skills.map((item, index) => <button key={item.id} onClick={() => selectSkill(index)} aria-pressed={activeIndex === index} className={activeIndex === index ? 'is-selected' : ''}><item.Icon aria-hidden="true" /><span>{item.name}</span></button>)}</div>
+            </div>
+            <span className="skills-sr-only" role="status" aria-live="polite">{activated ? `Selected ${skill.name}. ${skill.description}` : 'Watch idle. Activate or select a skill to begin.'}</span>
+          </div>
+        </div>
       </div>
     </section>
   );
-};
+}
 
-export default Skills;
+
