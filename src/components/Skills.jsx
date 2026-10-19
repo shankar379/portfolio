@@ -143,10 +143,13 @@ export default function Skills() {
     window.scrollTo({ top: window.scrollY + rect.top - STICKY_TOP + target * distance, behavior: 'instant' });
   }, [directMode]);
   const activated = activeIndex >= 0;
-  // Clicking the watch powers it up; clicking it again while active triggers the transformation sound.
+  // Tapping the watch on a skill transforms; tapping the same skill again times out.
+  const transformed = useRef(false);
+  useEffect(() => { transformed.current = false; }, [activeIndex]);
   const activate = useCallback(() => {
-    if (activated) { if (soundEnabled) playSound('transform', 0.7); return; }
-    selectSkill(0);
+    if (!activated) { selectSkill(0); return; }
+    transformed.current = !transformed.current;
+    if (soundEnabled) playSound(transformed.current ? 'transform' : 'deactivate', 0.7);
   }, [activated, soundEnabled, playSound, selectSkill]);
   return (
     <section id="skills" className={`skills${directMode ? ' skills--direct' : ''}`} aria-labelledby="skills-heading">
