@@ -8,24 +8,24 @@
 .skills-heading-row > p { color: #6b6b72; font-size: 14px; line-height: 1.7; margin: 0 0 5px; }
 .skills-scroll-track { height: 540svh; position: relative; }
 .skills-sticky { position: sticky; top: 80px; height: calc(100svh - 100px); min-height: 540px; max-height: 850px; display: grid; grid-template-columns: 1.12fr 1fr; gap: clamp(28px, 4.5vw, 72px); align-items: center; }
-.skills-watch-stage { height: 100%; max-height: 700px; min-width: 0; position: relative; overflow: hidden; isolation: isolate; border-radius: 26px; background: radial-gradient(ellipse at 52% 45%, #30251f 0%, #171717 52%, #101011 100%); border: 1px solid #29292b; }
+.skills-watch-stage { height: 100%; max-height: 700px; min-width: 0; position: relative; overflow: hidden; isolation: isolate; border-radius: 26px; background: radial-gradient(ellipse at 52% 45%, #fff3e6 0%, #f6efe8 48%, #ece8e4 100%); border: 1px solid #e4dfda; }
 .skills-watch-stage canvas { display: block; }
-.skills-stage-grid { pointer-events: none; position: absolute; z-index: -1; inset: 0; opacity: .16; background-image: linear-gradient(#ffffff17 1px, transparent 1px), linear-gradient(90deg, #ffffff17 1px, transparent 1px); background-size: 44px 44px; mask-image: linear-gradient(transparent, #000 50%, transparent); }
+.skills-stage-grid { pointer-events: none; position: absolute; z-index: -1; inset: 0; opacity: .5; background-image: linear-gradient(#00000010 1px, transparent 1px), linear-gradient(90deg, #00000010 1px, transparent 1px); background-size: 44px 44px; mask-image: linear-gradient(transparent, #000 50%, transparent); }
 .skills-stage-top, .skills-stage-bottom { position: absolute; left: 24px; right: 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; z-index: 2; pointer-events: none; }
 .skills-stage-top { top: 24px; }
 .skills-stage-bottom { bottom: 24px; }
 .skills-stage-top button, .skills-stage-bottom button { pointer-events: auto; }
-.skills-device-label, .skills-stage-status, .skills-scroll-hint { font: 10px/1.4 'JetBrains Mono', monospace; letter-spacing: .08em; color: #b7b4b1; }
+.skills-device-label, .skills-stage-status, .skills-scroll-hint { font: 10px/1.4 'JetBrains Mono', monospace; letter-spacing: .08em; color: #6b6660; }
 .skills-device-label { display: flex; gap: 9px; align-items: center; }
 .skills-device-label i { height: 5px; width: 5px; background: #888; border-radius: 50%; }
 .skills-device-label i.is-active { background: #ff8a38; box-shadow: 0 0 10px #ff6d0066; }
 .skills button { font-family: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .skills button:focus-visible { outline: 3px solid #ff8b36; outline-offset: 4px; }
-.skills-sound { display: inline-flex; gap: 7px; align-items: center; border: 1px solid #ffffff20; border-radius: 99px; padding: 8px 10px; color: #cac7c4; font-size: 10px; background: #171717b3; }
+.skills-sound { display: inline-flex; gap: 7px; align-items: center; border: 1px solid #00000018; border-radius: 99px; padding: 8px 10px; color: #4a4642; font-size: 10px; background: #ffffffcc; }
 .skills-sound svg { font-size: 14px; }
 .skills-activate { display: flex; gap: 6px; align-items: center; background: #ff6d00; color: #111; border: 0; border-radius: 99px; padding: 10px 15px; font-size: 12px; font-weight: 600; }
-.skills-scroll-hint { display: flex; gap: 7px; align-items: center; color: #b7b4b1; font-size: 9px; letter-spacing: 0; }
-.skills-scene-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; color: #b7b4b1; pointer-events: none; font: 11px 'JetBrains Mono', monospace; }
+.skills-scroll-hint { display: flex; gap: 7px; align-items: center; color: #6b6660; font-size: 9px; letter-spacing: 0; }
+.skills-scene-fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; color: #6b6660; pointer-events: none; font: 11px 'JetBrains Mono', monospace; }
 .skills-fallback-dial { width: 150px; height: 150px; display: grid; place-items: center; background: #efab36; border: 15px solid #525252; border-radius: 50%; box-shadow: 0 0 0 10px #090909, 0 0 55px #ff6d0015; }
 .skills-fallback-dial svg { width: 55px; height: 55px; color: #171717; }
 .skills-information { min-width: 0; padding: 18px 0; }
