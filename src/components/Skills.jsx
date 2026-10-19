@@ -24,9 +24,10 @@ function useMediaQuery(media) {
   return reduced;
 }
 const SOUND_URLS = {
-  activate: `${import.meta.env.BASE_URL}sounds/watch-activate-v4.mp3`,
-  turn: `${import.meta.env.BASE_URL}sounds/watch-turn-v3.mp3`,
-  deactivate: `${import.meta.env.BASE_URL}sounds/watch-deactivate.mp3`,
+  activate: `${import.meta.env.BASE_URL}sounds/ben-activate.mp3`,
+  turn: `${import.meta.env.BASE_URL}sounds/ben-turn.mp3`,
+  transform: `${import.meta.env.BASE_URL}sounds/ben-transform.mp3`,
+  deactivate: `${import.meta.env.BASE_URL}sounds/ben-timeout.mp3`,
 };
 const MODEL_URL = `${import.meta.env.BASE_URL}models/omnitrix-orange-interactive.glb`;
 // Warm the HTTP cache with the watch chunk, model and sounds while the browser is idle.
@@ -76,12 +77,12 @@ function useDialSound(activeIndex) {
     const previous = previousIndex.current;
     previousIndex.current = activeIndex;
     if (!enabled || previous === activeIndex) return;
-    if (previous < 0 && activeIndex >= 0) play('activate', 0.6);
+    if (previous < 0 && activeIndex >= 0) play('activate', 0.7);
     else if (activeIndex < 0) play('deactivate', 0.6);
-    else play('turn', 0.5);
+    else play('turn', 0.55);
   }, [activeIndex, enabled, play]);
   useEffect(() => () => { context.current?.close().catch(() => {}); }, []);
-  return [enabled, toggle];
+  return [enabled, toggle, play];
 }
 export default function Skills() {
   const track = useRef(null);
@@ -97,7 +98,7 @@ export default function Skills() {
   const activeIndex = directMode ? manualIndex : scrollIndex;
   const skill = skills[Math.max(0, activeIndex)];
   const Icon = skill.Icon;
-  const [soundEnabled, toggleSound] = useDialSound(activeIndex);
+  const [soundEnabled, toggleSound, playSound] = useDialSound(activeIndex);
   const sceneReady = useCallback(() => setReady(true), []);
   const sceneFailed = useCallback(() => setFailed(true), []);
   useEffect(() => {
@@ -141,8 +142,12 @@ export default function Skills() {
     // Position directly to avoid traversing intermediate skills on explicit selection.
     window.scrollTo({ top: window.scrollY + rect.top - STICKY_TOP + target * distance, behavior: 'instant' });
   }, [directMode]);
-  const activate = useCallback(() => selectSkill(0), [selectSkill]);
   const activated = activeIndex >= 0;
+  // Clicking the watch powers it up; clicking it again while active triggers the transformation sound.
+  const activate = useCallback(() => {
+    if (activated) { if (soundEnabled) playSound('transform', 0.7); return; }
+    selectSkill(0);
+  }, [activated, soundEnabled, playSound, selectSkill]);
   return (
     <section id="skills" className={`skills${directMode ? ' skills--direct' : ''}`} aria-labelledby="skills-heading">
       <header className="skills-header">
