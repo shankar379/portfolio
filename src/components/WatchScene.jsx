@@ -84,7 +84,14 @@ export default function WatchScene({ progress, activeIndex, skills, reducedMotio
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(32, 1, .001, 10);
     // High three-quarter angle keeps the skill display legible while showing the raised mechanism.
-    camera.position.set(0, .188, .07); camera.lookAt(0, .018, 0);
+    // Angled three-quarter view at rest; swings to face the dial head-on while active.
+    const idleView = new THREE.Vector3(.075, .15, .12), activeView = new THREE.Vector3(0, .188, .07);
+    let viewScale = 1;
+    const placeCamera = (t) => {
+      camera.position.lerpVectors(idleView, activeView, t).multiplyScalar(viewScale);
+      camera.lookAt(0, .018, 0);
+    };
+    placeCamera(0);
     const pmrem = new THREE.PMREMGenerator(renderer);
     const room = new RoomEnvironment();
     const environment = pmrem.fromScene(room, .04);
@@ -117,8 +124,8 @@ export default function WatchScene({ progress, activeIndex, skills, reducedMotio
       const width = container.clientWidth, height = container.clientHeight;
       if (!width || !height) return;
       renderer.setSize(width, height, false); camera.aspect = width / height;
-      camera.position.set(0, .188, .07).multiplyScalar(camera.aspect < 1 ? 1.12 : 1);
-      camera.lookAt(0, .018, 0); camera.updateProjectionMatrix(); dirty = true; wake();
+      viewScale = camera.aspect < 1 ? 1.12 : 1;
+      placeCamera(ease(activation)); camera.updateProjectionMatrix(); dirty = true; wake();
     };
     const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(container);
     const intersection = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) wake(); }, { rootMargin: '100px' });
@@ -155,7 +162,8 @@ export default function WatchScene({ progress, activeIndex, skills, reducedMotio
       if (model) {
         lift.position.y = baseLift + .4 * activation;
         rotor.rotation.y = input.reducedMotion ? rotationTo : THREE.MathUtils.lerp(rotationFrom, rotationTo, ease(turning));
-        model.rotation.y = 0;
+        model.rotation.y = -.24 * (1 - activation);
+        placeCamera(ease(activation));
         const press = input.reducedMotion ? 0 : Math.max(0, 1 - (now - pulseStart) / .23) * .045;
         for (const { object, x } of buttons) object.position.x = x - Math.sign(x) * press;
         if (dirty || turning < 1 || activation !== previousActivation) {
