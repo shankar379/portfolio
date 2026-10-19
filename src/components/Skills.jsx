@@ -23,30 +23,36 @@ function useMediaQuery(media) {
   }, [media]);
   return reduced;
 }
+const SOUND_URLS = {
+  activate: `${import.meta.env.BASE_URL}sounds/watch-activate.mp3`,
+  turn: `${import.meta.env.BASE_URL}sounds/watch-turn.mp3`,
+  deactivate: `${import.meta.env.BASE_URL}sounds/watch-deactivate.mp3`,
+};
+const MODEL_URL = `${import.meta.env.BASE_URL}models/omnitrix-orange-interactive.glb`;
+// Warm the HTTP cache with the watch chunk, model and sounds while the browser is idle.
+let preloaded = false;
+function preloadWatchAssets() {
+  if (preloaded) return;
+  preloaded = true;
+  import('./WatchScene').catch(() => {});
+  [MODEL_URL, ...Object.values(SOUND_URLS)].forEach((url) => fetch(url, { priority: 'low' }).catch(() => {}));
+}
 function useDialSound(activeIndex) {
   const [enabled, setEnabled] = useState(false);
   const context = useRef(null);
+  const buffers = useRef({});
   const previousIndex = useRef(activeIndex);
-  const click = useCallback(() => {
+  const play = useCallback((name, volume = 0.6) => {
     const audio = context.current;
-    if (!audio || audio.state !== 'running') return;
-    // Original short synthesized mechanical detent and its tail.
-    [0, 0.028].forEach((offset, index) => {
-      const oscillator = audio.createOscillator();
-      const gain = audio.createGain();
-      const start = audio.currentTime + offset;
-      oscillator.type = 'triangle';
-      oscillator.frequency.setValueAtTime(index ? 620 : 1600, start);
-      oscillator.frequency.exponentialRampToValueAtTime(90, start + 0.035);
-      gain.gain.setValueAtTime(0.0001, start);
-      gain.gain.exponentialRampToValueAtTime(index ? 0.06 : 0.12, start + 0.002);
-      gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.045);
-      oscillator.connect(gain);
-      gain.connect(audio.destination);
-      oscillator.start(start);
-      oscillator.stop(start + 0.05);
-      oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
-    });
+    const buffer = buffers.current[name];
+    if (!audio || audio.state !== 'running' || !buffer) return;
+    const source = audio.createBufferSource();
+    const gain = audio.createGain();
+    gain.gain.value = volume;
+    source.buffer = buffer;
+    source.connect(gain).connect(audio.destination);
+    source.onended = () => { source.disconnect(); gain.disconnect(); };
+    source.start();
   }, []);
   const toggle = async () => {
     if (enabled) { setEnabled(false); return; }
@@ -54,14 +60,26 @@ function useDialSound(activeIndex) {
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
       if (!AudioContextClass) return;
       if (!context.current) context.current = new AudioContextClass();
-      await context.current.resume();
-      if (context.current.state === 'running') { setEnabled(true); click(); }
+      const audio = context.current;
+      await audio.resume();
+      if (audio.state !== 'running') return;
+      await Promise.all(Object.entries(SOUND_URLS).map(async ([name, url]) => {
+        if (buffers.current[name]) return;
+        const response = await fetch(url);
+        buffers.current[name] = await audio.decodeAudioData(await response.arrayBuffer());
+      }));
+      setEnabled(true);
+      play(activeIndex >= 0 ? 'turn' : 'activate');
     } catch { setEnabled(false); }
   };
   useEffect(() => {
-    if (previousIndex.current !== activeIndex && activeIndex >= 0 && enabled) click();
+    const previous = previousIndex.current;
     previousIndex.current = activeIndex;
-  }, [activeIndex, enabled, click]);
+    if (!enabled || previous === activeIndex) return;
+    if (previous < 0 && activeIndex >= 0) play('activate', 0.75);
+    else if (activeIndex < 0) play('deactivate', 0.6);
+    else play('turn', 0.5);
+  }, [activeIndex, enabled, play]);
   useEffect(() => () => { context.current?.close().catch(() => {}); }, []);
   return [enabled, toggle];
 }
@@ -83,9 +101,15 @@ export default function Skills() {
   const sceneReady = useCallback(() => setReady(true), []);
   const sceneFailed = useCallback(() => setFailed(true), []);
   useEffect(() => {
+    const idle = window.requestIdleCallback || ((fn) => setTimeout(fn, 1500));
+    const cancelIdle = window.cancelIdleCallback || clearTimeout;
+    const handle = idle(preloadWatchAssets, { timeout: 4000 });
+    return () => cancelIdle(handle);
+  }, []);
+  useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) { setNearby(true); observer.disconnect(); }
-    }, { rootMargin: '500px' });
+    }, { rootMargin: '1200px' });
     observer.observe(track.current);
     return () => observer.disconnect();
   }, []);
