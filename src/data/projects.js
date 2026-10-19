@@ -16,6 +16,8 @@ export const projects = [
     id: 1,
     category: 'production',
     title: 'White-Label Event Apps',
+    metric: { value: '7', label: 'branded apps from one codebase' },
+    platforms: 'Android · iOS',
     company: 'Elevents Metaestate Pvt Ltd',
     role: 'React Native Developer',
     description:
@@ -59,6 +61,8 @@ export const projects = [
     id: 2,
     category: 'production',
     title: 'QuickStaff',
+    metric: { value: '4', label: 'user roles, one platform' },
+    platforms: 'Android · iOS',
     company: 'Elevents Metaestate Pvt Ltd',
     role: 'React Native Developer',
     description:
@@ -98,6 +102,7 @@ export const projects = [
     id: 4,
     category: 'academic',
     title: 'SETHU Web App',
+    metric: { value: '5k+', label: 'monthly users' },
     company: '',
     role: 'Full Stack Developer',
     description:
@@ -131,6 +136,7 @@ export const projects = [
     id: 5,
     category: 'academic',
     title: 'Time Table Generator',
+    metric: { value: '3w → 3h', label: 'scheduling time' },
     company: '',
     role: 'Full Stack Developer',
     description:
@@ -165,6 +171,7 @@ export const projects = [
     id: 6,
     category: 'academic',
     title: 'Student Communication Platform',
+    metric: { value: '200+', label: 'concurrent users' },
     company: '',
     role: 'Full Stack Developer',
     description:
